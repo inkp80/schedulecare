@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
         setContentView(R.layout.activity_main);
 
+        Log.d("TESDAS","etasrasd");
         /*
         Calendar calendar = Calendar.getInstance();
         Random random = new Random(System.currentTimeMillis());
@@ -52,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
         Marking on Date
         robotoCalendarView.markCircleImage1(calendar);
         */
+        /*
         android.app.Fragment fragment = new MainCalendarFragment();
         android.app.FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment, fragment);
-        fragmentTransaction.commit();
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+        fragmentTransaction.commit();*/
 
     }
 

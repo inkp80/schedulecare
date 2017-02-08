@@ -28,17 +28,24 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
  */
 
 public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener{
+
     public List<String> StrData;
     private ScheduleAdapter scheduleAdapter;
 
-
-    @BindView(R.id.main_schedule_recycler_view)
+    //@BindView(R.id.main_schedule_recycler_view)
     public RecyclerView scheduleRecyclerView;
-    @BindView(R.id.main_calendar)
+    //@BindView(R.id.main_calendar)
     public RobotoCalendarView robotoCalendar;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        ButterKnife.bind(getActivity());
+        //ButterKnife.bind(this);
+
+        View v = inflater.inflate(R.layout.activity_main_calendar, container, false);
+
+
+
+        scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_schedule_recycler_view);
+        robotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
 
         robotoCalendar.setRobotoCalendarListener((RobotoCalendarView.RobotoCalendarListener) this);
         robotoCalendar.setShortWeekDays(false);
@@ -72,7 +79,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         );
 
 
-        return inflater.inflate(R.layout.activity_main_calendar, container, false);
+        return v;
     }
 
     @Override
