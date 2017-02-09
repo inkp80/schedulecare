@@ -6,32 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/event_linear"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-        <fragment
-            android:id="@+id/main_event_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.inkp.boostcamp.Boostme.MainEventFragment"
-            tools:layout="@layout/activity_main"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/calendar_linear"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+        android:layout_height="match_parent">
         <fragment
             android:id="@+id/main_calendar_fragment"
             android:name="com.inkp.boostcamp.Boostme.MainCalendarFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/activity_main"/>
-    </LinearLayout>
+
+        <fragment
+            android:id="@+id/main_event_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.inkp.boostcamp.Boostme.MainEventFragment"
+            tools:layout="@layout/activity_main" />
+    </FrameLayout>
 </FrameLayout>

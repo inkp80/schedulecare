@@ -41,20 +41,22 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.calendar_linear)
-    public LinearLayout CalendarListViewer;
-    @BindView(R.id.event_linear)
-    public LinearLayout EventListViewer;
+    android.app.Fragment CalendarFragment;
+    android.app.Fragment EventFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
+        CalendarFragment = getFragmentManager().findFragmentById(R.id.main_calendar_fragment);
+        EventFragment = getFragmentManager().findFragmentById(R.id.main_event_fragment);
 
+        setFragmentShow(CalendarFragment, EventFragment);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+
+
     }
 
 
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar parent = (Toolbar) actionbar.getParent();
         parent.setContentInsetsAbsolute(0, 0);
 
-        //getMenuInflater().inflate(R.menu.main, menu);
 
         View view = getSupportActionBar().getCustomView();
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(MainActivity.this, "Event", Toast.LENGTH_SHORT).show();
-                        setEventVisible();
+                        setFragmentShow(EventFragment, CalendarFragment);
                     }
                 }
         );
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         Toast.makeText(MainActivity.this, "Calendar", Toast.LENGTH_SHORT).show();
-                        setCalendarVisible();
+                        setFragmentShow(CalendarFragment, EventFragment);
                     }
                 }
         );
@@ -123,12 +124,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setCalendarVisible(){
-        CalendarListViewer.setVisibility(View.VISIBLE);
-        EventListViewer.setVisibility(View.INVISIBLE);
-    }
-    public void setEventVisible(){
-        EventListViewer.setVisibility(View.VISIBLE);
-        CalendarListViewer.setVisibility(View.INVISIBLE);
+    public void setFragmentShow(android.app.Fragment fragmentToShow, android.app.Fragment fragmentToHide){
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.show(fragmentToShow);
+        fragmentTransaction.hide(fragmentToHide);
+        fragmentTransaction.commit();
     }
 }
