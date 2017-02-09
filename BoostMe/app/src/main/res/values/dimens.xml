@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="left_margin">16dp</dimen>
+
     <!--Roboto Calendar-->
     <dimen name="roboto_calendar_padding">8dp</dimen>
     <dimen name="roboto_calendar_month_margin_bottom">8dp</dimen>

@@ -41,10 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     android.app.Fragment CalendarFragment;
     android.app.Fragment EventFragment;
-    @BindView(R.id.main_event_button)
-    ImageButton EventButton;
-    @BindView(R.id.main_calendar_button)
-    ImageButton CalendarButton;
 
 
     @Override
@@ -52,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        CalendarButton.setVisibility(View.INVISIBLE);
 
         CalendarFragment = getFragmentManager().findFragmentById(R.id.main_calendar_fragment);
         EventFragment = getFragmentManager().findFragmentById(R.id.main_event_fragment);
@@ -83,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         View view = getSupportActionBar().getCustomView();
 
-        final ImageView EventListButton = (ImageButton) view.findViewById(R.id.main_event_button);
-        final ImageView CalendarListButton = (ImageButton) view.findViewById(R.id.main_calendar_button);
+        final ImageView EventListButton = (ImageView) view.findViewById(R.id.main_event_button);
+        final ImageView CalendarListButton = (ImageView) view.findViewById(R.id.main_calendar_button);
         final ImageView AddListButton = (ImageView) view.findViewById(R.id.main_add_button);
 
         EventListButton.setOnClickListener(
@@ -92,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(MainActivity.this, "Event", Toast.LENGTH_SHORT).show();
-                        CalendarButton.setVisibility(View.VISIBLE);
-                        EventButton.setVisibility(View.INVISIBLE);
+                        CalendarListButton.setVisibility(View.VISIBLE);
+                        EventListButton.setVisibility(View.INVISIBLE);
                         setFragmentShow(EventFragment, CalendarFragment);
                     }
                 }
@@ -105,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         Toast.makeText(MainActivity.this, "Calendar", Toast.LENGTH_SHORT).show();
-                        CalendarButton.setVisibility(View.INVISIBLE);
-                        EventButton.setVisibility(View.VISIBLE);
+                        CalendarListButton.setVisibility(View.INVISIBLE);
+                        EventListButton.setVisibility(View.VISIBLE);
                         setFragmentShow(CalendarFragment, EventFragment);
                     }
                 }

@@ -11,13 +11,20 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import butterknife.BindView;
 
 /**
  * Created by macbook on 2017. 2. 9..
  */
 
 public class AddTaskActivity extends AppCompatActivity {
+    @BindView(R.id.add_title_text)
+    TextView titleView;
+    @BindView(R.id.)
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -42,9 +49,24 @@ public class AddTaskActivity extends AppCompatActivity {
         parent.setContentInsetsAbsolute(0, 0);
 
         View view = getSupportActionBar().getCustomView();
+        ImageView saveButton = (ImageView) view.findViewById(R.id.add_save_button);
+        saveButton.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+
+                    }
+                }
+        );
 
         final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
 
         return true;
+    }
+
+
+    public void getDataFromView(){
+
+
     }
 }

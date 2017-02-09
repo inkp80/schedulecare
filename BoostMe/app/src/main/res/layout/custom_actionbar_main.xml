@@ -13,31 +13,32 @@
         android:text="title"
         android:textStyle="bold" />
 
-    <Button
+    <ImageView
         android:id="@+id/main_setting_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="28dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
-        android:text="set" />
+        android:layout_marginLeft="@dimen/left_margin"
+        android:src="@drawable/setup_icon"
+        />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/main_event_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/main_add_button"
         android:src="@android:drawable/ic_menu_slideshow"
         />
-    <ImageButton
+    <ImageView
         android:id="@+id/main_calendar_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="28dp"
         android:layout_toLeftOf="@+id/main_add_button"
-        android:src="@android:drawable/ic_menu_my_calendar"
-        android:visibility="visible"
+        android:src="@drawable/calendar"
+        android:visibility="invisible"
         />
-    <ImageButton
+    <ImageView
         android:id="@+id/main_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

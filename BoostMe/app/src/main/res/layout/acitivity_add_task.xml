@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <EditText
+        android:id="@+id/add_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Title"/>
