@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.marcohc.robotocalendar.RobotoCalendarView;
 
 import java.util.ArrayList;
 import java.util.List;

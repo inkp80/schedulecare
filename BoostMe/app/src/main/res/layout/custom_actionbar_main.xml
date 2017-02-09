@@ -33,7 +33,7 @@
         android:id="@+id/main_calendar_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/main_event_button"
+        android:layout_toLeftOf="@+id/main_add_button"
         android:src="@android:drawable/ic_menu_my_calendar"
         android:visibility="visible"
         />

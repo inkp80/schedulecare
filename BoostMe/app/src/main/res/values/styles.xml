@@ -8,6 +8,30 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+    <!--Roboto Calendar Style-->
+    <style name="RobotoCalendarMonthText">
+        <item name="android:textSize">@dimen/roboto_calendar_month_font</item>
+        <item name="android:textColor">@color/roboto_calendar_month_font</item>
+    </style>
+
+    <style name="RobotoCalendarMonthArrow">
+        <item name="android:tint">@color/roboto_calendar_month_arrow</item>
+    </style>
+
+    <style name="RobotoCalendarDayOfTheWeekText">
+        <item name="android:textSize">@dimen/roboto_calendar_day_of_week_font</item>
+        <item name="android:textColor">@color/roboto_calendar_day_of_the_month_font</item>
+    </style>
+
+    <style name="RobotoCalendarDayOfTheMonthText">
+        <item name="android:textSize">@dimen/roboto_calendar_day_of_the_month_font</item>
+        <item name="android:textColor">@color/roboto_calendar_day_of_the_month_font</item>
+    </style>
+
+
+
 </resources>
 
 

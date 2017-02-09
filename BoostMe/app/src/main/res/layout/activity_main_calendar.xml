@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.marcohc.robotocalendar.RobotoCalendarView
+    <com.inkp.boostcamp.Boostme.RobotoCalendarView
         android:id="@+id/main_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.marcohc.robotocalendar.RobotoCalendarView>
+    </com.inkp.boostcamp.Boostme.RobotoCalendarView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_calendar_recycler_view"

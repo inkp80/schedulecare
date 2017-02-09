@@ -24,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.marcohc.robotocalendar.RobotoCalendarView;
-import com.marcohc.robotocalendar.RobotoCalendarView.RobotoCalendarListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,12 +41,18 @@ public class MainActivity extends AppCompatActivity {
 
     android.app.Fragment CalendarFragment;
     android.app.Fragment EventFragment;
+    @BindView(R.id.main_event_button)
+    ImageButton EventButton;
+    @BindView(R.id.main_calendar_button)
+    ImageButton CalendarButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        CalendarButton.setVisibility(View.INVISIBLE);
 
         CalendarFragment = getFragmentManager().findFragmentById(R.id.main_calendar_fragment);
         EventFragment = getFragmentManager().findFragmentById(R.id.main_event_fragment);
@@ -88,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(MainActivity.this, "Event", Toast.LENGTH_SHORT).show();
+                        CalendarButton.setVisibility(View.VISIBLE);
+                        EventButton.setVisibility(View.INVISIBLE);
                         setFragmentShow(EventFragment, CalendarFragment);
                     }
                 }
@@ -99,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         Toast.makeText(MainActivity.this, "Calendar", Toast.LENGTH_SHORT).show();
+                        CalendarButton.setVisibility(View.INVISIBLE);
+                        EventButton.setVisibility(View.VISIBLE);
                         setFragmentShow(CalendarFragment, EventFragment);
                     }
                 }
