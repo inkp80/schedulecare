@@ -3,6 +3,7 @@ package com.inkp.boostcamp.Boostme;
 import android.app.Fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -23,11 +24,18 @@ import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 
-/**
- * Created by macbook on 2017. 2. 8..
- */
+        /*
+        Calendar calendar = Calendar.getInstance();
+        Random random = new Random(System.currentTimeMillis());
+        int style = random.nextInt(2);
+        int daySelected = random.nextInt(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.DAY_OF_MONTH, daySelected);
 
-public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener{
+        Marking on Date
+        robotoCalendarView.markCircleImage1(calendar);
+        */
+
+public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener {
 
     public List<String> StrData;
     private ScheduleAdapter scheduleAdapter;
@@ -44,7 +52,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
 
 
-        scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_schedule_recycler_view);
+        scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_calendar_recycler_view);
         robotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
 
         robotoCalendar.setRobotoCalendarListener((RobotoCalendarView.RobotoCalendarListener) this);
