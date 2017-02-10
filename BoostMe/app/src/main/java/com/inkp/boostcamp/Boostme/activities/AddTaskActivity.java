@@ -15,9 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.inkp.boostcamp.Boostme.SmallScheduleAdapter;
 import com.inkp.boostcamp.Boostme.data.Schedule;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,6 +76,8 @@ public class AddTaskActivity extends AppCompatActivity{
     TextView dateView;
     @BindView(R.id.add_task_time)
     TextView timeView;
+    @BindView(R.id.add_datetime_linear)
+    LinearLayout datetime_linearViewer;
 
     @BindView(R.id.add_small_task_button)
     ImageView addSmallTaskButton;
@@ -88,6 +93,7 @@ public class AddTaskActivity extends AppCompatActivity{
 
         orders = 0;
         GUID = UUID.randomUUID().toString();
+        Dates = new Date();
 
         smallSchedules = new ArrayList<>();
         AddSmallTask("First", new Date(), -1);
@@ -111,6 +117,13 @@ public class AddTaskActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 CustomDialogForSmallTasks();
+            }
+        });
+        datetime_linearViewer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddTaskActivity.this, "hi", Toast.LENGTH_SHORT).show();
+                CustomDialogForDateTime();
             }
         });
     }
@@ -173,7 +186,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 Schedule schedule = bgRealm.createObject(Schedule.class);
                 schedule.setTitle(title);
                 schedule.setDate(date);
-                schedule.setLocation(location);
+                //schedule.setLocation(location);
                 //schedule.setWeek_of_day_repit();
         }});
     }
@@ -203,7 +216,7 @@ public class AddTaskActivity extends AppCompatActivity{
 
         //멤버의 세부내역 입력 Dialog 생성 및 보이기
         AlertDialog.Builder buider = new AlertDialog.Builder(this); //AlertDialog.Builder 객체 생성
-        buider.setTitle("Member Information"); //Dialog 제목
+        //buider.setTitle("Member Information"); //Dialog 제목
         buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
         buider.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
@@ -215,15 +228,10 @@ public class AddTaskActivity extends AppCompatActivity{
                 tempDate.setHours(h);
                 tempDate.setMinutes(m);
                 AddSmallTask(edit_title.getText().toString(), tempDate, orders++);
-                for(int i=0; i<smallSchedules.size(); i++) {
-                    Log.d("list SIZE", smallSchedules.get(i).getSmall_tilte());
-                }
 
                 smallScheduleAdapter.dataChagned(smallSchedules);
                 smallScheduleAdapter.notifyDataSetChanged();
                 smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
-                //refreshView();
-
             }
         });
         buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -234,28 +242,46 @@ public class AddTaskActivity extends AppCompatActivity{
         });
 
         AlertDialog dialog = buider.create();
+        dialog.setCanceledOnTouchOutside(false);
 
-        //Dialog의 바깥쪽을 터치했을 때 Dialog를 없앨지 설정
-        dialog.setCanceledOnTouchOutside(false);//없어지지 않도록 설정
 
-        //Dialog 보이기
         dialog.show();
 
     }
 
     public void CustomDialogForDateTime() {
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_dialog_datetime, null);
 
+        final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.add_task_timepicker);
+        final DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.add_task_datepicker);
 
+        AlertDialog.Builder buider = new AlertDialog.Builder(this);
+        buider.setView(dialogView);
+        buider.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Dates.setHours(timePicker.getCurrentHour());
+                Dates.setMinutes(timePicker.getCurrentMinute());
+                Dates.setYear(datePicker.getYear());
+                Dates.setMonth(datePicker.getMonth());
+                Dates.setDate(datePicker.getDayOfMonth());
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm a");
+                dateView.setText(sdf.format(Dates).toString());
+            }
+
+        });
+        buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do nothing
+            }
+        });
+        AlertDialog dialog = buider.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
-
-
-/*
-    public void refreshView(){
-        SmallScheduleAdapter SmallScheduleAdapter = new SmallScheduleAdapter(smallSchedules);
-        smallScheduleRecyclerView.hasFixedSize();
-        smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        smallScheduleRecyclerView.setAdapter(SmallScheduleAdapter);
-    }*/
 
 
 

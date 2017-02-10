@@ -12,6 +12,7 @@ public class SmallSchedule {
     private String small_tilte;
     private Date small_time;
     private int order_value;
+    private boolean alarm_flag;
 
     public int getOrder_value() {
         return order_value;
@@ -37,6 +38,11 @@ public class SmallSchedule {
         this.small_tilte = small_tilte;
     }
 
+    public boolean isAlarm_flag() {
+        return alarm_flag;
+    }
 
-
+    public void setAlarm_flag(boolean alarm_flag) {
+        this.alarm_flag = alarm_flag;
+    }
 }
