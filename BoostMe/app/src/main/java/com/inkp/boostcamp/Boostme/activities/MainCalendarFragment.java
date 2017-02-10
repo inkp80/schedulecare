@@ -1,4 +1,4 @@
-package com.inkp.boostcamp.Boostme;
+package com.inkp.boostcamp.Boostme.activities;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
+import com.inkp.boostcamp.Boostme.R;
+import com.inkp.boostcamp.Boostme.RobotoCalendarView;
+import com.inkp.boostcamp.Boostme.ScheduleAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;

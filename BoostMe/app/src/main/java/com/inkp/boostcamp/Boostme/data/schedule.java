@@ -4,12 +4,17 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by inkp on 2017-02-10.
  */
 
-public class schedule extends RealmObject{
+public class Schedule extends RealmObject{
+
+    @PrimaryKey
+    private String id;
+
     private String title;
     private Date date;
     private String location;
@@ -18,6 +23,16 @@ public class schedule extends RealmObject{
 
     @Ignore
     private int sessionId;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     public Date getDate() {
         return date;
@@ -66,7 +81,6 @@ public class schedule extends RealmObject{
     public void setAlarm_flag(int alarm_flag) {
         this.alarm_flag = alarm_flag;
     }
-
 
 
 }

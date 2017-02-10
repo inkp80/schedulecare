@@ -1,4 +1,4 @@
-package com.inkp.boostcamp.Boostme;
+package com.inkp.boostcamp.Boostme.activities;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.inkp.boostcamp.Boostme.R;
+import com.inkp.boostcamp.Boostme.ScheduleAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
         <fragment
             android:id="@+id/main_calendar_fragment"
-            android:name="com.inkp.boostcamp.Boostme.MainCalendarFragment"
+            android:name="com.inkp.boostcamp.Boostme.activities.MainCalendarFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/activity_main"/>
@@ -20,7 +20,7 @@
             android:id="@+id/main_event_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.inkp.boostcamp.Boostme.MainEventFragment"
+            android:name="com.inkp.boostcamp.Boostme.activities.MainEventFragment"
             tools:layout="@layout/activity_main" />
     </FrameLayout>
 </FrameLayout>

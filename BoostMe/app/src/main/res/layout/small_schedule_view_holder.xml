@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/small_schedule_title"
+        android:layout_margin="18dp"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="this is item of small schedule"/>
-</LinearLayout>
+        android:text="Titlsdsadsdsadasdasde"/>
+
+    <TextView
+        android:id="@+id/small_schedule_time"
+        android:layout_toRightOf="@id/small_schedule_title"
+        android:layout_margin="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="times"/>
+
+    <ImageView
+        android:id="@+id/small_schedule_alarm"
+        android:layout_margin="18dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_lock_idle_alarm"
+        />
+</RelativeLayout>

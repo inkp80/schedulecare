@@ -1,40 +1,23 @@
-package com.inkp.boostcamp.Boostme;
+package com.inkp.boostcamp.Boostme.activities;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import com.inkp.boostcamp.Boostme.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
-import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
-import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
