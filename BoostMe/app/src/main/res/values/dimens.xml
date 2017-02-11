@@ -4,6 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="left_margin">16dp</dimen>
+    <dimen name="top_bot_margin">12dp</dimen>
+    <dimen name="base_font_size">18sp</dimen>
 
     <!--AddTask layout-->
     <dimen name="small_task_box">8dp</dimen>

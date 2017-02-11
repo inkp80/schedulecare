@@ -2,6 +2,7 @@ package com.inkp.boostcamp.Boostme.data;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -10,29 +11,30 @@ import io.realm.annotations.PrimaryKey;
  * Created by inkp on 2017-02-10.
  */
 
-public class Schedule extends RealmObject{
+public class ScheduleRealm extends RealmObject{
+
 
     @PrimaryKey
-    private String id;
+    private long id;
 
     private String title;
     private Date date;
     private String location;
-    private int Week_of_day_repit;
-    private int alarm_flag;
+    private int week_of_day_repit;
+    private boolean alarm_flag;
+
+    private RealmList<SmallScheduleRealm> small_schedule;
 
     @Ignore
     private int sessionId;
 
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
-
 
     public Date getDate() {
         return date;
@@ -67,20 +69,26 @@ public class Schedule extends RealmObject{
     }
 
     public int getWeek_of_day_repit() {
-        return Week_of_day_repit;
+        return week_of_day_repit;
     }
 
     public void setWeek_of_day_repit(int week_of_day_repit) {
-        Week_of_day_repit = week_of_day_repit;
+        this.week_of_day_repit = week_of_day_repit;
     }
 
-    public int getAlarm_flag() {
+    public boolean isAlarm_flag() {
         return alarm_flag;
     }
 
-    public void setAlarm_flag(int alarm_flag) {
+    public void setAlarm_flag(boolean alarm_flag) {
         this.alarm_flag = alarm_flag;
     }
 
+    public RealmList<SmallScheduleRealm> getSmall_schedule() {
+        return small_schedule;
+    }
 
+    public void setSmall_schedule(RealmList<SmallScheduleRealm> small_schedule) {
+        this.small_schedule = small_schedule;
+    }
 }

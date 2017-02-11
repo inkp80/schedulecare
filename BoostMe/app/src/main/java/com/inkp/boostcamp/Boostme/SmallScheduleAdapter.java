@@ -87,8 +87,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         }
     }
 
-/* 삭제 및 드래그 드롭 세부 구현 부분
-    private void remove(int position) {
+/*    private void remove(int position) {
         DataFromMain.remove(position);
         notifyItemRemoved(position);
     }
@@ -97,6 +96,8 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         Collections.swap(DataFromMain, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
     }
-*/
+    */
+
+
 }
 

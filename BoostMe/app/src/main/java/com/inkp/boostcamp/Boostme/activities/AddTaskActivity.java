@@ -1,8 +1,6 @@
 package com.inkp.boostcamp.Boostme.activities;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,7 +15,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,15 +22,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.R;
-import com.inkp.boostcamp.Boostme.RobotoCalendarView;
-import com.inkp.boostcamp.Boostme.ScheduleAdapter;
 import com.inkp.boostcamp.Boostme.SmallScheduleAdapter;
-import com.inkp.boostcamp.Boostme.data.Schedule;
+import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
+import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -41,7 +36,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
-import io.realm.RealmResults;
+
+import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
+import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 
 /**
  * Created by macbook on 2017. 2. 9..
@@ -58,14 +55,13 @@ public class AddTaskActivity extends AppCompatActivity{
 
 
     public int orders;
-    public String GUID;
-
-    public int year, month, date, hour, minute;
+    public long MainScheduleId;
 
     public Date Dates;
     public String Title;
     public int WeekOfDays;
     public String Location;
+    public boolean MainAlarm = true;
     //list에 대해서 -> 배열을 통해 객체를 따로 넣는다
     //해당 리스트는 타이틀 시간 우선순위 알람여부를 갖는 하위 데이터 테이블을 갖는다
 
@@ -76,12 +72,14 @@ public class AddTaskActivity extends AppCompatActivity{
     TextView dateView;
     @BindView(R.id.add_task_time)
     TextView timeView;
+    @BindView(R.id.add_location)
+    TextView locationView;
     @BindView(R.id.add_datetime_linear)
     LinearLayout datetime_linearViewer;
 
     @BindView(R.id.add_small_task_button)
     ImageView addSmallTaskButton;
-    @BindView(R.id.load_small_task_button)
+    @BindView(R.id.add_load_small_task_button)
     ImageView loadSmallTaskButton;
 
     Realm realm;
@@ -92,7 +90,6 @@ public class AddTaskActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         orders = 0;
-        GUID = UUID.randomUUID().toString();
         Dates = new Date();
 
         smallSchedules = new ArrayList<>();
@@ -100,13 +97,13 @@ public class AddTaskActivity extends AppCompatActivity{
         Log.d("SIZE", String.valueOf(smallSchedules.size()));
 
         realm = Realm.getDefaultInstance();
-
+        MainScheduleId = getNextKeyMainSchedule(realm);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
 
 
 
-        smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_task_recycler_view);
+        smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
         smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules);
         smallScheduleRecyclerView.hasFixedSize();
@@ -156,6 +153,7 @@ public class AddTaskActivity extends AppCompatActivity{
                     @Override
                     public void onClick(View view){
 
+                        InsertSchduleToDatabase();
                         //addSchdule();
                         //refreshView();
 
@@ -163,32 +161,27 @@ public class AddTaskActivity extends AppCompatActivity{
                 }
         );
 
-        final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
-
+        //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
         return true;
     }
 
 
     public void getDataFromView(){
-
         Title = titleView.getText().toString();
+        //Dates, Week_of_Days_repeats는 사용자 설정시 즉시 반영된다
+        Location = locationView.getText().toString();
 
     }
 
 
-    RealmAsyncTask transaction;
 
-    private void InsertSchduleToDatabase(final String title, final Date date, final String location){
-
-        transaction = realm.executeTransactionAsync(new Realm.Transaction(){
-            @Override
-            public void execute(Realm bgRealm) {
-                Schedule schedule = bgRealm.createObject(Schedule.class);
-                schedule.setTitle(title);
-                schedule.setDate(date);
-                //schedule.setLocation(location);
-                //schedule.setWeek_of_day_repit();
-        }});
+    private void InsertSchduleToDatabase(){
+        getDataFromView();
+        mainScheduleAddtoRealm();
+        smallScheduleAddToRealm();
+        finish();
+        //메인 fragments 갱신 필요
+        //포커싱 될 때마다 갱신을 하던, 할 것
     }
 
     //RecyclerView로 전달하기 위한 일시적인 small Task Array list
@@ -199,8 +192,6 @@ public class AddTaskActivity extends AppCompatActivity{
         newTask.setSmall_time(sDates);
         newTask.setOrder_value(Order);
         smallSchedules.add(newTask);
-        //week of days
-        //location
     }
 
     public void CustomDialogForSmallTasks() {
@@ -281,6 +272,49 @@ public class AddTaskActivity extends AppCompatActivity{
         AlertDialog dialog = buider.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+    }
+
+    public void smallScheduleAddToRealm(){
+        for(int i = 0; i<smallSchedules.size(); i++){
+            final int idx = i;
+            final int sId = getNextKeySmallSchedule(realm);
+
+            realm.executeTransactionAsync(new Realm.Transaction(){
+                @Override
+                public void execute(Realm bgRealm){
+                    SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, sId);
+
+                    SmallSchedule dataForTransaction = smallSchedules.get(idx);
+                    smallScheduleRealm.setSchedule_id(MainScheduleId);
+                    smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
+                    smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
+                    smallScheduleRealm.setOrder_value(dataForTransaction.getOrder_value());
+                    smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
+
+                    Realm realmForQuery = Realm.getDefaultInstance();
+                    ScheduleRealm mainSchedule = realmForQuery.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
+                    mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                }
+            });
+        }
+    }
+
+    public void mainScheduleAddtoRealm(){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, MainScheduleId);
+                schedule.setTitle(Title);
+                schedule.setDate(Dates);
+                schedule.setLocation(Location);
+                schedule.setWeek_of_day_repit(WeekOfDays);
+                schedule.setAlarm_flag(MainAlarm);
+            }}, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess(){
+                Log.d("REALM", "Data Sucess");
+            }
+        });
     }
 
 

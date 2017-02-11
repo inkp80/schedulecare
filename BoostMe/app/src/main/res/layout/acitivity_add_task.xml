@@ -19,27 +19,32 @@
             android:layout_marginLeft="@dimen/left_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/base_font_size"
             android:text="TIME"/>
         <TextView
             android:id="@+id/add_task_date"
             android:layout_marginLeft="@dimen/left_margin"
-            android:textSize="20sp"
+            android:textSize="@dimen/base_font_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DATE----------"/>
     </LinearLayout>
     <TextView
-        android:id="@+id/week_of_day_repeat"
+        android:id="@+id/add_week_of_day_repeat"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SET REPEAT"
-        android:textSize="20sp"/>
+        android:textSize="@dimen/base_font_size"/>
+
     <TextView
+        android:id="@+id/add_location"
         android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LOCATION------"/>
+        android:textSize="@dimen/base_font_size"
+        android:text="Merizit Tower, KN, SEOUL"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -57,16 +62,16 @@
                 android:layout_height="wrap_content"
                 android:text="small tasks"/>
             <ImageView
+                android:id="@+id/add_load_small_task_button"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/add_small_task_button"
-                android:id="@+id/load_small_task_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_save"/>
             <ImageView
+                android:id="@+id/add_small_task_button"
                 android:layout_marginRight="@dimen/left_margin"
                 android:layout_alignParentRight="true"
-                android:id="@+id/add_small_task_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_add"/>
@@ -74,7 +79,7 @@
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/add_task_recycler_view"
+            android:id="@+id/add_addtask_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
