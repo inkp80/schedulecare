@@ -83,11 +83,11 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
         @Override
         public void onItemClear() {
-
         }
     }
 
-/*    private void remove(int position) {
+/*
+private void remove(int position) {
         DataFromMain.remove(position);
         notifyItemRemoved(position);
     }
