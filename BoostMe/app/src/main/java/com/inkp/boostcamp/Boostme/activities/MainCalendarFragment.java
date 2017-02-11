@@ -2,6 +2,7 @@ package com.inkp.boostcamp.Boostme.activities;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -136,6 +137,8 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
                 new RVHItemClickListener(getActivity(), new RVHItemClickListener.OnItemClickListener(){
                     @Override
                     public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), DetailActivity.class);
+                        //startActivity(intent);
                         Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
                     }
                 })

@@ -14,6 +14,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import github.nisrulz.recyclerviewhelper.RVHAdapter;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
 import io.realm.RealmResults;
 
@@ -22,7 +23,7 @@ import io.realm.RealmResults;
  */
 
 public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdapter.SmallScheduleViewHolder>
-        implements RVHViewHolder {
+        implements RVHAdapter{
 
     public ArrayList<SmallSchedule> smallSchedules;
 
@@ -30,8 +31,15 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         smallSchedules = schedules;
     }
 
+    /*@Override
+    public SmallScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.small_schedule_view_holder, parent, false);
+        return new SmallScheduleViewHolder(view);
+    }*/
+
     @Override
-    public SmallScheduleAdapter.SmallScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SmallScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.small_schedule_view_holder, parent, false);
         return new SmallScheduleViewHolder(view);
@@ -49,14 +57,16 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
     @Override
-    public void onItemSelected(int actionstate) {
-
+    public boolean onItemMove(int fromPosition, int toPosition){
+        swap(fromPosition, toPosition);
+        return false;
     }
 
     @Override
-    public void onItemClear() {
-
+    public void onItemDismiss(int position, int direction) {
+        remove(position);
     }
+
 
     public void dataChagned(ArrayList<SmallSchedule> newSmallSchedule){
         smallSchedules = newSmallSchedule;
@@ -86,17 +96,18 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         }
     }
 
-/*
-private void remove(int position) {
-        DataFromMain.remove(position);
+
+
+    private void remove(int position) {
+        smallSchedules.remove(position);
         notifyItemRemoved(position);
     }
 
     private void swap(int firstPosition, int secondPosition) {
-        Collections.swap(DataFromMain, firstPosition, secondPosition);
+        Collections.swap(smallSchedules, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
     }
-    */
+
 
 
 }

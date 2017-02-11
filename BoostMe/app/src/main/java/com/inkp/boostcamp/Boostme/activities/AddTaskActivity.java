@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +35,9 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
+import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
+import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 
@@ -94,6 +98,7 @@ public class AddTaskActivity extends AppCompatActivity{
 
         smallSchedules = new ArrayList<>();
         AddSmallTask("First", new Date(), -1);
+        AddSmallTask("Second", new Date(), -2);
         Log.d("SIZE", String.valueOf(smallSchedules.size()));
 
         realm = Realm.getDefaultInstance();
@@ -109,6 +114,24 @@ public class AddTaskActivity extends AppCompatActivity{
         smallScheduleRecyclerView.hasFixedSize();
         smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
+
+
+        ItemTouchHelper.Callback callback = new RVHItemTouchHelperCallback(smallScheduleAdapter, true, true, true);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(smallScheduleRecyclerView);
+
+        smallScheduleRecyclerView.addItemDecoration(
+                new RVHItemDividerDecoration(this, LinearLayoutManager.VERTICAL));
+
+        smallScheduleRecyclerView.addOnItemTouchListener(
+                new RVHItemClickListener(this, new RVHItemClickListener.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getBaseContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+
 
         addSmallTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,8 +314,8 @@ public class AddTaskActivity extends AppCompatActivity{
                     smallScheduleRealm.setOrder_value(dataForTransaction.getOrder_value());
                     smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
 
-                    Realm realmForQuery = Realm.getDefaultInstance();
-                    ScheduleRealm mainSchedule = realmForQuery.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
+                    //Realm realmForQuery = Realm.getDefaultInstance();
+                    ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
                     mainSchedule.getSmall_schedule().add(smallScheduleRealm);
                 }
             });

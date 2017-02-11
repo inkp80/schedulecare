@@ -30,6 +30,12 @@
         <item name="android:textColor">@color/roboto_calendar_day_of_the_month_font</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
 
 
 </resources>
