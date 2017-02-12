@@ -99,7 +99,6 @@ public class AddTaskActivity extends AppCompatActivity{
 
         smallSchedules = new ArrayList<>();
         AddSmallTask("시작", Dates, orders);
-        //AddSmallTask("Second", new Date(), -2);
         Log.d("SIZE", String.valueOf(smallSchedules.size()));
 
         realm = Realm.getDefaultInstance();
@@ -111,7 +110,8 @@ public class AddTaskActivity extends AppCompatActivity{
 
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
-        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules);
+        //메인 시간 재설정 되면 recyclerView 전부 다시 그려야 함
+        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, Dates);
         smallScheduleRecyclerView.hasFixedSize();
         smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
@@ -284,7 +284,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 Dates.setMonth(datePicker.getMonth());
                 Dates.setDate(datePicker.getDayOfMonth());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm a");
+                SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd, hh:mm a");
                 dateView.setText(sdf.format(Dates).toString());
             }
 
@@ -298,6 +298,11 @@ public class AddTaskActivity extends AppCompatActivity{
         AlertDialog dialog = buider.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
+        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, Dates);
+        smallScheduleRecyclerView.hasFixedSize();
+        smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
     }
 
     public void smallScheduleAddToRealm(){

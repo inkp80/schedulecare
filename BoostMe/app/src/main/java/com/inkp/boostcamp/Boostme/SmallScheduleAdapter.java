@@ -11,11 +11,14 @@ import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -25,10 +28,14 @@ import io.realm.RealmResults;
 public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdapter.SmallScheduleViewHolder>
         implements RVHAdapter{
 
+    Date MainDate;
+    SimpleDateFormat format_small = new SimpleDateFormat("hh : mm a");
+    // dateView.setText(sdf.format(Dates).toString());
     public ArrayList<SmallSchedule> smallSchedules;
 
-    public SmallScheduleAdapter(ArrayList<SmallSchedule> schedules){
-        smallSchedules = schedules;
+    public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate){
+        MainDate = parentDate;
+        smallSchedules = s_schedules;
     }
 
     /*@Override
@@ -47,8 +54,17 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
     @Override
     public void onBindViewHolder(SmallScheduleAdapter.SmallScheduleViewHolder holder, int position) {
+
+        //String TimeToShow = format_small.format(smallSchedules.get(position).getSmall_time());
+        int hour = smallSchedules.get(position).getSmall_time().getHours();
+        int minute = smallSchedules.get(position).getSmall_time().getMinutes();
+        MainDate.setHours(MainDate.getHours() - hour);
+        MainDate.setMinutes(MainDate.getMinutes() - minute);
+        minute = minute + hour * 60;
+
         holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte());
-        holder.smallTimeView.setText(smallSchedules.get(position).getSmall_time().toString());
+        holder.smallTimeView.setText(String.valueOf(minute));
+
     }
 
     @Override
