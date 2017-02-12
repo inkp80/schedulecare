@@ -95,10 +95,11 @@ public class AddTaskActivity extends AppCompatActivity{
 
         orders = 0;
         Dates = new Date();
+        Dates.setSeconds(0);
 
         smallSchedules = new ArrayList<>();
-        AddSmallTask("First", new Date(), -1);
-        AddSmallTask("Second", new Date(), -2);
+        AddSmallTask("시작", Dates, orders);
+        //AddSmallTask("Second", new Date(), -2);
         Log.d("SIZE", String.valueOf(smallSchedules.size()));
 
         realm = Realm.getDefaultInstance();
@@ -176,14 +177,18 @@ public class AddTaskActivity extends AppCompatActivity{
                     @Override
                     public void onClick(View view){
 
-                        InsertSchduleToDatabase();
+                        if(smallSchedules.isEmpty()){
+                            Toast.makeText(AddTaskActivity.this, "최소 하나의 세부 일정이 필요합니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else
+                            InsertSchduleToDatabase();
                         //addSchdule();
                         //refreshView();
 
                     }
                 }
         );
-
         //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
         return true;
     }
@@ -201,12 +206,8 @@ public class AddTaskActivity extends AppCompatActivity{
     private void InsertSchduleToDatabase(){
         getDataFromView();
         mainScheduleAddtoRealm();
-        Log.d("#####", "after insert main");
         smallScheduleAddToRealm();
-        Log.d("#####", "after insert small");
         finish();
-        //메인 fragments 갱신 필요
-        //포커싱 될 때마다 갱신을 하던, 할 것
     }
 
     //RecyclerView로 전달하기 위한 일시적인 small Task Array list
@@ -243,7 +244,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 Date tempDate = new Date();
                 tempDate.setHours(h);
                 tempDate.setMinutes(m);
-                AddSmallTask(edit_title.getText().toString(), tempDate, orders++);
+                AddSmallTask(edit_title.getText().toString(), tempDate, ++orders);
 
                 smallScheduleAdapter.dataChagned(smallSchedules);
                 smallScheduleAdapter.notifyDataSetChanged();

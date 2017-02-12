@@ -59,6 +59,9 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        realm = Realm.getDefaultInstance();
+        RealmResults<ScheduleRealm> Schedules = realm.where(ScheduleRealm.class).findAll();
+        scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
     }
 
     @Override
@@ -108,11 +111,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         //ButterKnife.bind(this);
-
-        realm = Realm.getDefaultInstance();
         View v = inflater.inflate(R.layout.activity_main_calendar, container, false);
-
-
 
         scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_calendar_recycler_view);
         robotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
@@ -122,11 +121,6 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         robotoCalendar.showDateTitle(true);
         robotoCalendar.updateView();
 
-        if(realm.isEmpty())
-            return v;
-        RealmResults<ScheduleRealm> Schedules = realm.where(ScheduleRealm.class).findAll();
-
-        scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
         scheduleRecyclerView.hasFixedSize();
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         scheduleRecyclerView.setAdapter(scheduleAdapter);
