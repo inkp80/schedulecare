@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.RobotoCalendarView;
 import com.inkp.boostcamp.Boostme.ScheduleAdapter;
+import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +30,8 @@ import butterknife.ButterKnife;
 import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
         /*
         Calendar calendar = Calendar.getInstance();
@@ -41,6 +45,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
         */
 
 public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener {
+    Realm realm;
 
     public List<String> StrData;
     private ScheduleAdapter scheduleAdapter;
@@ -104,6 +109,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         //ButterKnife.bind(this);
 
+        realm = Realm.getDefaultInstance();
         View v = inflater.inflate(R.layout.activity_main_calendar, container, false);
 
 
@@ -115,36 +121,15 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         robotoCalendar.setShortWeekDays(false);
         robotoCalendar.showDateTitle(true);
         robotoCalendar.updateView();
-        StrData = new ArrayList<>();
-        StrData.add("1");
-        StrData.add("2");
-        StrData.add("3");
-        StrData.add("4");
 
-        scheduleAdapter = new ScheduleAdapter(StrData);
+        if(realm.isEmpty())
+            return v;
+        RealmResults<ScheduleRealm> Schedules = realm.where(ScheduleRealm.class).findAll();
+
+        scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
         scheduleRecyclerView.hasFixedSize();
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         scheduleRecyclerView.setAdapter(scheduleAdapter);
-
-        ItemTouchHelper.Callback callback = new RVHItemTouchHelperCallback(scheduleAdapter, true, true, true);
-        ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(scheduleRecyclerView);
-
-        scheduleRecyclerView.addItemDecoration(
-                new RVHItemDividerDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-
-        scheduleRecyclerView.addOnItemTouchListener(
-                new RVHItemClickListener(getActivity(), new RVHItemClickListener.OnItemClickListener(){
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getActivity(), DetailActivity.class);
-                        //startActivity(intent);
-                        Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                })
-        );
-
-
         return v;
     }
 

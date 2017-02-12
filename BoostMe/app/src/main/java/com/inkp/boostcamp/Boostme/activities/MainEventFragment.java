@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
 
 public class MainEventFragment extends Fragment {
 
-    public List<String> StrData2;
     private ScheduleAdapter Event_scheduleAdapter;
     public RecyclerView Event_scheduleRecyclerView;
 
@@ -35,18 +34,6 @@ public class MainEventFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_main_event, container, false);
 
         Event_scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_event_recycler_view);
-
-        StrData2 = new ArrayList<>();
-        StrData2.add("a");
-        StrData2.add("b");
-        StrData2.add("c");
-        StrData2.add("e");
-
-
-        Event_scheduleAdapter = new ScheduleAdapter(StrData2);
-        Event_scheduleRecyclerView.hasFixedSize();
-        Event_scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Event_scheduleRecyclerView.setAdapter(Event_scheduleAdapter);
 
         return v;
     }

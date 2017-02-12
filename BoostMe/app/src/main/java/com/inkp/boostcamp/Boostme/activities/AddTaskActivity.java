@@ -201,7 +201,9 @@ public class AddTaskActivity extends AppCompatActivity{
     private void InsertSchduleToDatabase(){
         getDataFromView();
         mainScheduleAddtoRealm();
+        Log.d("#####", "after insert main");
         smallScheduleAddToRealm();
+        Log.d("#####", "after insert small");
         finish();
         //메인 fragments 갱신 필요
         //포커싱 될 때마다 갱신을 하던, 할 것
@@ -300,12 +302,11 @@ public class AddTaskActivity extends AppCompatActivity{
     public void smallScheduleAddToRealm(){
         for(int i = 0; i<smallSchedules.size(); i++){
             final int idx = i;
-            final int sId = getNextKeySmallSchedule(realm);
 
             realm.executeTransactionAsync(new Realm.Transaction(){
                 @Override
                 public void execute(Realm bgRealm){
-                    SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, sId);
+                    SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
 
                     SmallSchedule dataForTransaction = smallSchedules.get(idx);
                     smallScheduleRealm.setSchedule_id(MainScheduleId);
@@ -317,6 +318,7 @@ public class AddTaskActivity extends AppCompatActivity{
                     //Realm realmForQuery = Realm.getDefaultInstance();
                     ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
                     mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                    bgRealm.insertOrUpdate(smallScheduleRealm);
                 }
             });
         }
@@ -332,6 +334,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 schedule.setLocation(Location);
                 schedule.setWeek_of_day_repit(WeekOfDays);
                 schedule.setAlarm_flag(MainAlarm);
+                bgRealm.insertOrUpdate(schedule);
             }}, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess(){
