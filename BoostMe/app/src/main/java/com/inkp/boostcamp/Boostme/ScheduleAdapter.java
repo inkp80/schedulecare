@@ -40,7 +40,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         ScheduleRealm obj = getData().get(position);
         holder.data = obj;
         holder.ViewHolder_title.setText(holder.data.getTitle());
-        holder.ViewHolder_date.setText(holder.data.getDate().toString());
+        holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
 
     }
 

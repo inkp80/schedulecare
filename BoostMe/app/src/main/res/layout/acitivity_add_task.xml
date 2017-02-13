@@ -32,11 +32,12 @@
 
     <TextView
         android:id="@+id/add_week_of_day_repeat"
+        android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SET REPEAT"
-        android:textSize="@dimen/base_font_size"/>
+        android:textSize="@dimen/base_font_size" />
 
     <TextView
         android:id="@+id/add_location"

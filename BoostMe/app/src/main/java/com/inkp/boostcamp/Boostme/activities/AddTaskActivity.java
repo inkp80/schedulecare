@@ -43,6 +43,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 
+import static com.inkp.boostcamp.Boostme.Utills.format_yymmdd_hhmm_a;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 
@@ -102,9 +103,12 @@ public class AddTaskActivity extends AppCompatActivity{
         Dates.setSeconds(0);
         WeekOfDays = 0;
 
+        dateView.setText(format_yymmdd_hhmm_a.format(new Date()));
         smallSchedules = new ArrayList<>();
         AddSmallTask("시작", Dates, orders);
-        Log.d("SIZE", String.valueOf(smallSchedules.size()));
+        //사용자로부터 입력 받은 시간을 그대로 반영한다.
+        //사용자로부터 시간 입력받으면 즉각적인 수정이 필요함
+
 
         realm = Realm.getDefaultInstance();
         MainScheduleId = getNextKeyMainSchedule(realm);
@@ -313,8 +317,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 Dates.setMonth(datePicker.getMonth());
                 Dates.setDate(datePicker.getDayOfMonth());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd, hh:mm a");
-                dateView.setText(sdf.format(Dates).toString());
+                dateView.setText(Utills.format_yymmdd_hhmm_a.format(Dates).toString());
             }
 
         });

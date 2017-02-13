@@ -3,6 +3,8 @@ package com.inkp.boostcamp.Boostme;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
+import java.text.SimpleDateFormat;
+
 import io.realm.Realm;
 
 /**
@@ -12,6 +14,11 @@ import io.realm.Realm;
 public class Utills {
     public static int weekdays_requestCode=1313;
     public static int weekdays_resultCode=3131;
+
+    public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
+
+    public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, hh:mm a");
+
     synchronized public static int getNextKeyMainSchedule(Realm realm)
     {
         if(realm.where(ScheduleRealm.class).max("id") == null)return 1;
