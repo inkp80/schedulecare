@@ -6,6 +6,7 @@
     <color name="actionbar_text">#FF4081</color>
     <color name="actionbar_color">#8badd7</color>
 
+    <color name="week_of_day_check">#91e9d9</color>
 
     <!--Roboto-->
     <color name="roboto_calendar_background">#FFFFFF</color>

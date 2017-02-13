@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:text="DATE----------"/>
     </LinearLayout>
+
     <TextView
         android:id="@+id/add_week_of_day_repeat"
         android:layout_marginLeft="@dimen/left_margin"

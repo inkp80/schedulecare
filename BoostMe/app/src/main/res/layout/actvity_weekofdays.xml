@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/week_of_day_sun"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/textview_border"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:text="일요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_sun"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"
+            android:descendantFocusability="blocksDescendants"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/week_of_day_mon"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:gravity="center"
+            android:text="월요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_mon"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/week_of_day_tue"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="화요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_tue"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:id="@+id/week_of_day_wed"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="수요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_wed"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/week_of_day_thu"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="목요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_thu"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:id="@+id/week_of_day_fri"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="금요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_fri"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:id="@+id/week_of_day_sat"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="토요일"
+            android:textSize="@dimen/base_font_size" />
+        <CheckBox
+            android:id="@+id/check_sat"
+            android:layout_marginRight="@dimen/left_margin"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:buttonTint="@color/week_of_day_check"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

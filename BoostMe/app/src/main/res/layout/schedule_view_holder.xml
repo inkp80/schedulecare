@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:layout_marginLeft="@dimen/left_margin"
+    android:layout_marginRight="@dimen/left_margin">
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/schedule_view_holder_alarmbutton"

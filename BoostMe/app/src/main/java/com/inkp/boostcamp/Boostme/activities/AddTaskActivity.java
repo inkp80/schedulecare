@@ -1,6 +1,7 @@
 package com.inkp.boostcamp.Boostme.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.SmallScheduleAdapter;
+import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
@@ -80,6 +82,8 @@ public class AddTaskActivity extends AppCompatActivity{
     TextView locationView;
     @BindView(R.id.add_datetime_linear)
     LinearLayout datetime_linearViewer;
+    @BindView(R.id.add_week_of_day_repeat)
+    TextView weekofdaysView;
 
     @BindView(R.id.add_small_task_button)
     ImageView addSmallTaskButton;
@@ -96,6 +100,7 @@ public class AddTaskActivity extends AppCompatActivity{
         orders = 0;
         Dates = new Date();
         Dates.setSeconds(0);
+        WeekOfDays = 0;
 
         smallSchedules = new ArrayList<>();
         AddSmallTask("시작", Dates, orders);
@@ -147,6 +152,14 @@ public class AddTaskActivity extends AppCompatActivity{
                 CustomDialogForDateTime();
             }
         });
+        weekofdaysView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(AddTaskActivity.this, SelectWeekdaysActivity.class);
+                intent.putExtra("curVal", WeekOfDays);
+                startActivityForResult(intent, Utills.weekdays_requestCode);
+            }
+        });
     }
 
     @Override
@@ -176,7 +189,6 @@ public class AddTaskActivity extends AppCompatActivity{
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-
                         if(smallSchedules.isEmpty()){
                             Toast.makeText(AddTaskActivity.this, "최소 하나의 세부 일정이 필요합니다.", Toast.LENGTH_SHORT).show();
                             return;
@@ -184,13 +196,30 @@ public class AddTaskActivity extends AppCompatActivity{
                         else
                             InsertSchduleToDatabase();
                         //addSchdule();
-                        //refreshView();
 
                     }
                 }
         );
         //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Utills.weekdays_resultCode){
+            WeekOfDays = data.getIntExtra("weekdaysVal", -1);
+            if(WeekOfDays == -1){
+                Toast.makeText(this, "ERROR : weekdaysVal is illegal value", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if(WeekOfDays > 0){
+                setWeekDayToView(WeekOfDays);
+            }
+            Toast.makeText(this, String.valueOf(WeekOfDays), Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 
 
@@ -350,5 +379,41 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
 
+    public void setWeekDayToView(int val) {
+        weekofdaysView.setText("");
+        //init textView
+        for (int i = 1; i < 8; i++) {
+
+
+            int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
+            if(flag != 0){
+                switch (i){
+                    case 1 :
+                        weekofdaysView.append("일 ");
+                        break;
+                    case 2 :
+                        weekofdaysView.append("월 ");
+                        break;
+                    case 3 :
+                        weekofdaysView.append("화 ");
+                        break;
+                    case 4 :
+                        weekofdaysView.append("수 ");
+                        break;
+                    case 5 :
+                        weekofdaysView.append("목 ");
+                        break;
+                    case 6 :
+                        weekofdaysView.append("금 ");
+                        break;
+                    case 7 :
+                        weekofdaysView.append("토 ");
+                        break;
+                }
+            }
+
+
+        }
+    }
 
 }
