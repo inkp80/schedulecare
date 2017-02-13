@@ -137,7 +137,8 @@ public class AddTaskActivity extends AppCompatActivity{
                 new RVHItemClickListener(this, new RVHItemClickListener.OnItemClickListener(){
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(getBaseContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
+                        SmallSchedule temp = smallScheduleAdapter.printOnclick(position);
+                        Toast.makeText(getBaseContext(), temp.getSmall_tilte() + ", " + temp.getOrder_value(), Toast.LENGTH_SHORT).show();
                     }
                 })
         );

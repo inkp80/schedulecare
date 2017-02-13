@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 
@@ -62,15 +63,15 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         MainDate.setMinutes(MainDate.getMinutes() - minute);
         minute = minute + hour * 60;
 
-        holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte());
+        holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() + "(" +smallSchedules.get(position).getOrder_value() + ")");
         holder.smallTimeView.setText(String.valueOf(minute));
-
     }
 
     @Override
     public int getItemCount() {
         return smallSchedules.size();
     }
+
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition){
@@ -81,6 +82,10 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     @Override
     public void onItemDismiss(int position, int direction) {
         remove(position);
+    }
+
+    public SmallSchedule printOnclick(int position){
+        return smallSchedules.get(position);
     }
 
 
@@ -120,8 +125,25 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
     private void swap(int firstPosition, int secondPosition) {
+        Log.d("####swap", "data swap");
+        swapOrderValue(firstPosition, secondPosition);
         Collections.swap(smallSchedules, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
+        notifyItemChanged(firstPosition);
+        notifyItemChanged(secondPosition);
+    }
+
+    private void swapOrderValue(int fir, int sec){
+        SmallSchedule temp = smallSchedules.get(fir);
+        int tempOrderVal = temp.getOrder_value();
+        Date tempDate = temp.getSmall_time();
+
+        smallSchedules.get(fir).setOrder_value(smallSchedules.get(sec).getOrder_value());
+        smallSchedules.get(fir).setSmall_time(smallSchedules.get(sec).getSmall_time());
+
+        smallSchedules.get(sec).setOrder_value(tempOrderVal);
+        smallSchedules.get(sec).setSmall_time(tempDate);
+
     }
 
 
