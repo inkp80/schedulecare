@@ -3,6 +3,7 @@ package com.inkp.boostcamp.Boostme;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,21 +31,24 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         implements RVHAdapter{
 
     Date MainDate;
-    SimpleDateFormat format_small = new SimpleDateFormat("hh : mm a");
-    // dateView.setText(sdf.format(Dates).toString());
     public ArrayList<SmallSchedule> smallSchedules;
+    public ArrayList<Long> timeLine;
+
+    public void maketotalTime(){
+        long total_time = 0;
+        for(int i=0; i<smallSchedules.size(); i++){
+            total_time += smallSchedules.get(i).getSmall_time().getTime();
+        }
+    }
+
+    public ArrayList<SmallSchedule> getSmallSchedules(){
+        return smallSchedules;
+    }
 
     public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate){
         MainDate = parentDate;
         smallSchedules = s_schedules;
     }
-
-    /*@Override
-    public SmallScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.small_schedule_view_holder, parent, false);
-        return new SmallScheduleViewHolder(view);
-    }*/
 
     @Override
     public SmallScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -95,7 +99,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
 
-    class SmallScheduleViewHolder extends RecyclerView.ViewHolder implements RVHViewHolder {
+    class SmallScheduleViewHolder extends RecyclerView.ViewHolder implements RVHViewHolder{
         final TextView smallTitleView;
         final TextView smallTimeView;
         final int orderOfTask = -1;
@@ -115,8 +119,8 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         @Override
         public void onItemClear() {
         }
-    }
 
+    }
 
 
     private void remove(int position) {
@@ -125,10 +129,10 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
     private void swap(int firstPosition, int secondPosition) {
-        Log.d("####swap", "data swap");
         swapOrderValue(firstPosition, secondPosition);
         Collections.swap(smallSchedules, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
+        //notifyDataSetChanged();
         notifyItemChanged(firstPosition);
         notifyItemChanged(secondPosition);
     }
@@ -143,10 +147,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
         smallSchedules.get(sec).setOrder_value(tempOrderVal);
         smallSchedules.get(sec).setSmall_time(tempDate);
-
     }
-
-
 
 }
 

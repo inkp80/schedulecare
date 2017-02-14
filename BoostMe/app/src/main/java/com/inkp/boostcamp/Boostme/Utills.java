@@ -1,9 +1,11 @@
 package com.inkp.boostcamp.Boostme;
 
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
+import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -11,7 +13,7 @@ import io.realm.Realm;
  * Created by macbook on 2017. 2. 11..
  */
 
-public class Utills {
+public class Utills{
     public static int weekdays_requestCode=1313;
     public static int weekdays_resultCode=3131;
 
@@ -37,5 +39,9 @@ public class Utills {
         if(flag!=0)
             return (1<<Target_WeekOfDay);
         else return 0;
+    }
+
+    public interface SmallScheduleInterface{
+        public void isReleased(ArrayList<SmallSchedule> newData);
     }
 }

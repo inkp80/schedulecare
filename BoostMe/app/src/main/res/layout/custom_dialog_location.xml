@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center">
-    <EditText
+    <TextView
+        android:id="@+id/dialog_location"
         android:gravity="center"
-        android:id="@+id/dialog_small_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter title"
+        android:text="서울시 강남구 메리츠타워"
+        android:textSize="40sp"
+        android:background="@drawable/textview_border"
         />
     <TimePicker
-        android:id="@+id/dialog_small_timer"
+        android:id="@+id/dialog_location_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        >
+        android:timePickerMode="spinner">
     </TimePicker>
+
+
+
 </LinearLayout>
