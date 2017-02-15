@@ -14,6 +14,7 @@ import io.realm.Realm;
  */
 
 public class Utills{
+    public static String access_Schedule_id = "schedule_id";
     public static int weekdays_requestCode=1313;
     public static int weekdays_resultCode=3131;
 
@@ -21,13 +22,13 @@ public class Utills{
 
     public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, hh:mm a");
 
-    synchronized public static int getNextKeyMainSchedule(Realm realm)
+    synchronized public static long getNextKeyMainSchedule(Realm realm)
     {
         if(realm.where(ScheduleRealm.class).max("id") == null)return 1;
         else
             return realm.where(ScheduleRealm.class).max("id").intValue() + 1;
     }
-    synchronized public static int getNextKeySmallSchedule(Realm realm)
+    synchronized public static long getNextKeySmallSchedule(Realm realm)
     {
         if(realm.where(SmallScheduleRealm.class).max("id") == null)return 1;
         else

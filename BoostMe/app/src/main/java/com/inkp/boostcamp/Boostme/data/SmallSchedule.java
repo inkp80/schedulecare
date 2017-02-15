@@ -11,16 +11,10 @@ import io.realm.annotations.PrimaryKey;
 public class SmallSchedule {
     private String small_tilte;
     private Date small_time;
-    private int order_value;
+    private long end_time;
+    private long alert_time;
     private boolean alarm_flag;
 
-    public int getOrder_value() {
-        return order_value;
-    }
-
-    public void setOrder_value(int order_value) {
-        this.order_value = order_value;
-    }
 
     public Date getSmall_time() {
         return small_time;
@@ -40,6 +34,22 @@ public class SmallSchedule {
 
     public boolean isAlarm_flag() {
         return alarm_flag;
+    }
+
+    public long getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(long end_time) {
+        this.end_time = end_time;
+    }
+
+    public long getAlert_time() {
+        return alert_time;
+    }
+
+    public void setAlert_time(long alert_time) {
+        this.alert_time = alert_time;
     }
 
     public void setAlarm_flag(boolean alarm_flag) {

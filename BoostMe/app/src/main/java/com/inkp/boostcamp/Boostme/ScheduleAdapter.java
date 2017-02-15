@@ -1,6 +1,9 @@
 package com.inkp.boostcamp.Boostme;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -10,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inkp.boostcamp.Boostme.activities.DetailActivity;
+import com.inkp.boostcamp.Boostme.activities.MainActivity;
+import com.inkp.boostcamp.Boostme.data.ScheduleParcel;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 
 import java.util.ArrayList;
@@ -25,8 +31,10 @@ import io.realm.RealmResults;
 
 public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, ScheduleAdapter.ScheduleViewHolder>{
 
+    Context mContext;
     public ScheduleAdapter(Context context, RealmResults<ScheduleRealm> results){
         super(context, results, true);
+        mContext = context;
     }
 
     @Override
@@ -41,6 +49,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         holder.data = obj;
         holder.ViewHolder_title.setText(holder.data.getTitle());
         holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
+        holder.holder_schedule_id = obj.getId();
 
     }
 
@@ -49,6 +58,9 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         public TextView ViewHolder_date;
         public SwitchCompat ViewHolder_alarmButton;
         public ScheduleRealm data;
+
+        long holder_schedule_id;
+
         public ScheduleViewHolder(View view){
             super(view);
             ViewHolder_title = (TextView) view.findViewById(R.id.schedule_view_holder_Title);
@@ -68,6 +80,15 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
                         ViewHolder_alarmButton.setChecked(true);
                     break;
                     default:
+                        Intent intent = new Intent(mContext, DetailActivity.class);
+                        //int flag=0;
+                        //if(data.isAlarm_flag()) flag = 1;
+                        //ScheduleParcel scheduleParcel = new ScheduleParcel(data.getId(), data.getTitle(), data.getDate().getTime(), data.getWeek_of_day_repit(), flag);
+                        //intent.putExtra("scheduleParcel", scheduleParcel);
+                        intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
+                        Log.d("####111",String.valueOf(holder_schedule_id));
+                        mContext.startActivity(intent);
+                        //intent.putExtra("RealmData", data);
                         Toast.makeText(context, "To Detail View", Toast.LENGTH_SHORT).show();
                         break;
             }

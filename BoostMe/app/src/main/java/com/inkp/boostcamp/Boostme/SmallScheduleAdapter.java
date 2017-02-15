@@ -29,7 +29,7 @@ import io.realm.RealmResults;
 
 public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdapter.SmallScheduleViewHolder>
         implements RVHAdapter{
-
+    static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
     Date MainDate;
     SmallSchedule departSchedule;
     SmallSchedule finalSchedule;
@@ -43,6 +43,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate, SmallSchedule depart, SmallSchedule fin){
         MainDate = parentDate;
         smallSchedules = s_schedules;
+        timeLineSetting();
         departSchedule = depart;
         finalSchedule = fin;
     }
@@ -60,12 +61,13 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         //String TimeToShow = format_small.format(smallSchedules.get(position).getSmall_time());
         long hour = smallSchedules.get(position).getSmall_time().getHours();
         long minute = smallSchedules.get(position).getSmall_time().getMinutes();
-        MainDate.setHours(MainDate.getHours() - (int)hour);
-        MainDate.setMinutes(MainDate.getMinutes() - (int)minute);
         minute = minute + hour * 60;
 
-        holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() + "(" +smallSchedules.get(position).getOrder_value() + ")");
-        holder.smallTimeView.setText(String.valueOf(minute));
+        holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() );
+
+        Date viewTime=new Date();
+        viewTime.setTime(smallSchedules.get(position).getAlert_time());
+        holder.smallTimeView.setText(Utills.format_hhmm_a.format(viewTime) +"(" +String.valueOf(minute)+"분)");
     }
 
     @Override
@@ -91,10 +93,12 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
 
-    public void dataChagned(ArrayList<SmallSchedule> newSmallSchedule){
+    public void dataChagned(ArrayList<SmallSchedule> newSmallSchedule, Date newDate){
         smallSchedules = newSmallSchedule;
-        //departSchedule = depart;
+        MainDate = newDate;
+        timeLineSetting();
         notifyDataSetChanged();
+        Log.d("#####", Utills.format_yymmdd_hhmm_a.format(MainDate));
     }
 
 
@@ -123,18 +127,37 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
     private void remove(int position) {
         smallSchedules.remove(position);
+        timeLineSetting();
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     private void swap(int firstPosition, int secondPosition) {
-        Log.d("#####firstSmall", smallSchedules.get(firstPosition).getSmall_tilte());
-        Log.d("#####secSmall", smallSchedules.get(secondPosition).getSmall_tilte());
         Collections.swap(smallSchedules, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
+        timeLineSetting();
         notifyItemChanged(firstPosition);
         notifyItemChanged(secondPosition);
     }
 
+    public void timeLineSetting(){
+        Date tmpDate = new Date(MainDate.getTime());
+        long timeline = tmpDate.getTime();
+
+        for(int i=smallSchedules.size()-1; i>=0; i--){
+
+            Date time = smallSchedules.get(i).getSmall_time();
+            long time_to_minute = time.getHours() * 60 * ONE_MINUTE_IN_MILLIS + time.getMinutes() * ONE_MINUTE_IN_MILLIS;
+
+
+            smallSchedules.get(i).setEnd_time(timeline);
+            smallSchedules.get(i).setAlert_time(timeline-time_to_minute);
+
+            timeline -= time_to_minute;
+            tmpDate.setTime(timeline);
+
+        }
+    }
 
 
 }
