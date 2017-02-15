@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
+import org.w3c.dom.Text;
+
 import java.util.Date;
 
 import butterknife.BindView;
@@ -51,6 +53,8 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
         public SmallScheduleRealm data;
         public DetailScheduleViewHolder(View view){
             super(view);
+            holder_title = (TextView) view.findViewById(R.id.detail_viewholder_title);
+            holder_date = (TextView) view.findViewById(R.id.detail_viewholder_date);
         }
         @Override
         public void onClick(View v) {
