@@ -60,11 +60,11 @@ public class AddTaskActivity extends AppCompatActivity{
     public SmallScheduleAdapter smallScheduleAdapter;
     public RecyclerView smallScheduleRecyclerView;
     public ArrayList<SmallSchedule> smallSchedules;
-    public ArrayList<SmallSchedule> start_Schedules;
 
-    public SmallSchedule departTime;
 
-    public int orders;
+    public SmallSchedule departSchedule;
+    public SmallSchedule finalSchedule;
+
     public long MainScheduleId;
 
     public Date Dates;
@@ -72,6 +72,7 @@ public class AddTaskActivity extends AppCompatActivity{
     public int WeekOfDays;
     public String Location;
     public boolean MainAlarm = true;
+    public boolean isDepartTimeSet = false;
     //list에 대해서 -> 배열을 통해 객체를 따로 넣는다
     //해당 리스트는 타이틀 시간 우선순위 알람여부를 갖는 하위 데이터 테이블을 갖는다
 
@@ -93,6 +94,8 @@ public class AddTaskActivity extends AppCompatActivity{
     ImageView addSmallTaskButton;
     @BindView(R.id.add_load_small_task_button)
     ImageView loadSmallTaskButton;
+    @BindView(R.id.add_location_depart_time)
+    TextView locationDepartTimeView;
 
     Realm realm;
     @Override
@@ -101,31 +104,33 @@ public class AddTaskActivity extends AppCompatActivity{
         setContentView(R.layout.acitivity_add_task);
         ButterKnife.bind(this);
 
-        orders = 0;
         Dates = new Date();
         Dates.setSeconds(0);
         WeekOfDays = 0;
-        departTime = new SmallSchedule();
+
+        //출발시간 & 마지막 스케쥴 초기화
+        departSchedule = new SmallSchedule();
+        finalSchedule = new SmallSchedule();
+        Date finalTime= new Date(); finalTime.setTime(0);
+        finalSchedule.setSmall_time(finalTime);
+        finalSchedule.setSmall_tilte("일정 시작");
+
 
         dateView.setText(format_yymmdd_hhmm_a.format(new Date()));
         smallSchedules = new ArrayList<>();
-        start_Schedules = new ArrayList<>();
-        AddSmallTask("일정 시작", Dates);
-        //사용자로부터 입력 받은 시간을 그대로 반영한다.
-        //사용자로부터 시간 입력받으면 즉각적인 수정이 필요함
 
-
+        //realm database setup
         realm = Realm.getDefaultInstance();
         MainScheduleId = getNextKeyMainSchedule(realm);
 
+        //action bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
 
 
-
+        //recyclerView part
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
-        //refreshRecyclerView(smallSchedules);
-        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, Dates);
+        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, Dates, departSchedule, finalSchedule);
         smallScheduleRecyclerView.hasFixedSize();
         smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
@@ -249,7 +254,6 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
 
-
     private void InsertSchduleToDatabase(){
         getDataFromView();
         mainScheduleAddtoRealm();
@@ -289,7 +293,6 @@ public class AddTaskActivity extends AppCompatActivity{
                 newSchedule.addAll(smallScheduleAdapter.getSmallSchedules());
                 smallSchedules.clear();
                 smallSchedules.addAll(newSchedule);
-                //smallSchedules = (ArrayList<SmallSchedule>)newSchedule.clone();
 
                 int h, m;
                 h=timePicker.getCurrentHour();
@@ -300,10 +303,16 @@ public class AddTaskActivity extends AppCompatActivity{
                 String s_title = edit_title.getText().toString();
                 if(s_title.length() == 0) {
                     Toast.makeText(AddTaskActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
-                    return;
                 }
-                AddSmallTask(s_title, tempDate);
-                refreshRecyclerView(smallSchedules);
+
+                if(isDepartTimeSet) {
+                    smallSchedules.remove(smallSchedules.size() - 1);
+                    AddSmallTask(s_title, tempDate);
+                    smallSchedules.add(departSchedule);
+                }else{
+                    AddSmallTask(s_title, tempDate);
+                }
+                refreshRecyclerView(smallSchedules, departSchedule);
             }
         });
         buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -322,6 +331,7 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
     public void CustomDialogForDateTime() {
+        //시간 변경된거 Apdater에 넣어줘야함
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog_datetime, null);
 
@@ -334,9 +344,11 @@ public class AddTaskActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                ArrayList<SmallSchedule> newSchedule = smallScheduleAdapter.getSmallSchedules();
+                ArrayList<SmallSchedule> newSchedule = new ArrayList<SmallSchedule>();
+                newSchedule = smallScheduleAdapter.getSmallSchedules();
                 smallSchedules.clear();
-                smallSchedules = newSchedule;
+                smallSchedules.addAll(newSchedule);
+                refreshRecyclerView(smallSchedules, departSchedule);
 
                 Dates.setHours(timePicker.getCurrentHour());
                 Dates.setMinutes(timePicker.getCurrentMinute());
@@ -358,11 +370,6 @@ public class AddTaskActivity extends AppCompatActivity{
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        smallSchedules.clear();
-        smallSchedules = new ArrayList<>();
-        AddSmallTask("일정 시작", Dates);
-
-        refreshRecyclerView(smallSchedules);
     }
 
 
@@ -377,10 +384,8 @@ public class AddTaskActivity extends AppCompatActivity{
         timePicker.setCurrentMinute(0);
 
 
-        //멤버의 세부내역 입력 Dialog 생성 및 보이기
-        AlertDialog.Builder buider = new AlertDialog.Builder(this); //AlertDialog.Builder 객체 생성
-        //buider.setTitle("Member Information"); //Dialog 제목
-        buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
+        AlertDialog.Builder buider = new AlertDialog.Builder(this);
+        buider.setView(dialogView);
         buider.setPositiveButton("저장", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -392,17 +397,29 @@ public class AddTaskActivity extends AppCompatActivity{
                 Date tempDate = new Date();
                 tempDate.setHours(h);
                 tempDate.setMinutes(m);
+                departSchedule.setSmall_time(tempDate);
+                departSchedule.setSmall_tilte("출발");
+                locationDepartTimeView.append(String.valueOf(tempDate.getMinutes() + tempDate.getHours() * 60) + "분");
 
+                if(isDepartTimeSet) {
+                    smallSchedules.remove(smallSchedules.size() - 1);
+                    smallSchedules.add(departSchedule);
+                }else{
+                    smallSchedules.add(departSchedule);
+                    isDepartTimeSet=true;
+                }
 
-
+                refreshRecyclerView(smallSchedules, departSchedule);
             }
         });
         buider.setNegativeButton("취소", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
-                //do cancle action on activity
             }
         });
+        AlertDialog dialog = buider.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     public void smallScheduleAddToRealm(){
@@ -488,32 +505,13 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
 
-    public Utills.SmallScheduleInterface listenerInterface = new Utills.SmallScheduleInterface(){
+    public void refreshRecyclerView(ArrayList<SmallSchedule> newData, SmallSchedule depart){
 
-        @Override
-        public void isReleased(ArrayList<SmallSchedule> newData) {
-            Log.d("####", "interface ON");
-            refreshRecyclerView(newData);
-        }
-    };
-
-    public void refreshRecyclerView(ArrayList<SmallSchedule> newData){
         smallScheduleAdapter.dataChagned(newData);
         smallScheduleAdapter.notifyDataSetChanged();
     }
+
     public void setScheduleStartTime(String title, Date date){
-        start_Schedules.clear();
-        start_Schedules = new ArrayList<>();
-
-        SmallSchedule tmp_smallSchedule = new SmallSchedule();
-
-        tmp_smallSchedule.setSmall_tilte(title);
-        tmp_smallSchedule.setSmall_time(date);
-        start_Schedules.add(tmp_smallSchedule);
-
-        tmp_smallSchedule.setSmall_tilte("일정 시작");
-        tmp_smallSchedule.setSmall_time(date);
-        start_Schedules.add(tmp_smallSchedule);
 
         //departTime => 설정 여부 체크 *
         //미설정시 일정 시작 시간만
@@ -525,7 +523,6 @@ public class AddTaskActivity extends AppCompatActivity{
         //등록되는 순으로
         //for문으로 total time 구한 뒤, 기준 시간으로부터 시간 감소시켜 누적 시간 값 구할 것
         //drag&drop 값 갱신
-
     }
 
 }

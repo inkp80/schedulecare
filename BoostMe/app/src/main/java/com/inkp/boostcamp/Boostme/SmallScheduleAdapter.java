@@ -31,23 +31,20 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         implements RVHAdapter{
 
     Date MainDate;
+    SmallSchedule departSchedule;
+    SmallSchedule finalSchedule;
     public ArrayList<SmallSchedule> smallSchedules;
-    public ArrayList<Long> timeLine;
 
-    public void maketotalTime(){
-        long total_time = 0;
-        for(int i=0; i<smallSchedules.size(); i++){
-            total_time += smallSchedules.get(i).getSmall_time().getTime();
-        }
-    }
 
     public ArrayList<SmallSchedule> getSmallSchedules(){
         return smallSchedules;
     }
 
-    public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate){
+    public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate, SmallSchedule depart, SmallSchedule fin){
         MainDate = parentDate;
         smallSchedules = s_schedules;
+        departSchedule = depart;
+        finalSchedule = fin;
     }
 
     @Override
@@ -61,10 +58,10 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     public void onBindViewHolder(SmallScheduleAdapter.SmallScheduleViewHolder holder, int position) {
 
         //String TimeToShow = format_small.format(smallSchedules.get(position).getSmall_time());
-        int hour = smallSchedules.get(position).getSmall_time().getHours();
-        int minute = smallSchedules.get(position).getSmall_time().getMinutes();
-        MainDate.setHours(MainDate.getHours() - hour);
-        MainDate.setMinutes(MainDate.getMinutes() - minute);
+        long hour = smallSchedules.get(position).getSmall_time().getHours();
+        long minute = smallSchedules.get(position).getSmall_time().getMinutes();
+        MainDate.setHours(MainDate.getHours() - (int)hour);
+        MainDate.setMinutes(MainDate.getMinutes() - (int)minute);
         minute = minute + hour * 60;
 
         holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() + "(" +smallSchedules.get(position).getOrder_value() + ")");
@@ -79,6 +76,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition){
+        //if(fromPosition == smallSchedules.size()-1 || toPosition == smallSchedules.size()-1) return false;
         swap(fromPosition, toPosition);
         return false;
     }
@@ -95,14 +93,14 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
     public void dataChagned(ArrayList<SmallSchedule> newSmallSchedule){
         smallSchedules = newSmallSchedule;
-        //notifyDataSetChanged();
+        //departSchedule = depart;
+        notifyDataSetChanged();
     }
 
 
     class SmallScheduleViewHolder extends RecyclerView.ViewHolder implements RVHViewHolder{
         final TextView smallTitleView;
         final TextView smallTimeView;
-        final int orderOfTask = -1;
         final boolean isAlarm = false;
 
         public SmallScheduleViewHolder(View itemView) {
@@ -129,25 +127,15 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
     private void swap(int firstPosition, int secondPosition) {
-        swapOrderValue(firstPosition, secondPosition);
+        Log.d("#####firstSmall", smallSchedules.get(firstPosition).getSmall_tilte());
+        Log.d("#####secSmall", smallSchedules.get(secondPosition).getSmall_tilte());
         Collections.swap(smallSchedules, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
-        //notifyDataSetChanged();
         notifyItemChanged(firstPosition);
         notifyItemChanged(secondPosition);
     }
 
-    private void swapOrderValue(int fir, int sec){
-        SmallSchedule temp = smallSchedules.get(fir);
-        int tempOrderVal = temp.getOrder_value();
-        Date tempDate = temp.getSmall_time();
 
-        smallSchedules.get(fir).setOrder_value(smallSchedules.get(sec).getOrder_value());
-        smallSchedules.get(fir).setSmall_time(smallSchedules.get(sec).getSmall_time());
-
-        smallSchedules.get(sec).setOrder_value(tempOrderVal);
-        smallSchedules.get(sec).setSmall_time(tempDate);
-    }
 
 }
 
