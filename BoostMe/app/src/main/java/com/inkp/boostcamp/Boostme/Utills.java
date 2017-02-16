@@ -27,7 +27,7 @@ public class Utills{
 
     public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
 
-    public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, hh:mm a");
+    public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, a hh:mm");
 
     synchronized public static int getNextKeyMainSchedule(Realm realm)
     {
@@ -47,10 +47,6 @@ public class Utills{
         if(flag!=0)
             return (1<<Target_WeekOfDay);
         else return 0;
-    }
-
-    public interface SmallScheduleInterface{
-        public void isReleased(ArrayList<SmallSchedule> newData);
     }
 
 

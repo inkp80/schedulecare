@@ -26,6 +26,9 @@ public class AlarmReceiver extends BroadcastReceiver{
         long date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
         int week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
 
+
+
+
         //String alarmId = String.valueOf(Schedule_id) + String.valueOf(idx);
 
         //PendingIntent pendingIntent

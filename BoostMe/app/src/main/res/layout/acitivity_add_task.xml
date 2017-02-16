@@ -5,22 +5,28 @@
     <EditText
         android:id="@+id/add_task_title"
         android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Title"/>
+        android:hint="일정 제목을 입력하세요."
+        android:background="@drawable/box_border_bot"/>
 
     <LinearLayout
         android:id="@+id/add_datetime_linear"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:background="@drawable/box_border_bot">
         <TextView
             android:id="@+id/add_task_time"
             android:layout_marginLeft="@dimen/left_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/base_font_size"
-            android:text="TIME"/>
+            android:text="일정 시간"/>
         <TextView
             android:id="@+id/add_task_date"
             android:layout_marginLeft="@dimen/left_margin"
@@ -32,25 +38,29 @@
 
     <TextView
         android:id="@+id/add_week_of_day_repeat"
-        android:layout_marginTop="@dimen/top_bot_margin"
-        android:layout_marginLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="요일 반복 "
-        android:textSize="@dimen/base_font_size" />
+        android:textSize="@dimen/base_font_size"
+        android:background="@drawable/box_border_bot"/>
 
     <LinearLayout
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:paddingTop="@dimen/top_bot_margin"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_border_bot">
         <TextView
             android:id="@+id/add_location"
             android:layout_marginLeft="@dimen/left_margin"
-            android:layout_marginTop="@dimen/top_bot_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/base_font_size"
-            android:text="Merizit Tower, KN, SEOUL"/>
+            android:text="서울시 강남구 메리츠타워"/>
         <TextView
             android:layout_marginLeft="@dimen/left_margin"
             android:layout_marginTop="@dimen/top_bot_margin"
@@ -62,6 +72,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/box_border_bot"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -69,13 +80,15 @@
         <RelativeLayout
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <TextView
                 android:textSize="20sp"
                 android:layout_marginLeft="@dimen/left_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="small tasks"/>
+                android:text="small tasks"
+                />
             <ImageView
                 android:id="@+id/add_load_small_task_button"
                 android:layout_marginRight="5dp"

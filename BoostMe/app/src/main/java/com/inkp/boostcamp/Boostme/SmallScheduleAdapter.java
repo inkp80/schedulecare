@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
@@ -36,14 +37,14 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     Date MainDate;
     SmallSchedule departSchedule;
     SmallSchedule finalSchedule;
-    public ArrayList<SmallSchedule> smallSchedules;
+    List<SmallSchedule> smallSchedules;
 
 
-    public ArrayList<SmallSchedule> getSmallSchedules(){
+    public List<SmallSchedule> getSmallSchedules(){
         return smallSchedules;
     }
 
-    public SmallScheduleAdapter(ArrayList<SmallSchedule> s_schedules, Date parentDate, SmallSchedule depart, SmallSchedule fin){
+    public SmallScheduleAdapter(List<SmallSchedule> s_schedules, Date parentDate, SmallSchedule depart, SmallSchedule fin){
         MainDate = parentDate;
         smallSchedules = s_schedules;
         timeLineSetting();
@@ -98,7 +99,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
 
-    public void dataChagned(ArrayList<SmallSchedule> newSmallSchedule, Date newDate){
+    public void dataChagned(List<SmallSchedule> newSmallSchedule, Date newDate){
         smallSchedules = newSmallSchedule;
         MainDate = newDate;
         timeLineSetting();

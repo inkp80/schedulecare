@@ -99,7 +99,7 @@ public class DetailActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(false);
 
         LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar_setting, null);
+        View actionbar = inflater.inflate(R.layout.custom_actionbar_detail, null);
 
         actionBar.setCustomView(actionbar);
         Toolbar parent = (Toolbar) actionbar.getParent();

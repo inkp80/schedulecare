@@ -37,8 +37,10 @@ import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -64,13 +66,13 @@ public class AddTaskActivity extends AppCompatActivity{
     private InputMethodManager imm;
     public SmallScheduleAdapter smallScheduleAdapter;
     public RecyclerView smallScheduleRecyclerView;
-    public ArrayList<SmallSchedule> smallSchedules;
+    public List<SmallSchedule> smallSchedules;
 
 
     public SmallSchedule departSchedule;
     public SmallSchedule finalSchedule;
 
-    public int MainScheduleId;
+    public int main_schedule_id;
 
     public Date Dates;
     public String Title;
@@ -126,10 +128,17 @@ public class AddTaskActivity extends AppCompatActivity{
 
         //realm database setup
         realm = Realm.getDefaultInstance();
-        MainScheduleId = getNextKeyMainSchedule(realm);
+        main_schedule_id = getNextKeyMainSchedule(realm);
 
         //action bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+
+        //Date temp = new Date();
+        //temp.setHours(0);
+        //temp.setMinutes(0);
+        //AddSmallTask("출발", temp);
+        //isDepartTimeSet = true;
+
 
 
         //recyclerView part
@@ -264,8 +273,7 @@ public class AddTaskActivity extends AppCompatActivity{
         getDataFromView();
         mainScheduleAddtoRealm();
         smallScheduleAddToRealm();
-
-        alarmRegister(MainScheduleId);
+        //alarmRegister(main_schedule_id);
         finish();
     }
 
@@ -280,7 +288,7 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
 
-    ArrayList<SmallSchedule> newSchedule = new ArrayList<SmallSchedule>();
+    List<SmallSchedule> newSchedule = new ArrayList<SmallSchedule>();
     public void CustomDialogForSmallTasks() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -461,14 +469,14 @@ public class AddTaskActivity extends AppCompatActivity{
                     SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
 
                     SmallSchedule dataForTransaction = smallSchedules.get(idx);
-                    smallScheduleRealm.setSchedule_id(MainScheduleId);
+                    smallScheduleRealm.setSchedule_id(main_schedule_id);
                     smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
                     smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
                     smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
                     smallScheduleRealm.setOrder_value(idx);
 
                     //Realm realmForQuery = Realm.getDefaultInstance();
-                    ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
+                    ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
                     mainSchedule.getSmall_schedule().add(smallScheduleRealm);
                     bgRealm.insertOrUpdate(smallScheduleRealm);
                 }
@@ -480,7 +488,7 @@ public class AddTaskActivity extends AppCompatActivity{
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-                ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, MainScheduleId);
+                ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, main_schedule_id);
                 schedule.setTitle(Title);
                 schedule.setDate(Dates);
                 schedule.setLocation(Location);
@@ -532,14 +540,14 @@ public class AddTaskActivity extends AppCompatActivity{
         }
     }
 
-
-    public void refreshRecyclerView(ArrayList<SmallSchedule> newData, SmallSchedule depart, Date newDate){
+    public void refreshRecyclerView(List<SmallSchedule> newData, SmallSchedule depart, Date newDate){
         smallScheduleAdapter.dataChagned(newData, newDate);
     }
 
     public boolean checkDepartTimeisSet(){
         return isDepartTimeSet;
     }
+
     private void initKeyBoard(){
         imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
     }
@@ -548,30 +556,30 @@ public class AddTaskActivity extends AppCompatActivity{
         AlarmManager alarmManager = (AlarmManager) getSystemService(getBaseContext().ALARM_SERVICE);
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
 
-        intent.putExtra(Utills.ALARM_intent_scheduleId, MainScheduleId);
+        intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id);
         intent.putExtra(Utills.ALARM_intent_scheduleIdx, 0);
         intent.putExtra(Utills.ALARM_intent_title, Title);
         intent.putExtra(Utills.ALARM_intent_date, Dates.getTime());
         intent.putExtra(Utills.ALARM_intent_weekofday, WeekOfDays);
 
 
-        long TriggerTime = 0;
+        long triggerTime = 0;
+
 
         int alarm_id = Utills.alarmIdBuilder(schedule_id, 0);
 
         PendingIntent pendingIntent
                 = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Calendar calendar = Calendar.getInstance();
+        triggerTime = smallSchedules.get(0).getAlert_time();
+        Date trigerDate = new Date(triggerTime);
+        calendar.setTime(trigerDate);
 
-        //alarmManager.setAlarmClock();
-
-        //AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
-        //alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-
-        /*
         if(Build.VERSION.SDK_INT >= 23){
-            //AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
-            //alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+
+            AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
 
             //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
         }
@@ -582,7 +590,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
             }
         }
-        */
+
     }
 
 

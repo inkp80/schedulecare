@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/top_bot_margin"
+    android:paddingLeft="@dimen/left_margin"
+    android:paddingRight="@dimen/left_margin"
+    >
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
     <TextView
         android:id="@+id/detail_viewholder_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+        android:layout_below="@+id/detail_viewholder_title"
         android:id="@+id/detail_viewholder_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    </LinearLayout>
     <android.support.v7.widget.SwitchCompat
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_marginRight="@dimen/left_margin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+</RelativeLayout>

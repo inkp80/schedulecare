@@ -4,27 +4,33 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/setting_tag"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginTop="@dimen/top_bot_margin"
-        android:textSize="@dimen/base_font_size"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/menu_font_size"
         android:text="태그 등록하기"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_border_bot"/>
     <TextView
         android:id="@+id/setting_location"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginTop="@dimen/top_bot_margin"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
         android:text="위치 설정하기"
-        android:textSize="@dimen/base_font_size"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/setting_application_information"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginTop="@dimen/top_bot_margin"
-        android:text="어플리케이션 정보"
-        android:textSize="@dimen/base_font_size"
+        android:textSize="@dimen/menu_font_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/box_border_bot"/>
+    <TextView
+        android:id="@+id/setting_application_information"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:text="어플리케이션 정보"
+        android:textSize="@dimen/menu_font_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_border_bot"
         />
 </LinearLayout>

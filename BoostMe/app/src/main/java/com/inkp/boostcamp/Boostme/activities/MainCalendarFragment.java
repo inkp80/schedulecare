@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.transition.Scene;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +20,13 @@ import android.widget.Toast;
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.RobotoCalendarView;
 import com.inkp.boostcamp.Boostme.ScheduleAdapter;
+import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,13 +60,36 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     //@BindView(R.id.main_calendar)
     public RobotoCalendarView robotoCalendar;
 
+    public RealmResults<ScheduleRealm> Schedules;
+    public RealmResults<ScheduleRealm> schedulesForShown;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
-        RealmResults<ScheduleRealm> Schedules = realm.where(ScheduleRealm.class).findAll();
+
+        Date todayDate = new Date();
+        todayDate.setHours(0);
+        todayDate.setMinutes(0);
+        todayDate.setSeconds(0);
+        Log.d("###today", Utills.format_yymmdd_hhmm_a.format(todayDate));
+
+        Date tomorrow = new Date();
+        tomorrow.setTime(todayDate.getTime()+24*60*60*1000);
+        //tomorrow.setHours(24);
+        //tomorrow.setMinutes(0);
+        //tomorrow.setSeconds(0);
+
+        Log.d("###tomo", Utills.format_yymmdd_hhmm_a.format(tomorrow));
+
+
+//.lessThan("date", tomorrow).
+        Schedules = realm.where(ScheduleRealm.class).lessThan("date", tomorrow).findAll();
+
+        //Schedules = realm.where(ScheduleRealm.class).findAll();
         Schedules = Schedules.sort("date", Sort.ASCENDING);
+
+        Log.d("####size", String.valueOf(Schedules.size()));
         scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
     }
 
@@ -126,6 +153,13 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         scheduleRecyclerView.hasFixedSize();
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         scheduleRecyclerView.setAdapter(scheduleAdapter);
+
+
+
+        //Calendar calendar = new GregorianCalendar();
+        //calendar.setTime(Schedules.get(0).getDate());
+        //robotoCalendar.markCircleImage1(calendar);
+
         return v;
     }
 
@@ -147,5 +181,15 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onLeftButtonClick() {
         Toast.makeText(getActivity(), "onLeftButtonClick!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getDataFromSelectedDate(Date date){
+        for(int i=0; i<Schedules.size(); i++) {
+            Date CurPosDate = Schedules.get(i).getDate();
+            CurPosDate.setHours(0);
+            CurPosDate.setMinutes(0);
+            if(CurPosDate == date)
+                schedulesForShown.add(Schedules.get(i));
+        }
     }
 }
