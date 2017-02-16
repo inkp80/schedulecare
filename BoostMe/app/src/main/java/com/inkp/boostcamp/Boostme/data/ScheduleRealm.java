@@ -22,6 +22,7 @@ public class ScheduleRealm extends RealmObject{
     private String location;
     private int week_of_day_repit;
     private boolean alarm_flag;
+    private long date_in_long;
 
     private RealmList<SmallScheduleRealm> small_schedule;
 
@@ -90,5 +91,13 @@ public class ScheduleRealm extends RealmObject{
 
     public void setSmall_schedule(RealmList<SmallScheduleRealm> small_schedule) {
         this.small_schedule = small_schedule;
+    }
+
+    public long getDate_in_long() {
+        return date_in_long;
+    }
+
+    public void setDate_in_long(long date_in_long) {
+        this.date_in_long = date_in_long;
     }
 }
