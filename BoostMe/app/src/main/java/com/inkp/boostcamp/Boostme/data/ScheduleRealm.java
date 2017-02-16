@@ -15,7 +15,7 @@ public class ScheduleRealm extends RealmObject{
 
 
     @PrimaryKey
-    private long id;
+    private int id;
 
     private String title;
     private Date date;
@@ -28,11 +28,11 @@ public class ScheduleRealm extends RealmObject{
     @Ignore
     private int sessionId;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

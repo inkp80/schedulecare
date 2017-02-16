@@ -12,26 +12,26 @@ import io.realm.annotations.PrimaryKey;
 public class SmallScheduleRealm extends RealmObject {
 
     @PrimaryKey
-    private long id;
-    private long schedule_id;
+    private int id;
+    private int schedule_id;
     private String small_tilte;
     private Date small_time;
     private int order_value;
     private boolean alarm_flag;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getSchedule_id() {
+    public int getSchedule_id() {
         return schedule_id;
     }
 
-    public void setSchedule_id(long schedule_id) {
+    public void setSchedule_id(int schedule_id) {
         this.schedule_id = schedule_id;
     }
 

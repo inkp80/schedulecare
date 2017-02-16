@@ -18,17 +18,24 @@ public class Utills{
     public static int weekdays_requestCode=1313;
     public static int weekdays_resultCode=3131;
 
+    public static String ALARM_intent_scheduleId = "alarm_scheduleId";
+    public static String ALARM_intent_scheduleIdx = "alarm_scheduleIdx";
+    public static String ALARM_intent_title = "alarm_title";
+    public static String ALARM_intent_date = "alarm_date";
+    public static String ALARM_intent_weekofday = "alarm_weekofday";
+
+
     public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
 
     public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, hh:mm a");
 
-    synchronized public static long getNextKeyMainSchedule(Realm realm)
+    synchronized public static int getNextKeyMainSchedule(Realm realm)
     {
         if(realm.where(ScheduleRealm.class).max("id") == null)return 1;
         else
             return realm.where(ScheduleRealm.class).max("id").intValue() + 1;
     }
-    synchronized public static long getNextKeySmallSchedule(Realm realm)
+    synchronized public static int getNextKeySmallSchedule(Realm realm)
     {
         if(realm.where(SmallScheduleRealm.class).max("id") == null)return 1;
         else
@@ -44,5 +51,11 @@ public class Utills{
 
     public interface SmallScheduleInterface{
         public void isReleased(ArrayList<SmallSchedule> newData);
+    }
+
+
+    public static int alarmIdBuilder(int schedule_id, int index){
+        String Id_builder = String.valueOf(schedule_id) + String.valueOf(index);
+        return Integer.valueOf(Id_builder);
     }
 }

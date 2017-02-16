@@ -70,7 +70,7 @@ public class AddTaskActivity extends AppCompatActivity{
     public SmallSchedule departSchedule;
     public SmallSchedule finalSchedule;
 
-    public long MainScheduleId;
+    public int MainScheduleId;
 
     public Date Dates;
     public String Title;
@@ -264,6 +264,8 @@ public class AddTaskActivity extends AppCompatActivity{
         getDataFromView();
         mainScheduleAddtoRealm();
         smallScheduleAddToRealm();
+
+        alarmRegister(MainScheduleId);
         finish();
     }
 
@@ -542,20 +544,37 @@ public class AddTaskActivity extends AppCompatActivity{
         imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
     }
 
-    public void alarmRegister(int alarm_id){
+    public void alarmRegister(int schedule_id){
         AlarmManager alarmManager = (AlarmManager) getSystemService(getBaseContext().ALARM_SERVICE);
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
 
-        //intent data input
+        intent.putExtra(Utills.ALARM_intent_scheduleId, MainScheduleId);
+        intent.putExtra(Utills.ALARM_intent_scheduleIdx, 0);
+        intent.putExtra(Utills.ALARM_intent_title, Title);
+        intent.putExtra(Utills.ALARM_intent_date, Dates.getTime());
+        intent.putExtra(Utills.ALARM_intent_weekofday, WeekOfDays);
+
+
+        long TriggerTime = 0;
+
+        int alarm_id = Utills.alarmIdBuilder(schedule_id, 0);
 
         PendingIntent pendingIntent
                 = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
         //alarmManager.setAlarmClock();
 
+        //AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
+        //alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+
         /*
-        if(Build.VERSION.SDK_INT >= 23)
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        if(Build.VERSION.SDK_INT >= 23){
+            //AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
+            //alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+
+            //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        }
         else {
             if(Build.VERSION.SDK_INT >= 19) {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
