@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.internal.Util;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -61,14 +62,12 @@ public class DetailActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         Intent intent = getIntent();
         long targetId = intent.getLongExtra(Utills.access_Schedule_id, -1);
-        Log.d("####",String.valueOf(targetId));
         //Bundle bundle = getIntent().getExtras();
         //ScheduleParcel scheduleParcel = bundle.getParcelable("scheduleParcel");
 
         ScheduleRealm Schedules = realm.where(ScheduleRealm.class).equalTo("id", targetId).findFirst();
         Schedules.getSmall_schedule();
 
-        Log.d("####", Schedules.getTitle());
 
         detail_titleView.setText(Schedules.getTitle());
         detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(Schedules.getDate()));
@@ -76,7 +75,12 @@ public class DetailActivity extends AppCompatActivity {
         //result = Schedules.getSmall_schedule();
 
         RealmResults<SmallScheduleRealm> result = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
-        Log.d("###size#",String.valueOf(result.size()));
+        result = result.sort("order_value", Sort.ASCENDING);
+
+        for(int i=0; i<result.size(); i++){
+            Log.d("get idx", String.valueOf(result.get(i).getOrder_value()));
+        }
+
         DetailScheduleAdapter detailScheduleAdapter = new DetailScheduleAdapter(getBaseContext(), result);
         detail_recyclerView.hasFixedSize();
         detail_recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
@@ -95,7 +99,7 @@ public class DetailActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(false);
 
         LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar_detail, null);
+        View actionbar = inflater.inflate(R.layout.custom_actionbar_setting, null);
 
         actionBar.setCustomView(actionbar);
         Toolbar parent = (Toolbar) actionbar.getParent();
@@ -103,20 +107,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
         View view = getSupportActionBar().getCustomView();
-
-        //final ImageView EventListButton = (ImageView) view.findViewById(R.id.main_event_button);
-
-        /*EventListButton.setOnClickListener(
-                new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "Event", Toast.LENGTH_SHORT).show();
-                        CalendarListButton.setVisibility(View.VISIBLE);
-                        EventListButton.setVisibility(View.INVISIBLE);
-                        setFragmentShow(EventFragment, CalendarFragment);
-                    }
-                }
-        );*/
         return true;
     }
 
@@ -124,4 +114,5 @@ public class DetailActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
 }

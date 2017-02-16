@@ -32,6 +32,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
         /*
         Calendar calendar = Calendar.getInstance();
@@ -61,6 +62,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
         RealmResults<ScheduleRealm> Schedules = realm.where(ScheduleRealm.class).findAll();
+        Schedules = Schedules.sort("date", Sort.ASCENDING);
         scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
     }
 

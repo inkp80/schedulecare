@@ -36,7 +36,7 @@
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SET REPEAT"
+        android:text="요일 반복 "
         android:textSize="@dimen/base_font_size" />
 
     <LinearLayout

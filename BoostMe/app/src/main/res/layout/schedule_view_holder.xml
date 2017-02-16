@@ -3,9 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:layout_marginTop="@dimen/top_bot_margin"
-    android:layout_marginLeft="@dimen/left_margin"
-    android:layout_marginRight="@dimen/left_margin">
+    android:paddingTop="@dimen/top_bot_margin"
+    android:paddingLeft="@dimen/left_margin"
+    android:paddingRight="@dimen/left_margin"
+    android:background="@drawable/box_border_bot">
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/schedule_view_holder_alarmbutton"
@@ -36,5 +37,8 @@
             />
 
     </LinearLayout>
-
 </RelativeLayout>
+
+
+
+

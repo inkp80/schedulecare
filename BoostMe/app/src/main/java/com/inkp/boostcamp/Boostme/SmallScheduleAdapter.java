@@ -1,14 +1,17 @@
 package com.inkp.boostcamp.Boostme;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inkp.boostcamp.Boostme.activities.AddTaskActivity;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 
 import org.w3c.dom.Text;
@@ -78,7 +81,9 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition){
-        //if(fromPosition == smallSchedules.size()-1 || toPosition == smallSchedules.size()-1) return false;
+        if(smallSchedules.get(fromPosition).isDepart_time()
+                || smallSchedules.get(toPosition).isDepart_time()) return false;
+
         swap(fromPosition, toPosition);
         return false;
     }
@@ -158,7 +163,6 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
         }
     }
-
 
 }
 

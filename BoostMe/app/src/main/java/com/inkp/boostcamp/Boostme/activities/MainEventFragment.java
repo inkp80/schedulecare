@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by macbook on 2017. 2. 8..
@@ -36,8 +37,8 @@ public class MainEventFragment extends Fragment {
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
         RealmResults<ScheduleRealm> Schedule = realm.where(ScheduleRealm.class).findAll();
+        Schedule = Schedule.sort("date", Sort.ASCENDING);
         Event_scheduleAdapter = new ScheduleAdapter(getActivity(), Schedule);
-
     }
 
     @Override

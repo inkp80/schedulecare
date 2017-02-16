@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageView EventListButton = (ImageView) view.findViewById(R.id.main_event_button);
         final ImageView CalendarListButton = (ImageView) view.findViewById(R.id.main_calendar_button);
         final ImageView AddListButton = (ImageView) view.findViewById(R.id.main_add_button);
+        final ImageView SettingButton = (ImageView) view.findViewById(R.id.main_setting_button);
 
         EventListButton.setOnClickListener(
                 new View.OnClickListener(){
@@ -99,6 +100,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        SettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "To Setting", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return true;
     }

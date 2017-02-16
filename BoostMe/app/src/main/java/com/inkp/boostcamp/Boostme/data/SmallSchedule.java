@@ -14,7 +14,16 @@ public class SmallSchedule {
     private long end_time;
     private long alert_time;
     private boolean alarm_flag;
+    private boolean depart_time;
 
+
+    public boolean isDepart_time() {
+        return depart_time;
+    }
+
+    public void setDepart_time(boolean depart_time) {
+        this.depart_time = depart_time;
+    }
 
     public Date getSmall_time() {
         return small_time;

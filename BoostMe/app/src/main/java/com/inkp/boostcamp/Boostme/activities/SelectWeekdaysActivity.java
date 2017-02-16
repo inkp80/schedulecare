@@ -62,6 +62,7 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
             item_layout.setOnClickListener(this);
         }
         setCheckState();
+        Toast.makeText(this, "요일 반복 설정 시, 날짜 설정 값은 무시됩니다.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

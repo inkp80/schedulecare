@@ -1,8 +1,11 @@
 package com.inkp.boostcamp.Boostme.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +33,7 @@ import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
+import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,7 +61,7 @@ import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 //UUID.randomUUID().toString();
 
 public class AddTaskActivity extends AppCompatActivity{
-
+    private InputMethodManager imm;
     public SmallScheduleAdapter smallScheduleAdapter;
     public RecyclerView smallScheduleRecyclerView;
     public ArrayList<SmallSchedule> smallSchedules;
@@ -183,6 +188,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 CustomDialog_location();
             }
         });
+        initKeyBoard();
     }
 
     @Override
@@ -267,6 +273,7 @@ public class AddTaskActivity extends AppCompatActivity{
         SmallSchedule newTask = new SmallSchedule();
         newTask.setSmall_tilte(sTitle);
         newTask.setSmall_time(sDates);
+        newTask.setDepart_time(false);
         smallSchedules.add(newTask);
     }
 
@@ -314,6 +321,9 @@ public class AddTaskActivity extends AppCompatActivity{
                     AddSmallTask(s_title, tempDate);
                 }
                 refreshRecyclerView(smallSchedules, departSchedule, Dates);
+                imm.hideSoftInputFromWindow(edit_title.getWindowToken(),0);
+
+                //.hideSoftInputFromWindow(searchTxt.getWindowToken(), 0);
             }
         });
         buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -408,6 +418,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 tempDate.setMinutes(m);
                 departSchedule.setSmall_time(tempDate);
                 departSchedule.setSmall_tilte("출발");
+                departSchedule.setDepart_time(true);
                 locationDepartTimeView.append(String.valueOf(tempDate.getMinutes() + tempDate.getHours() * 60) + "분");
 
                 if(isDepartTimeSet && smallSchedules.size() != 0) {
@@ -432,6 +443,13 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
     public void smallScheduleAddToRealm(){
+
+        newSchedule = null; newSchedule = new ArrayList<SmallSchedule>();
+        newSchedule = smallScheduleAdapter.getSmallSchedules();
+        Log.d("####", String.valueOf(newSchedule.size()));
+        smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
+        smallSchedules.addAll(newSchedule);
+
         for(int i = 0; i<smallSchedules.size(); i++){
             final int idx = i;
 
@@ -445,6 +463,7 @@ public class AddTaskActivity extends AppCompatActivity{
                     smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
                     smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
                     smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
+                    smallScheduleRealm.setOrder_value(idx);
 
                     //Realm realmForQuery = Realm.getDefaultInstance();
                     ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", MainScheduleId).findFirst();
@@ -475,7 +494,7 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
     public void setWeekDayToView(int val) {
-        weekofdaysView.setText("");
+        //weekofdaysView.setText("");
         //init textView
         for (int i = 1; i < 8; i++) {
 
@@ -515,5 +534,38 @@ public class AddTaskActivity extends AppCompatActivity{
     public void refreshRecyclerView(ArrayList<SmallSchedule> newData, SmallSchedule depart, Date newDate){
         smallScheduleAdapter.dataChagned(newData, newDate);
     }
+
+    public boolean checkDepartTimeisSet(){
+        return isDepartTimeSet;
+    }
+    private void initKeyBoard(){
+        imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
+    }
+
+    public void alarmRegister(int alarm_id){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(getBaseContext().ALARM_SERVICE);
+        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+
+        //intent data input
+
+        PendingIntent pendingIntent
+                = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //alarmManager.setAlarmClock();
+
+        /*
+        if(Build.VERSION.SDK_INT >= 23)
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        else {
+            if(Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+            }
+        }
+        */
+    }
+
+
 
 }

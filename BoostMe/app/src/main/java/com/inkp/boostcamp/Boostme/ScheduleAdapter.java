@@ -49,8 +49,8 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         holder.data = obj;
         holder.ViewHolder_title.setText(holder.data.getTitle());
         holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
+        holder.ViewHolder_alarmButton.setChecked(holder.data.isAlarm_flag());
         holder.holder_schedule_id = obj.getId();
-
     }
 
     class ScheduleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
