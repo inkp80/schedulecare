@@ -12,6 +12,7 @@ import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -42,8 +43,9 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
     public void onBindViewHolder(DetailScheduleViewHolder holder, int position) {
         SmallScheduleRealm obj = getData().get(position);
         holder.data = obj;
+        Date viewDate = new Date(holder.data.getAlarm_start_time());
         holder.holder_title.setText(holder.data.getSmall_tilte());
-        holder.holder_date.setText(Utills.format_hhmm_a.format(holder.data.getSmall_time()));
+        holder.holder_date.setText(Utills.format_hhmm_a.format(viewDate));
     }
 
 

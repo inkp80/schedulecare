@@ -18,6 +18,7 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         implements RVHAdapter{
     static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
     Date MainDate;
+    long main_date_long;
     SmallSchedule departSchedule;
     SmallSchedule finalSchedule;
     List<SmallSchedule> smallSchedules;
@@ -44,8 +46,9 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         return smallSchedules;
     }
 
-    public SmallScheduleAdapter(List<SmallSchedule> s_schedules, Date parentDate, SmallSchedule depart, SmallSchedule fin){
+    public SmallScheduleAdapter(List<SmallSchedule> s_schedules, Date parentDate, long main_time_long, SmallSchedule depart, SmallSchedule fin){
         MainDate = parentDate;
+        main_date_long = main_time_long;
         smallSchedules = s_schedules;
         timeLineSetting();
         departSchedule = depart;
@@ -63,15 +66,17 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     public void onBindViewHolder(SmallScheduleAdapter.SmallScheduleViewHolder holder, int position) {
 
         //String TimeToShow = format_small.format(smallSchedules.get(position).getSmall_time());
-        long hour = smallSchedules.get(position).getSmall_time().getHours();
-        long minute = smallSchedules.get(position).getSmall_time().getMinutes();
-        minute = minute + hour * 60;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(smallSchedules.get(position).getSmall_time_long());
+        long hour = calendar.get(Calendar.HOUR_OF_DAY);
+        long minute = calendar.get(Calendar.MINUTE);
+
+        calendar.setTimeInMillis(smallSchedules.get(position).getAlert_time());
+        Date date = new Date(calendar.getTimeInMillis());
 
         holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() );
 
-        Date viewTime=new Date();
-        viewTime.setTime(smallSchedules.get(position).getAlert_time());
-        holder.smallTimeView.setText(Utills.format_hhmm_a.format(viewTime) +"(" +String.valueOf(minute)+"분)");
+        holder.smallTimeView.setText(Utills.format_hhmm_a.format(date) +"(" +String.valueOf(hour*60 + minute)+"분)");
     }
 
     @Override
@@ -102,9 +107,9 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     public void dataChagned(List<SmallSchedule> newSmallSchedule, Date newDate){
         smallSchedules = newSmallSchedule;
         MainDate = newDate;
+        main_date_long = MainDate.getTime();
         timeLineSetting();
         notifyDataSetChanged();
-        Log.d("#####", Utills.format_yymmdd_hhmm_a.format(MainDate));
     }
 
 
@@ -147,21 +152,22 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     }
 
     public void timeLineSetting(){
-        Date tmpDate = new Date(MainDate.getTime());
-        long timeline = tmpDate.getTime();
 
+        Calendar line_calendar = Calendar.getInstance();
+        line_calendar.setTimeInMillis(main_date_long);
+        Log.d("###Main", String.valueOf(line_calendar));
+
+
+        Calendar calLine = Calendar.getInstance();
         for(int i=smallSchedules.size()-1; i>=0; i--){
+            calLine.setTimeInMillis(smallSchedules.get(i).getSmall_time_long());
 
-            Date time = smallSchedules.get(i).getSmall_time();
-            long time_to_minute = time.getHours() * 60 * ONE_MINUTE_IN_MILLIS + time.getMinutes() * ONE_MINUTE_IN_MILLIS;
+            smallSchedules.get(i).setEnd_time(line_calendar.getTimeInMillis());
 
+            line_calendar.add(Calendar.HOUR_OF_DAY, -calLine.get(Calendar.HOUR_OF_DAY));
+            line_calendar.add(Calendar.MINUTE, -calLine.get(Calendar.MINUTE));
 
-            smallSchedules.get(i).setEnd_time(timeline);
-            smallSchedules.get(i).setAlert_time(timeline-time_to_minute);
-
-            timeline -= time_to_minute;
-            tmpDate.setTime(timeline);
-
+            smallSchedules.get(i).setAlert_time(line_calendar.getTimeInMillis());
         }
     }
 

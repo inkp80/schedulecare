@@ -194,10 +194,9 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         Calendar marking_end_date = new GregorianCalendar();
         marking_end_date.setTimeInMillis(mToday.getTimeInMillis());
         marking_end_date.set(Calendar.DATE, marking_end_date.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Log.d("###fin date", String.valueOf(marking_end_date.getTime()));
 
         RealmResults<ScheduleRealm> mListOfMonth = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", marking_start_date.getTimeInMillis()).lessThan("date_in_long", marking_end_date.getTimeInMillis()).findAll();
-        Log.d("###size", String.valueOf(mListOfMonth.size()));
+
         Calendar marking = new GregorianCalendar();
 
         for(int i=0; i<mListOfMonth.size(); i++) {

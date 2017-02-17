@@ -3,17 +3,25 @@ package com.inkp.boostcamp.Boostme;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
 
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
+import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by macbook on 2017. 2. 11..
@@ -83,12 +91,47 @@ public class Utills{
     public static long setTriggerTime(long input_time_long){
         Calendar calendar = Calendar.getInstance();
         long cur_time_long = calendar.getTimeInMillis();
-        long return_time = 0;
         if(cur_time_long < input_time_long){
-            return_time = input_time_long - cur_time_long;
-        }else{
-            return_time = cur_time_long + (cur_time_long - input_time_long);
+            return input_time_long;
+        }else {
+            long return_time = cur_time_long + (cur_time_long - input_time_long);
+            return return_time;
         }
-        return return_time;
+    }
+
+    public static void alarmRegister(Context context, int schedule_id) {
+        Realm realm = Realm.getDefaultInstance();
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        ScheduleRealm main_schedule = realm.where(ScheduleRealm.class).equalTo("id", schedule_id).findFirst();
+        RealmResults<SmallScheduleRealm> small_schedule = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAll();
+        Log.d("####", String.valueOf(small_schedule.size()));
+        long trigger_time = 0;
+        int alarm_id=0;
+
+        Calendar calendar = Calendar.getInstance();
+        //get start alarm schedule
+
+        for (int i = 0; i < small_schedule.size(); i++) {
+            if (small_schedule.get(i).isAlarm_flag()) {
+
+                trigger_time = small_schedule.get(i).getAlarm_start_time();
+                Date triger_date = new Date(trigger_time);
+                calendar.setTime(triger_date);
+                alarm_id = Utills.alarmIdBuilder(schedule_id, i);
+
+                intent.putExtra(Utills.ALARM_intent_scheduleId, schedule_id); //메인아이디
+                intent.putExtra(Utills.ALARM_intent_title, main_schedule.getTitle()); //메인 타이틀
+                intent.putExtra(Utills.ALARM_intent_date, main_schedule.getDate_in_long()); //메인 시간
+                intent.putExtra(Utills.ALARM_intent_scheduleIdx, i); //세부 인덱스
+                intent.putExtra(Utills.ALARM_intent_weekofday, main_schedule.getWeek_of_day_repit()); //요일 반복
+                intent.putExtra(Utills.ALARM_intent_small_title, small_schedule.get(i).getSmall_tilte());
+                break;
+            }
+        }
+        Log.d("triggertime", String.valueOf(trigger_time));
+
+        PendingIntent pendingIntent
+                = PendingIntent.getBroadcast(context, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Utills.enrollAlarm(context, pendingIntent, trigger_time);
     }
 }

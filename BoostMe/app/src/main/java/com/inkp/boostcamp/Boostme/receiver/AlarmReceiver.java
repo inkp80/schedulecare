@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.activities.AlarmActivity;
@@ -36,6 +38,8 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("alarm Received", "alarm");
+        Toast.makeText(context, "Alaamr", Toast.LENGTH_SHORT).show();
 
         mContext = context;
 
@@ -48,6 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
 
         schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
+        Log.d("schedule id", String.valueOf(schedule_id));
         idx = intent.getIntExtra(Utills.ALARM_intent_scheduleIdx, 0);
         title = intent.getStringExtra(Utills.ALARM_intent_title);
         date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
@@ -55,12 +60,15 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<SmallScheduleRealm> mSmallSchedule
-                = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAllSorted("order_value");
+                = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAll();
+        Log.d("mSmallSize", String.valueOf(mSmallSchedule.size()));
         small_title = mSmallSchedule.get(idx).getSmall_tilte();
+
 
 
         long alert_time_long = intent.getLongExtra(Utills.ALARM_intent_alert_time_long, 0);
         long triggertime = Utills.setTriggerTime(alert_time_long);
+        Log.d("Title", idx + title + date_in_long);
 
         //반복성 schedule인 경우
         if (week_of_days != 0) {
@@ -74,8 +82,6 @@ public class AlarmReceiver extends BroadcastReceiver{
                 //Utills.enrollAlarm(context, pendingIntent);
                 //재등록 24시간 이후로
             }
-
-
         }
         //일회성 schedule인 경우
         else{
@@ -101,5 +107,4 @@ public class AlarmReceiver extends BroadcastReceiver{
         intent.putExtra(Utills.ALARM_intent_small_title, small_title);
         return intent;
     }
-
 }

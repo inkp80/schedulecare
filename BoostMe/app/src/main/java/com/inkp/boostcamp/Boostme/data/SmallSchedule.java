@@ -11,11 +11,19 @@ import io.realm.annotations.PrimaryKey;
 public class SmallSchedule {
     private String small_tilte;
     private Date small_time;
+    private long small_time_long;
     private long end_time;
     private long alert_time;
     private boolean alarm_flag;
     private boolean depart_time;
 
+    public long getSmall_time_long() {
+        return small_time_long;
+    }
+
+    public void setSmall_time_long(long small_time_long) {
+        this.small_time_long = small_time_long;
+    }
 
     public boolean isDepart_time() {
         return depart_time;

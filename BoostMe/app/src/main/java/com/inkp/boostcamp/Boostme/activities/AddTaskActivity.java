@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +53,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
+import io.realm.RealmResults;
 
 import static com.inkp.boostcamp.Boostme.Utills.format_yymmdd_hhmm_a;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
@@ -139,20 +142,11 @@ public class AddTaskActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         main_schedule_id = getNextKeyMainSchedule(realm);
 
-        //action bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
 
-        //Date temp = new Date();
-        //temp.setHours(0);
-        //temp.setMinutes(0);
-        //AddSmallTask("출발", temp);
-        //isDepartTimeSet = true;
-
-
-        //recyclerView part
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
-        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, mDates, departSchedule, finalSchedule);
+        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, mDates, mCalendar.getTimeInMillis(), departSchedule, finalSchedule);
         smallScheduleRecyclerView.hasFixedSize();
         smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
@@ -275,21 +269,24 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
-
     private void InsertSchduleToDatabase() {
         getDataFromView();
         mainScheduleAddtoRealm();
         smallScheduleAddToRealm();
-        //alarmRegister(main_schedule_id);
+        //Utills.alarmRegister(getBaseContext(), main_schedule_id);
+        addAlarmRegister(main_schedule_id);
         finish();
     }
 
     //RecyclerView로 전달하기 위한 일시적인 small Task Array list
     //Database에 들어가는 객체는
-    public void AddSmallTask(String sTitle, Date sDates) {
+    public void AddSmallTask(String title, long datetime_long) {
         SmallSchedule newTask = new SmallSchedule();
-        newTask.setSmall_tilte(sTitle);
-        newTask.setSmall_time(sDates);
+        Date tmp = new Date(datetime_long);
+        newTask.setSmall_tilte(title);
+        newTask.setSmall_time(tmp);
+        newTask.setSmall_time_long(datetime_long);
+        newTask.setAlarm_flag(true);
         newTask.setDepart_time(false);
         smallSchedules.add(newTask);
     }
@@ -299,6 +296,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void CustomDialogForSmallTasks() {
 
+        final Calendar calendar = Calendar.getInstance();
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
         final EditText edit_title = (EditText) dialogView.findViewById(R.id.dialog_small_title);
@@ -306,6 +304,14 @@ public class AddTaskActivity extends AppCompatActivity {
         timePicker.setIs24HourView(true);
         timePicker.setCurrentHour(0);
         timePicker.setCurrentMinute(0);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+            }
+        });
+
 
         //멤버의 세부내역 입력 Dialog 생성 및 보이기
         AlertDialog.Builder buider = new AlertDialog.Builder(this); //AlertDialog.Builder 객체 생성
@@ -322,28 +328,23 @@ public class AddTaskActivity extends AppCompatActivity {
                 smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
-                int h, m;
-                h = timePicker.getCurrentHour();
-                m = timePicker.getCurrentMinute();
-                Date tempDate = new Date();
-                tempDate.setHours(h);
-                tempDate.setMinutes(m);
+
+
                 String s_title = edit_title.getText().toString();
                 if (s_title.length() == 0) {
                     Toast.makeText(AddTaskActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 if (isDepartTimeSet) {
                     smallSchedules.remove(smallSchedules.size() - 1);
-                    AddSmallTask(s_title, tempDate);
+                    AddSmallTask(s_title, calendar.getTimeInMillis());
                     smallSchedules.add(departSchedule);
                 } else {
-                    AddSmallTask(s_title, tempDate);
+                    AddSmallTask(s_title, calendar.getTimeInMillis());
                 }
                 refreshRecyclerView(smallSchedules, departSchedule, mDates);
                 imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
-
-                //.hideSoftInputFromWindow(searchTxt.getWindowToken(), 0);
             }
         });
         buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -355,10 +356,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         AlertDialog dialog = buider.create();
         dialog.setCanceledOnTouchOutside(false);
-
-
         dialog.show();
-
     }
 
     public void CustomDialogForDateTime() {
@@ -400,7 +398,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
-                Log.d("####", String.valueOf(newSchedule.size()));
+
                 smallSchedules = null;
                 smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
@@ -424,16 +422,24 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
-
     public void CustomDialog_location() {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog_location, null);
         final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
 
+        final Calendar calendar = Calendar.getInstance();
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_location_time);
         timePicker.setIs24HourView(true);
         timePicker.setCurrentHour(0);
         timePicker.setCurrentMinute(0);
+
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+            }
+        });
 
 
         AlertDialog.Builder buider = new AlertDialog.Builder(this);
@@ -444,23 +450,21 @@ public class AddTaskActivity extends AppCompatActivity {
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
-                Log.d("####", String.valueOf(newSchedule.size()));
                 smallSchedules = null;
                 smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
                 mLocation = locationName.getText().toString();
 
-                int h, m;
-                h = timePicker.getCurrentHour();
-                m = timePicker.getCurrentMinute();
-                Date tempDate = new Date();
-                tempDate.setHours(h);
-                tempDate.setMinutes(m);
-                departSchedule.setSmall_time(tempDate);
+
+
+                Date temp=new Date(calendar.getTimeInMillis());
+                departSchedule.setSmall_time(temp);
+                departSchedule.setSmall_time_long(calendar.getTimeInMillis());
                 departSchedule.setSmall_tilte("출발");
                 departSchedule.setDepart_time(true);
-                locationDepartTimeView.append(String.valueOf(tempDate.getMinutes() + tempDate.getHours() * 60) + "분");
+
+                locationDepartTimeView.setText("소요시간 "+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)*60 + calendar.get(Calendar.MINUTE)) + "분");
 
                 if (isDepartTimeSet && smallSchedules.size() != 0) {
                     smallSchedules.remove(smallSchedules.size() - 1);
@@ -488,7 +492,6 @@ public class AddTaskActivity extends AppCompatActivity {
         newSchedule = null;
         newSchedule = new ArrayList<SmallSchedule>();
         newSchedule = smallScheduleAdapter.getSmallSchedules();
-        Log.d("####", String.valueOf(newSchedule.size()));
         smallSchedules = null;
         smallSchedules = new ArrayList<SmallSchedule>();
         smallSchedules.addAll(newSchedule);
@@ -514,6 +517,11 @@ public class AddTaskActivity extends AppCompatActivity {
                     //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
                     bgRealm.insertOrUpdate(smallScheduleRealm);
                 }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "small Data Sucess");
+                }
             });
         }
     }
@@ -534,7 +542,7 @@ public class AddTaskActivity extends AppCompatActivity {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.d("REALM", "Data Sucess");
+                Log.d("REALM", "main Data Sucess");
             }
         });
     }
@@ -588,26 +596,22 @@ public class AddTaskActivity extends AppCompatActivity {
         imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
     }
 
-    public void alarmRegister(int schedule_id) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(getBaseContext().ALARM_SERVICE);
+    public void addAlarmRegister(int schedule_id) {
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
 
 
-
         long trigger_time = 0;
-
-
         int alarm_id = Utills.alarmIdBuilder(schedule_id, 0);
 
-
         Calendar calendar = Calendar.getInstance();
-        //get start alarm schedule
+        //Log.d("alarm size", String.valueOf(smallSchedules.size()));
+
         for (int i = 0; i < smallSchedules.size(); i++) {
+
             if (smallSchedules.get(i).isAlarm_flag()) {
                 trigger_time = smallSchedules.get(i).getAlert_time();
                 Date triger_date = new Date(trigger_time);
                 calendar.setTime(triger_date);
-
 
                 //메인 아이디, 메인 타이틀, 메인 시간, 세부 인덱스, 요일반복
                 //
@@ -617,7 +621,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 intent.putExtra(Utills.ALARM_intent_scheduleIdx, i); //세부 인덱스
                 intent.putExtra(Utills.ALARM_intent_weekofday, mWeekOfDays); //요일 반복
                 intent.putExtra(Utills.ALARM_intent_small_title, smallSchedules.get(i).getSmall_tilte());
-
                 break;
             }
         }
@@ -625,8 +628,9 @@ public class AddTaskActivity extends AppCompatActivity {
         PendingIntent pendingIntent
                 = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Utills.enrollAlarm(getBaseContext(), pendingIntent, trigger_time);
+        Utills.enrollAlarm(getBaseContext(), pendingIntent, Utills.setTriggerTime(trigger_time));
     }
+
 
 
 }
