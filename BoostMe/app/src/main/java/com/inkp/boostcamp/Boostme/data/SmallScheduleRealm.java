@@ -19,6 +19,8 @@ public class SmallScheduleRealm extends RealmObject {
     private int order_value;
     private boolean alarm_flag;
 
+    private long alarm_start_time;
+
     public int getId() {
         return id;
     }
@@ -65,5 +67,13 @@ public class SmallScheduleRealm extends RealmObject {
 
     public void setAlarm_flag(boolean alarm_flag) {
         this.alarm_flag = alarm_flag;
+    }
+
+    public long getAlarm_start_time() {
+        return alarm_start_time;
+    }
+
+    public void setAlarm_start_time(long alarm_start_time) {
+        this.alarm_start_time = alarm_start_time;
     }
 }

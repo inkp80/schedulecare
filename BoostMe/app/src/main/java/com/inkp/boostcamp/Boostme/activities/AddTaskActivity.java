@@ -63,7 +63,7 @@ import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 
 //UUID.randomUUID().toString();
 
-public class AddTaskActivity extends AppCompatActivity{
+public class AddTaskActivity extends AppCompatActivity {
     private InputMethodManager imm;
     SmallScheduleAdapter smallScheduleAdapter;
     RecyclerView smallScheduleRecyclerView;
@@ -75,11 +75,11 @@ public class AddTaskActivity extends AppCompatActivity{
 
     int main_schedule_id;
     Calendar mCalendar;
-    Date Dates;
-    String Title;
-    int WeekOfDays;
-    String Location;
-    boolean MainAlarm = true;
+    Date mDates;
+    String mTitle;
+    int mWeekOfDays;
+    String mLocation;
+    boolean mMainAlarm = true;
     boolean isDepartTimeSet = false;
     //list에 대해서 -> 배열을 통해 객체를 따로 넣는다
     //해당 리스트는 타이틀 시간 우선순위 알람여부를 갖는 하위 데이터 테이블을 갖는다
@@ -106,26 +106,28 @@ public class AddTaskActivity extends AppCompatActivity{
     TextView locationDepartTimeView;
 
     Realm realm;
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_add_task);
         ButterKnife.bind(this);
 
-        Dates = new Date();
+        mDates = new Date();
         mCalendar = new GregorianCalendar();
-        mCalendar.setTime(Dates);
+        mCalendar.setTime(mDates);
         mCalendar.set(Calendar.SECOND, 0);
         mCalendar.set(Calendar.MILLISECOND, 0);
 
 
-        Dates.setSeconds(0);
-        WeekOfDays = 0;
+        mDates.setSeconds(0);
+        mWeekOfDays = 0;
 
         //출발시간 & 마지막 스케쥴 초기화
         departSchedule = new SmallSchedule();
         finalSchedule = new SmallSchedule();
-        Date finalTime= new Date(); finalTime.setTime(0);
+        Date finalTime = new Date();
+        finalTime.setTime(0);
         finalSchedule.setSmall_time(finalTime);
         finalSchedule.setSmall_tilte("일정 시작");
 
@@ -147,11 +149,10 @@ public class AddTaskActivity extends AppCompatActivity{
         //isDepartTimeSet = true;
 
 
-
         //recyclerView part
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
-        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, Dates, departSchedule, finalSchedule);
+        smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, mDates, departSchedule, finalSchedule);
         smallScheduleRecyclerView.hasFixedSize();
         smallScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         smallScheduleRecyclerView.setAdapter(smallScheduleAdapter);
@@ -165,7 +166,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 new RVHItemDividerDecoration(this, LinearLayoutManager.VERTICAL));
 
         smallScheduleRecyclerView.addOnItemTouchListener(
-                new RVHItemClickListener(this, new RVHItemClickListener.OnItemClickListener(){
+                new RVHItemClickListener(this, new RVHItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         SmallSchedule temp = smallScheduleAdapter.printOnclick(position);
@@ -189,18 +190,18 @@ public class AddTaskActivity extends AppCompatActivity{
                 CustomDialogForDateTime();
             }
         });
-        weekofdaysView.setOnClickListener(new View.OnClickListener(){
+        weekofdaysView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent = new Intent(AddTaskActivity.this, SelectWeekdaysActivity.class);
-                intent.putExtra("curVal", WeekOfDays);
+                intent.putExtra("curVal", mWeekOfDays);
                 startActivityForResult(intent, Utills.weekdays_requestCode);
             }
         });
 
-        locationView.setOnClickListener(new View.OnClickListener(){
+        locationView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 CustomDialog_location();
             }
         });
@@ -208,12 +209,13 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         realm.close();
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayShowCustomEnabled(true);
@@ -221,7 +223,7 @@ public class AddTaskActivity extends AppCompatActivity{
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
 
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View actionbar = inflater.inflate(R.layout.custom_actionbar_add, null);
 
         actionBar.setCustomView(actionbar);
@@ -231,14 +233,13 @@ public class AddTaskActivity extends AppCompatActivity{
         View view = getSupportActionBar().getCustomView();
         ImageView saveButton = (ImageView) view.findViewById(R.id.add_save_button);
         saveButton.setOnClickListener(
-                new View.OnClickListener(){
+                new View.OnClickListener() {
                     @Override
-                    public void onClick(View view){
-                        if(smallSchedules.isEmpty()){
+                    public void onClick(View view) {
+                        if (smallSchedules.isEmpty()) {
                             Toast.makeText(AddTaskActivity.this, "최소 하나의 세부 일정이 필요합니다.", Toast.LENGTH_SHORT).show();
                             return;
-                        }
-                        else
+                        } else
                             InsertSchduleToDatabase();
                         //addSchdule();
 
@@ -250,33 +251,32 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Utills.weekdays_resultCode){
-            WeekOfDays = data.getIntExtra("weekdaysVal", -1);
-            if(WeekOfDays == -1){
+        if (resultCode == Utills.weekdays_resultCode) {
+            mWeekOfDays = data.getIntExtra("weekdaysVal", -1);
+            if (mWeekOfDays == -1) {
                 Toast.makeText(this, "ERROR : weekdaysVal is illegal value", Toast.LENGTH_SHORT).show();
                 return;
+            } else if (mWeekOfDays > 0) {
+                setWeekDayToView(mWeekOfDays);
             }
-            else if(WeekOfDays > 0){
-                setWeekDayToView(WeekOfDays);
-            }
-            Toast.makeText(this, String.valueOf(WeekOfDays), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
 
         }
 
     }
 
 
-    public void getDataFromView(){
-        Title = titleView.getText().toString();
-        //Dates, Week_of_Days_repeats는 사용자 설정시 즉시 반영된다
-        Location = locationView.getText().toString();
+    public void getDataFromView() {
+        mTitle = titleView.getText().toString();
+        //mDates, Week_of_Days_repeats는 사용자 설정시 즉시 반영된다
+        mLocation = locationView.getText().toString();
 
     }
 
 
-    private void InsertSchduleToDatabase(){
+    private void InsertSchduleToDatabase() {
         getDataFromView();
         mainScheduleAddtoRealm();
         smallScheduleAddToRealm();
@@ -286,7 +286,7 @@ public class AddTaskActivity extends AppCompatActivity{
 
     //RecyclerView로 전달하기 위한 일시적인 small Task Array list
     //Database에 들어가는 객체는
-    public void AddSmallTask(String sTitle, Date sDates){
+    public void AddSmallTask(String sTitle, Date sDates) {
         SmallSchedule newTask = new SmallSchedule();
         newTask.setSmall_tilte(sTitle);
         newTask.setSmall_time(sDates);
@@ -296,6 +296,7 @@ public class AddTaskActivity extends AppCompatActivity{
 
 
     List<SmallSchedule> newSchedule = new ArrayList<SmallSchedule>();
+
     public void CustomDialogForSmallTasks() {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -314,31 +315,33 @@ public class AddTaskActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                newSchedule = null; newSchedule = new ArrayList<SmallSchedule>();
+                newSchedule = null;
+                newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule.addAll(smallScheduleAdapter.getSmallSchedules());
-                smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
+                smallSchedules = null;
+                smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
                 int h, m;
-                h=timePicker.getCurrentHour();
-                m=timePicker.getCurrentMinute();
+                h = timePicker.getCurrentHour();
+                m = timePicker.getCurrentMinute();
                 Date tempDate = new Date();
                 tempDate.setHours(h);
                 tempDate.setMinutes(m);
                 String s_title = edit_title.getText().toString();
-                if(s_title.length() == 0) {
+                if (s_title.length() == 0) {
                     Toast.makeText(AddTaskActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
                 }
 
-                if(isDepartTimeSet) {
+                if (isDepartTimeSet) {
                     smallSchedules.remove(smallSchedules.size() - 1);
                     AddSmallTask(s_title, tempDate);
                     smallSchedules.add(departSchedule);
-                }else{
+                } else {
                     AddSmallTask(s_title, tempDate);
                 }
-                refreshRecyclerView(smallSchedules, departSchedule, Dates);
-                imm.hideSoftInputFromWindow(edit_title.getWindowToken(),0);
+                refreshRecyclerView(smallSchedules, departSchedule, mDates);
+                imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
 
                 //.hideSoftInputFromWindow(searchTxt.getWindowToken(), 0);
             }
@@ -369,19 +372,19 @@ public class AddTaskActivity extends AppCompatActivity{
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Dates.setHours(hourOfDay);
-                Dates.setMinutes(minute);
-                mCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                mCalendar.set(Calendar.MINUTE,minute);
+                mDates.setHours(hourOfDay);
+                mDates.setMinutes(minute);
+                mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                mCalendar.set(Calendar.MINUTE, minute);
             }
         });
-        datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE), new DatePicker.OnDateChangedListener(){
+        datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
 
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Dates.setYear(datePicker.getYear());
-                Dates.setMonth(datePicker.getMonth());
-                Dates.setDate(datePicker.getDayOfMonth());
+                mDates.setYear(datePicker.getYear());
+                mDates.setMonth(datePicker.getMonth());
+                mDates.setDate(datePicker.getDayOfMonth());
                 mCalendar.set(Calendar.YEAR, year);
                 mCalendar.set(Calendar.MONTH, monthOfYear);
                 mCalendar.set(Calendar.DATE, dayOfMonth);
@@ -394,15 +397,17 @@ public class AddTaskActivity extends AppCompatActivity{
         buider.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                newSchedule = null; newSchedule = new ArrayList<SmallSchedule>();
+                newSchedule = null;
+                newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
                 Log.d("####", String.valueOf(newSchedule.size()));
-                smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
+                smallSchedules = null;
+                smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
-                dateView.setText(Utills.format_yymmdd_hhmm_a.format(Dates).toString());
+                dateView.setText(Utills.format_yymmdd_hhmm_a.format(mDates).toString());
 
-                refreshRecyclerView(smallSchedules, departSchedule, Dates);
+                refreshRecyclerView(smallSchedules, departSchedule, mDates);
 
             }
 
@@ -420,7 +425,7 @@ public class AddTaskActivity extends AppCompatActivity{
     }
 
 
-    public void CustomDialog_location(){
+    public void CustomDialog_location() {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog_location, null);
         final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
@@ -436,17 +441,19 @@ public class AddTaskActivity extends AppCompatActivity{
         buider.setPositiveButton("저장", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                newSchedule = null; newSchedule = new ArrayList<SmallSchedule>();
+                newSchedule = null;
+                newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
                 Log.d("####", String.valueOf(newSchedule.size()));
-                smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
+                smallSchedules = null;
+                smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
-                Location = locationName.getText().toString();
+                mLocation = locationName.getText().toString();
 
                 int h, m;
-                h=timePicker.getCurrentHour();
-                m=timePicker.getCurrentMinute();
+                h = timePicker.getCurrentHour();
+                m = timePicker.getCurrentMinute();
                 Date tempDate = new Date();
                 tempDate.setHours(h);
                 tempDate.setMinutes(m);
@@ -455,20 +462,20 @@ public class AddTaskActivity extends AppCompatActivity{
                 departSchedule.setDepart_time(true);
                 locationDepartTimeView.append(String.valueOf(tempDate.getMinutes() + tempDate.getHours() * 60) + "분");
 
-                if(isDepartTimeSet && smallSchedules.size() != 0) {
+                if (isDepartTimeSet && smallSchedules.size() != 0) {
                     smallSchedules.remove(smallSchedules.size() - 1);
                     smallSchedules.add(departSchedule);
-                }else{
+                } else {
                     smallSchedules.add(departSchedule);
-                    isDepartTimeSet=true;
+                    isDepartTimeSet = true;
                 }
 
-                refreshRecyclerView(smallSchedules, departSchedule, Dates);
+                refreshRecyclerView(smallSchedules, departSchedule, mDates);
             }
         });
-        buider.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+        buider.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which){
+            public void onClick(DialogInterface dialog, int which) {
             }
         });
         AlertDialog dialog = buider.create();
@@ -476,20 +483,22 @@ public class AddTaskActivity extends AppCompatActivity{
         dialog.show();
     }
 
-    public void smallScheduleAddToRealm(){
+    public void smallScheduleAddToRealm() {
 
-        newSchedule = null; newSchedule = new ArrayList<SmallSchedule>();
+        newSchedule = null;
+        newSchedule = new ArrayList<SmallSchedule>();
         newSchedule = smallScheduleAdapter.getSmallSchedules();
         Log.d("####", String.valueOf(newSchedule.size()));
-        smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
+        smallSchedules = null;
+        smallSchedules = new ArrayList<SmallSchedule>();
         smallSchedules.addAll(newSchedule);
 
-        for(int i = 0; i<smallSchedules.size(); i++){
+        for (int i = 0; i < smallSchedules.size(); i++) {
             final int idx = i;
 
-            realm.executeTransactionAsync(new Realm.Transaction(){
+            realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
-                public void execute(Realm bgRealm){
+                public void execute(Realm bgRealm) {
                     SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
 
                     SmallSchedule dataForTransaction = smallSchedules.get(idx);
@@ -498,6 +507,7 @@ public class AddTaskActivity extends AppCompatActivity{
                     smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
                     smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
                     smallScheduleRealm.setOrder_value(idx);
+                    smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
 
                     //Realm realmForQuery = Realm.getDefaultInstance();
                     //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
@@ -508,21 +518,22 @@ public class AddTaskActivity extends AppCompatActivity{
         }
     }
 
-    public void mainScheduleAddtoRealm(){
+    public void mainScheduleAddtoRealm() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
                 ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, main_schedule_id);
-                schedule.setTitle(Title);
-                schedule.setDate(Dates);
-                schedule.setLocation(Location);
-                schedule.setWeek_of_day_repit(WeekOfDays);
-                schedule.setAlarm_flag(MainAlarm);
+                schedule.setTitle(mTitle);
+                schedule.setDate(mDates);
+                schedule.setLocation(mLocation);
+                schedule.setWeek_of_day_repit(mWeekOfDays);
+                schedule.setAlarm_flag(mMainAlarm);
                 schedule.setDate_in_long(mCalendar.getTimeInMillis());
                 bgRealm.insertOrUpdate(schedule);
-            }}, new Realm.Transaction.OnSuccess() {
+            }
+        }, new Realm.Transaction.OnSuccess() {
             @Override
-            public void onSuccess(){
+            public void onSuccess() {
                 Log.d("REALM", "Data Sucess");
             }
         });
@@ -535,27 +546,27 @@ public class AddTaskActivity extends AppCompatActivity{
 
 
             int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
-            if(flag != 0){
-                switch (i){
-                    case 1 :
+            if (flag != 0) {
+                switch (i) {
+                    case 1:
                         weekofdaysView.append("일 ");
                         break;
-                    case 2 :
+                    case 2:
                         weekofdaysView.append("월 ");
                         break;
-                    case 3 :
+                    case 3:
                         weekofdaysView.append("화 ");
                         break;
-                    case 4 :
+                    case 4:
                         weekofdaysView.append("수 ");
                         break;
-                    case 5 :
+                    case 5:
                         weekofdaysView.append("목 ");
                         break;
-                    case 6 :
+                    case 6:
                         weekofdaysView.append("금 ");
                         break;
-                    case 7 :
+                    case 7:
                         weekofdaysView.append("토 ");
                         break;
                 }
@@ -565,59 +576,57 @@ public class AddTaskActivity extends AppCompatActivity{
         }
     }
 
-    public void refreshRecyclerView(List<SmallSchedule> newData, SmallSchedule depart, Date newDate){
+    public void refreshRecyclerView(List<SmallSchedule> newData, SmallSchedule depart, Date newDate) {
         smallScheduleAdapter.dataChagned(newData, newDate);
     }
 
-    public boolean checkDepartTimeisSet(){
+    public boolean checkDepartTimeisSet() {
         return isDepartTimeSet;
     }
 
-    private void initKeyBoard(){
+    private void initKeyBoard() {
         imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
     }
 
-    public void alarmRegister(int schedule_id){
+    public void alarmRegister(int schedule_id) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(getBaseContext().ALARM_SERVICE);
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
 
-        intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id);
-        intent.putExtra(Utills.ALARM_intent_scheduleIdx, 0);
-        intent.putExtra(Utills.ALARM_intent_title, Title);
-        intent.putExtra(Utills.ALARM_intent_date, Dates.getTime());
-        intent.putExtra(Utills.ALARM_intent_weekofday, WeekOfDays);
 
 
-        long triggerTime = 0;
+        long trigger_time = 0;
 
 
         int alarm_id = Utills.alarmIdBuilder(schedule_id, 0);
 
-        PendingIntent pendingIntent
-                = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
-        triggerTime = smallSchedules.get(0).getAlert_time();
-        Date trigerDate = new Date(triggerTime);
-        calendar.setTime(trigerDate);
+        //get start alarm schedule
+        for (int i = 0; i < smallSchedules.size(); i++) {
+            if (smallSchedules.get(i).isAlarm_flag()) {
+                trigger_time = smallSchedules.get(i).getAlert_time();
+                Date triger_date = new Date(trigger_time);
+                calendar.setTime(triger_date);
 
-        if(Build.VERSION.SDK_INT >= 23){
 
-            AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+                //메인 아이디, 메인 타이틀, 메인 시간, 세부 인덱스, 요일반복
+                //
+                intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id); //메인아이디
+                intent.putExtra(Utills.ALARM_intent_title, mTitle); //메인 타이틀
+                intent.putExtra(Utills.ALARM_intent_date, mCalendar.getTimeInMillis()); //메인 시간
+                intent.putExtra(Utills.ALARM_intent_scheduleIdx, i); //세부 인덱스
+                intent.putExtra(Utills.ALARM_intent_weekofday, mWeekOfDays); //요일 반복
+                intent.putExtra(Utills.ALARM_intent_small_title, smallSchedules.get(i).getSmall_tilte());
 
-            //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
-        }
-        else {
-            if(Build.VERSION.SDK_INT >= 19) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
-            } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+                break;
             }
         }
 
-    }
+        PendingIntent pendingIntent
+                = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Utills.enrollAlarm(getBaseContext(), pendingIntent, trigger_time);
+    }
 
 
 }

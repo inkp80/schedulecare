@@ -7,43 +7,99 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.inkp.boostcamp.Boostme.Utills;
+import com.inkp.boostcamp.Boostme.activities.AlarmActivity;
+import com.inkp.boostcamp.Boostme.data.SmallSchedule;
+import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.internal.Util;
 
 /**
  * Created by macbook on 2017. 2. 16..
  */
 
 public class AlarmReceiver extends BroadcastReceiver{
+    Context mContext;
+
+    int schedule_id;
+    int idx;
+    String title;
+    long date_in_long;
+    int week_of_days;
+
+    String small_title;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        mContext = context;
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent;
+
+        Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date); //오늘 날짜 설정
 
 
-        int Schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
-        int idx = intent.getIntExtra(Utills.ALARM_intent_scheduleIdx, 0);
-        String title = intent.getStringExtra(Utills.ALARM_intent_title);
-        long date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
-        int week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
+        schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
+        idx = intent.getIntExtra(Utills.ALARM_intent_scheduleIdx, 0);
+        title = intent.getStringExtra(Utills.ALARM_intent_title);
+        date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
+        week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SmallScheduleRealm> mSmallSchedule
+                = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAllSorted("order_value");
+        small_title = mSmallSchedule.get(idx).getSmall_tilte();
 
 
+        long alert_time_long = intent.getLongExtra(Utills.ALARM_intent_alert_time_long, 0);
+        long triggertime = Utills.setTriggerTime(alert_time_long);
+
+        //반복성 schedule인 경우
+        if (week_of_days != 0) {
+            int check_day = Utills.checkTargetWeekOfDayIsSet
+                    (week_of_days, calendar.get(Calendar.DAY_OF_WEEK));
+            if (check_day != 0) {
+                Intent alert_intent = new Intent(context, AlarmActivity.class);
+                alert_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(alert_intent);
+            } else {
+                //Utills.enrollAlarm(context, pendingIntent);
+                //재등록 24시간 이후로
+            }
 
 
-        //String alarmId = String.valueOf(Schedule_id) + String.valueOf(idx);
+        }
+        //일회성 schedule인 경우
+        else{
 
-        //PendingIntent pendingIntent
-        //        = PendingIntent.getBroadcast(context, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-
-
-        //if(idx == end...){
-
-       // }
-
+        }
     }
 
     public static void cancelAlarm(PendingIntent pendingIntent, Context context) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+    }
+
+    public PendingIntent setPendingIntent(int alarm_id, Intent intent){
+        PendingIntent pendingIntent
+                = PendingIntent.getBroadcast(mContext, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+    }
+
+    public Intent makeAlarmActivityIntent(){
+        Intent intent = new Intent(mContext, AlarmActivity.class);
+        intent.putExtra(Utills.ALARM_intent_title, title);
+        intent.putExtra(Utills.ALARM_intent_date, date_in_long);
+        intent.putExtra(Utills.ALARM_intent_small_title, small_title);
+        return intent;
     }
 
 }
