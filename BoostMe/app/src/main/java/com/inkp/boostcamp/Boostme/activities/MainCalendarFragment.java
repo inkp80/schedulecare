@@ -52,13 +52,10 @@ import io.realm.Sort;
 public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener {
     Realm realm;
 
-    public List<String> mStrData;
-
     public RecyclerView mScheduleRecyclerView;
     public RobotoCalendarView mRobotoCalendar;
 
     public RealmResults<ScheduleRealm> mSchedules;
-    public RealmResults<ScheduleRealm> mSchedulesForShown;
 
     Calendar mToday;
     Calendar mTomorrow;
@@ -139,10 +136,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         mRobotoCalendar.showDateTitle(true);
         mRobotoCalendar.updateView();
 
-
         makeCheckMarkOnDay();
-        //mRobotoCalendar.markCircleImage1(mToday);
-
 
         mSchedules = realm.where(ScheduleRealm.class).greaterThan("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
 
@@ -165,8 +159,6 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
 
         mSchedules = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
-
-        Log.d("###size", String.valueOf(mSchedules.size()));
 
         ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
         mScheduleRecyclerView.setAdapter(mScheduleAdapter);
