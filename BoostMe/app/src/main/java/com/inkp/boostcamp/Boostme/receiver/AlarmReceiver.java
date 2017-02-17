@@ -62,13 +62,18 @@ public class AlarmReceiver extends BroadcastReceiver{
         RealmResults<SmallScheduleRealm> mSmallSchedule
                 = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAll();
         Log.d("mSmallSize", String.valueOf(mSmallSchedule.size()));
+        if(mSmallSchedule.size() == 0){
+            //cancelAlarm(setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), context);
+            return;
+        }
+
         small_title = mSmallSchedule.get(idx).getSmall_tilte();
 
 
 
         long alert_time_long = intent.getLongExtra(Utills.ALARM_intent_alert_time_long, 0);
         long triggertime = Utills.setTriggerTime(alert_time_long);
-        Log.d("Title", idx + title + date_in_long);
+
 
         //반복성 schedule인 경우
         if (week_of_days != 0) {
@@ -83,8 +88,8 @@ public class AlarmReceiver extends BroadcastReceiver{
                 //재등록 24시간 이후로
             }
         }
-        //일회성 schedule인 경우
-        else{
+        else{ //단발성 알람
+            context.startActivity(makeAlarmActivityIntent());
 
         }
     }

@@ -297,13 +297,21 @@ public class AddTaskActivity extends AppCompatActivity {
     public void CustomDialogForSmallTasks() {
 
         final Calendar calendar = Calendar.getInstance();
+        //calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+        Log.d("when just click happen", String.valueOf(calendar.getTime()));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
         final EditText edit_title = (EditText) dialogView.findViewById(R.id.dialog_small_title);
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_small_timer);
         timePicker.setIs24HourView(true);
-        timePicker.setCurrentHour(0);
-        timePicker.setCurrentMinute(0);
+        if (Build.VERSION.SDK_INT >= 23) {
+            timePicker.setHour(0);
+            timePicker.setMinute(0);
+        }
+        else{
+            timePicker.setCurrentHour(0);
+            timePicker.setCurrentMinute(0);
+        }
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -320,6 +328,14 @@ public class AddTaskActivity extends AppCompatActivity {
         buider.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+                    calendar.set(Calendar.MINUTE, timePicker.getMinute());
+
+                }else {
+                    calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                    calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                }
 
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
@@ -345,6 +361,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 }
                 refreshRecyclerView(smallSchedules, departSchedule, mDates);
                 imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
+
+                Log.d("after ok", String.valueOf(calendar.getTime()));
             }
         });
         buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -370,22 +388,23 @@ public class AddTaskActivity extends AppCompatActivity {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                mDates.setHours(hourOfDay);
-                mDates.setMinutes(minute);
+
                 mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mCalendar.set(Calendar.MINUTE, minute);
+                mDates.setTime(mCalendar.getTimeInMillis());
+                Log.d("mCalendar", String.valueOf(mCalendar.getTime()));
             }
         });
         datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
 
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mDates.setYear(datePicker.getYear());
-                mDates.setMonth(datePicker.getMonth());
-                mDates.setDate(datePicker.getDayOfMonth());
+
                 mCalendar.set(Calendar.YEAR, year);
                 mCalendar.set(Calendar.MONTH, monthOfYear);
                 mCalendar.set(Calendar.DATE, dayOfMonth);
+                mDates.setTime(mCalendar.getTimeInMillis());
+
             }
         });
 
@@ -395,6 +414,7 @@ public class AddTaskActivity extends AppCompatActivity {
         buider.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d("save","press");
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
@@ -428,16 +448,25 @@ public class AddTaskActivity extends AppCompatActivity {
         final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
 
         final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mCalendar.getTimeInMillis());
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_location_time);
+
         timePicker.setIs24HourView(true);
-        timePicker.setCurrentHour(0);
-        timePicker.setCurrentMinute(0);
+        if (Build.VERSION.SDK_INT >= 23) {
+            timePicker.setHour(0);
+            timePicker.setMinute(0);
+        }
+        else{
+            timePicker.setCurrentHour(0);
+            timePicker.setCurrentMinute(0);
+        }
 
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
+                Log.d("location Cal", String.valueOf(calendar.getTime()));
             }
         });
 
@@ -447,6 +476,16 @@ public class AddTaskActivity extends AppCompatActivity {
         buider.setPositiveButton("저장", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+                    calendar.set(Calendar.MINUTE, timePicker.getMinute());
+
+                }else {
+                    calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                    calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                }
+
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
@@ -463,6 +502,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 departSchedule.setSmall_time_long(calendar.getTimeInMillis());
                 departSchedule.setSmall_tilte("출발");
                 departSchedule.setDepart_time(true);
+                departSchedule.setAlarm_flag(true);
+
+
+
 
                 locationDepartTimeView.setText("소요시간 "+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)*60 + calendar.get(Calendar.MINUTE)) + "분");
 

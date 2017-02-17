@@ -155,7 +155,7 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
         Calendar line_calendar = Calendar.getInstance();
         line_calendar.setTimeInMillis(main_date_long);
-        Log.d("###Main", String.valueOf(line_calendar));
+        Log.d("###Main", String.valueOf(line_calendar.getTime()));
 
 
         Calendar calLine = Calendar.getInstance();
