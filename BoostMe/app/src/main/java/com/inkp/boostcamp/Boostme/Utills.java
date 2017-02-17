@@ -1,11 +1,17 @@
 package com.inkp.boostcamp.Boostme;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.os.Build;
+
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.realm.Realm;
 
@@ -23,6 +29,8 @@ public class Utills{
     public static String ALARM_intent_title = "alarm_title";
     public static String ALARM_intent_date = "alarm_date";
     public static String ALARM_intent_weekofday = "alarm_weekofday";
+    public static String ALARM_intent_alert_time_long = "alarm_alerttime_long";
+    public static String ALARM_intent_small_title = "alarm_small_title";
 
 
     public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
@@ -53,5 +61,34 @@ public class Utills{
     public static int alarmIdBuilder(int schedule_id, int index){
         String Id_builder = String.valueOf(schedule_id) + String.valueOf(index);
         return Integer.valueOf(Id_builder);
+    }
+
+    public static void enrollAlarm(Context context, PendingIntent pendingIntent, long trigger_time){
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+
+        //Calendar calendar = Calendar.getInstance();
+        if (Build.VERSION.SDK_INT >= 23) {
+            AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(trigger_time, pendingIntent);
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        } else {
+            if (Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, trigger_time, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, trigger_time, pendingIntent);
+            }
+        }
+    }
+
+    public static long setTriggerTime(long input_time_long){
+        Calendar calendar = Calendar.getInstance();
+        long cur_time_long = calendar.getTimeInMillis();
+        long return_time = 0;
+        if(cur_time_long < input_time_long){
+            return_time = input_time_long - cur_time_long;
+        }else{
+            return_time = cur_time_long + (cur_time_long - input_time_long);
+        }
+        return return_time;
     }
 }

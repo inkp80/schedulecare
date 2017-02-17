@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inkp.boostcamp.Boostme">
 
+
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
     <!---->
     <application
         android:name=".MyApplication"
@@ -30,6 +37,8 @@
         <activity android:name=".activities.SettingActivity"></activity>
 
         <receiver android:name=".receiver.AlarmReceiver"/>
+
+
     </application>
 
 </manifest>

@@ -69,6 +69,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
         mToday = new GregorianCalendar();
         mToday.setTime(mTodayInDate);
+        Log.d("check week of day", String.valueOf(mToday.get(Calendar.DAY_OF_WEEK)));
         mToday.set(Calendar.HOUR_OF_DAY, 0);
         mToday.set(Calendar.MINUTE, 0);
         mToday.set(Calendar.SECOND, 0);
