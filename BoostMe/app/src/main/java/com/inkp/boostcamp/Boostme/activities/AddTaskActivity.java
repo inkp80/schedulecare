@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,22 +65,22 @@ import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 
 public class AddTaskActivity extends AppCompatActivity{
     private InputMethodManager imm;
-    public SmallScheduleAdapter smallScheduleAdapter;
-    public RecyclerView smallScheduleRecyclerView;
-    public List<SmallSchedule> smallSchedules;
+    SmallScheduleAdapter smallScheduleAdapter;
+    RecyclerView smallScheduleRecyclerView;
+    List<SmallSchedule> smallSchedules;
 
 
-    public SmallSchedule departSchedule;
-    public SmallSchedule finalSchedule;
+    SmallSchedule departSchedule;
+    SmallSchedule finalSchedule;
 
-    public int main_schedule_id;
-
-    public Date Dates;
-    public String Title;
-    public int WeekOfDays;
-    public String Location;
-    public boolean MainAlarm = true;
-    public boolean isDepartTimeSet = false;
+    int main_schedule_id;
+    Calendar mCalendar;
+    Date Dates;
+    String Title;
+    int WeekOfDays;
+    String Location;
+    boolean MainAlarm = true;
+    boolean isDepartTimeSet = false;
     //list에 대해서 -> 배열을 통해 객체를 따로 넣는다
     //해당 리스트는 타이틀 시간 우선순위 알람여부를 갖는 하위 데이터 테이블을 갖는다
 
@@ -112,6 +113,12 @@ public class AddTaskActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         Dates = new Date();
+        mCalendar = new GregorianCalendar();
+        mCalendar.setTime(Dates);
+        mCalendar.set(Calendar.SECOND, 0);
+        mCalendar.set(Calendar.MILLISECOND, 0);
+
+
         Dates.setSeconds(0);
         WeekOfDays = 0;
 
@@ -358,6 +365,30 @@ public class AddTaskActivity extends AppCompatActivity{
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.add_task_timepicker);
         final DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.add_task_datepicker);
 
+
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                Dates.setHours(hourOfDay);
+                Dates.setMinutes(minute);
+                mCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                mCalendar.set(Calendar.MINUTE,minute);
+            }
+        });
+        datePicker.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE), new DatePicker.OnDateChangedListener(){
+
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Dates.setYear(datePicker.getYear());
+                Dates.setMonth(datePicker.getMonth());
+                Dates.setDate(datePicker.getDayOfMonth());
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, monthOfYear);
+                mCalendar.set(Calendar.DATE, dayOfMonth);
+            }
+        });
+
+
         AlertDialog.Builder buider = new AlertDialog.Builder(this);
         buider.setView(dialogView);
         buider.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -369,14 +400,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 smallSchedules = null; smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
-                Dates.setHours(timePicker.getCurrentHour());
-                Dates.setMinutes(timePicker.getCurrentMinute());
-                Dates.setYear(datePicker.getYear());
-                Dates.setMonth(datePicker.getMonth());
-                Dates.setDate(datePicker.getDayOfMonth());
-
                 dateView.setText(Utills.format_yymmdd_hhmm_a.format(Dates).toString());
-
 
                 refreshRecyclerView(smallSchedules, departSchedule, Dates);
 
@@ -476,8 +500,8 @@ public class AddTaskActivity extends AppCompatActivity{
                     smallScheduleRealm.setOrder_value(idx);
 
                     //Realm realmForQuery = Realm.getDefaultInstance();
-                    ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
-                    mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                    //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+                    //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
                     bgRealm.insertOrUpdate(smallScheduleRealm);
                 }
             });
@@ -494,6 +518,7 @@ public class AddTaskActivity extends AppCompatActivity{
                 schedule.setLocation(Location);
                 schedule.setWeek_of_day_repit(WeekOfDays);
                 schedule.setAlarm_flag(MainAlarm);
+                schedule.setDate_in_long(mCalendar.getTimeInMillis());
                 bgRealm.insertOrUpdate(schedule);
             }}, new Realm.Transaction.OnSuccess() {
             @Override

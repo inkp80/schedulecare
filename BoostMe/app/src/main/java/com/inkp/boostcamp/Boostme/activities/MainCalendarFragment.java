@@ -52,45 +52,35 @@ import io.realm.Sort;
 public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener {
     Realm realm;
 
-    public List<String> StrData;
-    private ScheduleAdapter scheduleAdapter;
+    public List<String> mStrData;
 
-    //@BindView(R.id.main_schedule_recycler_view)
-    public RecyclerView scheduleRecyclerView;
-    //@BindView(R.id.main_calendar)
-    public RobotoCalendarView robotoCalendar;
+    public RecyclerView mScheduleRecyclerView;
+    public RobotoCalendarView mRobotoCalendar;
 
-    public RealmResults<ScheduleRealm> Schedules;
-    public RealmResults<ScheduleRealm> schedulesForShown;
+    public RealmResults<ScheduleRealm> mSchedules;
+    public RealmResults<ScheduleRealm> mSchedulesForShown;
+
+    Calendar mToday;
+    Calendar mTomorrow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
 
-        Date todayDate = new Date();
-        todayDate.setHours(0);
-        todayDate.setMinutes(0);
-        todayDate.setSeconds(0);
-        Log.d("###today", Utills.format_yymmdd_hhmm_a.format(todayDate));
+        Date mTodayInDate = new Date();
 
-        Date tomorrow = new Date();
-        tomorrow.setTime(todayDate.getTime()+24*60*60*1000);
-        //tomorrow.setHours(24);
-        //tomorrow.setMinutes(0);
-        //tomorrow.setSeconds(0);
-
-        Log.d("###tomo", Utills.format_yymmdd_hhmm_a.format(tomorrow));
+        mToday = new GregorianCalendar();
+        mToday.setTime(mTodayInDate);
+        mToday.set(Calendar.HOUR_OF_DAY, 0);
+        mToday.set(Calendar.MINUTE, 0);
+        mToday.set(Calendar.SECOND, 0);
+        mToday.set(Calendar.MILLISECOND, 0);
 
 
-//.lessThan("date", tomorrow).
-        Schedules = realm.where(ScheduleRealm.class).lessThan("date", tomorrow).findAll();
+        mTomorrow = new GregorianCalendar();
+        mTomorrow.setTimeInMillis(mToday.getTimeInMillis()+24*60*60*1000);
 
-        //Schedules = realm.where(ScheduleRealm.class).findAll();
-        Schedules = Schedules.sort("date", Sort.ASCENDING);
-
-        Log.d("####size", String.valueOf(Schedules.size()));
-        scheduleAdapter = new ScheduleAdapter(getActivity(), Schedules);
     }
 
     @Override
@@ -139,33 +129,48 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        //ButterKnife.bind(this);
         View v = inflater.inflate(R.layout.activity_main_calendar, container, false);
 
-        scheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_calendar_recycler_view);
-        robotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
+        mScheduleRecyclerView = (RecyclerView) v.findViewById(R.id.main_calendar_recycler_view);
 
-        robotoCalendar.setRobotoCalendarListener((RobotoCalendarView.RobotoCalendarListener) this);
-        robotoCalendar.setShortWeekDays(false);
-        robotoCalendar.showDateTitle(true);
-        robotoCalendar.updateView();
-
-        scheduleRecyclerView.hasFixedSize();
-        scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        scheduleRecyclerView.setAdapter(scheduleAdapter);
+        mRobotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
+        mRobotoCalendar.setRobotoCalendarListener((RobotoCalendarView.RobotoCalendarListener) this);
+        mRobotoCalendar.setShortWeekDays(false);
+        mRobotoCalendar.showDateTitle(true);
+        mRobotoCalendar.updateView();
 
 
+        makeCheckMarkOnDay();
+        //mRobotoCalendar.markCircleImage1(mToday);
 
-        //Calendar calendar = new GregorianCalendar();
-        //calendar.setTime(Schedules.get(0).getDate());
-        //robotoCalendar.markCircleImage1(calendar);
+
+        mSchedules = realm.where(ScheduleRealm.class).greaterThan("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
+
+        ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
+        mScheduleRecyclerView.hasFixedSize();
+        mScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mScheduleRecyclerView.setAdapter(mScheduleAdapter);
 
         return v;
     }
 
     @Override
     public void onDayClick(Calendar daySelectedCalendar) {
-        Toast.makeText(getActivity(), "onDayClick: " + daySelectedCalendar.getTime(), Toast.LENGTH_SHORT).show();
+        mToday.setTimeInMillis(daySelectedCalendar.getTimeInMillis());
+        mToday.set(Calendar.HOUR_OF_DAY, 0);
+        mToday.set(Calendar.MINUTE, 0);
+        mToday.set(Calendar.SECOND, 0);
+        mToday.set(Calendar.MILLISECOND, 0);
+        mTomorrow.setTimeInMillis(mToday.getTimeInMillis() + 24*60*60*1000);
+
+
+        mSchedules = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
+
+        Log.d("###size", String.valueOf(mSchedules.size()));
+
+        ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
+        mScheduleRecyclerView.setAdapter(mScheduleAdapter);
+        Toast.makeText(getActivity(), "onDayClick: " + mToday.getTime() + "/" + mTomorrow.getTime(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -176,20 +181,37 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onRightButtonClick() {
         Toast.makeText(getActivity(), "onRightButtonClick!", Toast.LENGTH_SHORT).show();
+        mToday.add(Calendar.MONTH, 1);
+        makeCheckMarkOnDay();
     }
 
     @Override
     public void onLeftButtonClick() {
         Toast.makeText(getActivity(), "onLeftButtonClick!", Toast.LENGTH_SHORT).show();
+
+        mToday.add(Calendar.MONTH, -1);
+        makeCheckMarkOnDay();
     }
 
-    public void getDataFromSelectedDate(Date date){
-        for(int i=0; i<Schedules.size(); i++) {
-            Date CurPosDate = Schedules.get(i).getDate();
-            CurPosDate.setHours(0);
-            CurPosDate.setMinutes(0);
-            if(CurPosDate == date)
-                schedulesForShown.add(Schedules.get(i));
+    void makeCheckMarkOnDay(){
+        Calendar marking_start_date = new GregorianCalendar();
+        marking_start_date.setTimeInMillis(mToday.getTimeInMillis());
+        marking_start_date.set(Calendar.DATE, 1);
+
+        Calendar marking_end_date = new GregorianCalendar();
+        marking_end_date.setTimeInMillis(mToday.getTimeInMillis());
+        marking_end_date.set(Calendar.DATE, marking_end_date.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Log.d("###fin date", String.valueOf(marking_end_date.getTime()));
+
+        RealmResults<ScheduleRealm> mListOfMonth = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", marking_start_date.getTimeInMillis()).lessThan("date_in_long", marking_end_date.getTimeInMillis()).findAll();
+        Log.d("###size", String.valueOf(mListOfMonth.size()));
+        Calendar marking = new GregorianCalendar();
+
+        for(int i=0; i<mListOfMonth.size(); i++) {
+            marking.setTimeInMillis(mListOfMonth.get(i).getDate_in_long());
+            mRobotoCalendar.markCircleImage1(marking);
         }
+
     }
+
 }
