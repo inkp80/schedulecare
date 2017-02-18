@@ -51,8 +51,12 @@ public class AlarmActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sp.stop(soundID);
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        sp.stop(soundID);
     }
 
     private void Sound() {

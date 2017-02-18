@@ -2,6 +2,7 @@ package com.inkp.boostcamp.Boostme;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,10 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
         public TextView holder_title;
         public TextView holder_date;
         public SmallScheduleRealm data;
+        public SwitchCompat alarm_on_off;
         public DetailScheduleViewHolder(View view){
             super(view);
+            alarm_on_off = (SwitchCompat) view.findViewById(R.id.detail_viewholder_alarm_button);
             holder_title = (TextView) view.findViewById(R.id.detail_viewholder_title);
             holder_date = (TextView) view.findViewById(R.id.detail_viewholder_date);
         }

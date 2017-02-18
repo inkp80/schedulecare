@@ -23,6 +23,7 @@
         android:layout_height="wrap_content" />
     </LinearLayout>
     <android.support.v7.widget.SwitchCompat
+        android:id="@+id/detail_viewholder_alarm_button"
         android:layout_marginRight="@dimen/left_margin"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"

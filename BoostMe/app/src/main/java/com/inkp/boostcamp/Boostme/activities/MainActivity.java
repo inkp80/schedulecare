@@ -3,6 +3,7 @@ package com.inkp.boostcamp.Boostme.activities;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +12,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.inkp.boostcamp.Boostme.R;
 
+import org.w3c.dom.Text;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -25,24 +31,78 @@ public class MainActivity extends AppCompatActivity {
     android.app.Fragment CalendarFragment;
     android.app.Fragment EventFragment;
 
+    long backKeyTime = 0;
+
+    @BindView(R.id.toolbar_main_calendar)
+    TextView mCalendarListFragment;
+    @BindView(R.id.toolbar_main_event)
+    TextView mEventListFragment;
+    @BindView(R.id.toolbar_main_add)
+    ImageButton mAddListButton;
+    @BindView(R.id.toolbar_main_setup)
+    ImageButton mSettingButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        //setSupportActionBar(toolbar);
+        //toolbar.setTitleTextColor(Color.WHITE);
         ButterKnife.bind(this);
 
         CalendarFragment = getFragmentManager().findFragmentById(R.id.main_calendar_fragment);
         EventFragment = getFragmentManager().findFragmentById(R.id.main_event_fragment);
 
         setFragmentShow(CalendarFragment, EventFragment);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+
+        mEventListFragment.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Event", Toast.LENGTH_SHORT).show();
+                        setFragmentShow(EventFragment, CalendarFragment);
+                    }
+                }
+        );
+
+        mCalendarListFragment.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Toast.makeText(MainActivity.this, "Calendar", Toast.LENGTH_SHORT).show();
+                        setFragmentShow(CalendarFragment, EventFragment);
+                    }
+                }
+        );
 
 
+        mAddListButton.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        mSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "To Setting", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu){
         ActionBar actionBar = getSupportActionBar();
 
@@ -111,6 +171,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         return true;
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        Toast toast;
+        if (System.currentTimeMillis() > backKeyTime + 2000) {
+            backKeyTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\' 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyTime + 2000) {
+            moveTaskToBack(true);
+            finish();
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 
 

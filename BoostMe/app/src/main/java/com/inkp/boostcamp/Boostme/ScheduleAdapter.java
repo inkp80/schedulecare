@@ -66,7 +66,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         public SwitchCompat ViewHolder_alarmButton;
         public ScheduleRealm data;
 
-        long holder_schedule_id;
+        int holder_schedule_id;
 
         public ScheduleViewHolder(View view){
             super(view);

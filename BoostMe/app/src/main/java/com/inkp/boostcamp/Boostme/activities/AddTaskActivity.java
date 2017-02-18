@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 import io.realm.RealmResults;
+import io.realm.internal.Util;
 
 import static com.inkp.boostcamp.Boostme.Utills.format_yymmdd_hhmm_a;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
@@ -75,6 +77,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
     SmallSchedule departSchedule;
     SmallSchedule finalSchedule;
+
+    int action_flag = 0;
 
     int main_schedule_id;
     Calendar mCalendar;
@@ -108,6 +112,9 @@ public class AddTaskActivity extends AppCompatActivity {
     @BindView(R.id.add_location_depart_time)
     TextView locationDepartTimeView;
 
+    @BindView(R.id.toolbar_add_save)
+    ImageButton mSaveListButton;
+
     Realm realm;
 
     @Override
@@ -116,33 +123,55 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.acitivity_add_task);
         ButterKnife.bind(this);
 
+        setSupportActionBar((Toolbar) findViewById(R.id.add_toolbar));
+
+
+        //realm database setup
+        realm = Realm.getDefaultInstance();
+        main_schedule_id = getNextKeyMainSchedule(realm);
+
+
         mDates = new Date();
         mCalendar = new GregorianCalendar();
         mCalendar.setTime(mDates);
         mCalendar.set(Calendar.SECOND, 0);
         mCalendar.set(Calendar.MILLISECOND, 0);
 
-
         mDates.setSeconds(0);
         mWeekOfDays = 0;
 
-        //출발시간 & 마지막 스케쥴 초기화
-        departSchedule = new SmallSchedule();
-        finalSchedule = new SmallSchedule();
-        Date finalTime = new Date();
-        finalTime.setTime(0);
-        finalSchedule.setSmall_time(finalTime);
-        finalSchedule.setSmall_tilte("일정 시작");
-
-
-        dateView.setText(format_yymmdd_hhmm_a.format(new Date()));
         smallSchedules = new ArrayList<>();
+        departSchedule = new SmallSchedule();
 
-        //realm database setup
-        realm = Realm.getDefaultInstance();
-        main_schedule_id = getNextKeyMainSchedule(realm);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+        Intent intent = getIntent();
+        String check_start_act = intent.getStringExtra("intentAction");
+        if (check_start_act != null && check_start_act.equals(Utills.INTENT_ACTION_EDIT_SCHEDULE)) {
+            titleView.setText(intent.getStringExtra(Utills.ALARM_intent_title));
+            mCalendar.setTimeInMillis(intent.getLongExtra(Utills.ALARM_intent_date, 0));
+            main_schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
+            mWeekOfDays = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
+            setWeekDayToView(mWeekOfDays);
+            RealmResults<SmallScheduleRealm> small_objects = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
+            for (int i = 0; i < small_objects.size(); i++) {
+                SmallSchedule tmp = new SmallSchedule();
+                tmp.setSmall_tilte(small_objects.get(i).getSmall_tilte());
+                tmp.setSmall_time_long(small_objects.get(i).getSmall_time().getTime());
+                tmp.setSmall_time(small_objects.get(i).getSmall_time());
+                tmp.setAlarm_flag(small_objects.get(i).isAlarm_flag());
+                if (i == small_objects.size() - 1) {
+                    tmp.setDepart_time(true);
+                } else
+                    tmp.setDepart_time(false);
+                smallSchedules.add(tmp);
+            }
+            mDates.setTime(mCalendar.getTimeInMillis());
+            action_flag = 1;
+        }
+
+
+        dateView.setText(format_yymmdd_hhmm_a.format(mDates));
+
 
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
@@ -199,34 +228,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 CustomDialog_location();
             }
         });
-        initKeyBoard();
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar_add, null);
-
-        actionBar.setCustomView(actionbar);
-        Toolbar parent = (Toolbar) actionbar.getParent();
-        parent.setContentInsetsAbsolute(0, 0);
-
-        View view = getSupportActionBar().getCustomView();
-        ImageView saveButton = (ImageView) view.findViewById(R.id.add_save_button);
-        saveButton.setOnClickListener(
+        mSaveListButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -235,13 +238,16 @@ public class AddTaskActivity extends AppCompatActivity {
                             return;
                         } else
                             InsertSchduleToDatabase();
-                        //addSchdule();
-
                     }
                 }
         );
-        //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
-        return true;
+        initKeyBoard();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 
     @Override
@@ -307,8 +313,7 @@ public class AddTaskActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             timePicker.setHour(0);
             timePicker.setMinute(0);
-        }
-        else{
+        } else {
             timePicker.setCurrentHour(0);
             timePicker.setCurrentMinute(0);
         }
@@ -332,7 +337,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
                     calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
-                }else {
+                } else {
                     calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                     calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
                 }
@@ -343,7 +348,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 smallSchedules = null;
                 smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
-
 
 
                 String s_title = edit_title.getText().toString();
@@ -414,7 +418,7 @@ public class AddTaskActivity extends AppCompatActivity {
         buider.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.d("save","press");
+                Log.d("save", "press");
                 newSchedule = null;
                 newSchedule = new ArrayList<SmallSchedule>();
                 newSchedule = smallScheduleAdapter.getSmallSchedules();
@@ -455,8 +459,7 @@ public class AddTaskActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             timePicker.setHour(0);
             timePicker.setMinute(0);
-        }
-        else{
+        } else {
             timePicker.setCurrentHour(0);
             timePicker.setCurrentMinute(0);
         }
@@ -481,7 +484,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
                     calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
-                }else {
+                } else {
                     calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                     calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
                 }
@@ -496,8 +499,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 mLocation = locationName.getText().toString();
 
 
-
-                Date temp=new Date(calendar.getTimeInMillis());
+                Date temp = new Date(calendar.getTimeInMillis());
                 departSchedule.setSmall_time(temp);
                 departSchedule.setSmall_time_long(calendar.getTimeInMillis());
                 departSchedule.setSmall_tilte("출발");
@@ -505,9 +507,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 departSchedule.setAlarm_flag(true);
 
 
-
-
-                locationDepartTimeView.setText("소요시간 "+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)*60 + calendar.get(Calendar.MINUTE)) + "분");
+                locationDepartTimeView.setText("소요시간 " + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)) + "분");
 
                 if (isDepartTimeSet && smallSchedules.size() != 0) {
                     smallSchedules.remove(smallSchedules.size() - 1);
@@ -542,52 +542,106 @@ public class AddTaskActivity extends AppCompatActivity {
         for (int i = 0; i < smallSchedules.size(); i++) {
             final int idx = i;
 
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm bgRealm) {
-                    SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
+            //insert
+            if (action_flag == 0) {
+                //smallScheduleRealm = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).equalTo("order_value", idx).findFirst();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm bgRealm) {
+                        if (action_flag == 0) {
+                            SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
+                            SmallSchedule dataForTransaction = smallSchedules.get(idx);
+                            smallScheduleRealm.setSchedule_id(main_schedule_id);
+                            smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
+                            smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
+                            smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
+                            smallScheduleRealm.setOrder_value(idx);
+                            smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
 
-                    SmallSchedule dataForTransaction = smallSchedules.get(idx);
-                    smallScheduleRealm.setSchedule_id(main_schedule_id);
-                    smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
-                    smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
-                    smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
-                    smallScheduleRealm.setOrder_value(idx);
-                    smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
+                            //Realm realmForQuery = Realm.getDefaultInstance();
+                            //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+                            //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                            bgRealm.insertOrUpdate(smallScheduleRealm);
+                        } else {
+                            SmallScheduleRealm smallScheduleRealm = bgRealm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).equalTo("order_value", idx).findFirst();
+                            Log.d("small id", String.valueOf(smallScheduleRealm.getId()));
+                            if(!smallScheduleRealm.isValid()) {
+                                smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
+                                Log.d("id", "invalild");
+                            }
+                            SmallSchedule dataForTransaction = smallSchedules.get(idx);
+                            smallScheduleRealm.setSchedule_id(main_schedule_id);
+                            smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
+                            smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
+                            smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
+                            smallScheduleRealm.setOrder_value(idx);
+                            smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
 
-                    //Realm realmForQuery = Realm.getDefaultInstance();
-                    //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
-                    //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
-                    bgRealm.insertOrUpdate(smallScheduleRealm);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    Log.d("REALM", "small Data Sucess");
-                }
-            });
+                            //Realm realmForQuery = Realm.getDefaultInstance();
+                            //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+                            //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                            bgRealm.insertOrUpdate(smallScheduleRealm);
+                        }
+
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("REALM", "small Data Sucess");
+                    }
+                });
+
+
+            }
         }
     }
 
     public void mainScheduleAddtoRealm() {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm bgRealm) {
-                ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, main_schedule_id);
-                schedule.setTitle(mTitle);
-                schedule.setDate(mDates);
-                schedule.setLocation(mLocation);
-                schedule.setWeek_of_day_repit(mWeekOfDays);
-                schedule.setAlarm_flag(mMainAlarm);
-                schedule.setDate_in_long(mCalendar.getTimeInMillis());
-                bgRealm.insertOrUpdate(schedule);
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Log.d("REALM", "main Data Sucess");
-            }
-        });
+
+        //insert
+        if (action_flag == 0) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+
+                    ScheduleRealm schedule = bgRealm.createObject(ScheduleRealm.class, main_schedule_id);
+                    schedule.setTitle(mTitle);
+                    schedule.setDate(mDates);
+                    schedule.setLocation(mLocation);
+                    schedule.setWeek_of_day_repit(mWeekOfDays);
+                    schedule.setAlarm_flag(mMainAlarm);
+                    schedule.setDate_in_long(mCalendar.getTimeInMillis());
+                    bgRealm.insertOrUpdate(schedule);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "main Data Sucess");
+                }
+            });
+        }
+        //update
+        else {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+                    ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+                    schedule.setTitle(mTitle);
+                    schedule.setDate(mDates);
+                    schedule.setLocation(mLocation);
+                    schedule.setWeek_of_day_repit(mWeekOfDays);
+                    schedule.setAlarm_flag(mMainAlarm);
+                    schedule.setDate_in_long(mCalendar.getTimeInMillis());
+                    bgRealm.insertOrUpdate(schedule);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "main Data Sucess");
+                }
+            });
+        }
+
     }
 
     public void setWeekDayToView(int val) {
@@ -673,7 +727,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
         Utills.enrollAlarm(getBaseContext(), pendingIntent, Utills.setTriggerTime(trigger_time));
     }
-
 
 
 }

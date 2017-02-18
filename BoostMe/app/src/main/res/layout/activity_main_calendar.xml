@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#4d5966">
 
     <com.inkp.boostcamp.Boostme.RobotoCalendarView
         android:id="@+id/main_calendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4d5966">
 
     </com.inkp.boostcamp.Boostme.RobotoCalendarView>
 

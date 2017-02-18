@@ -40,6 +40,8 @@ public class Utills{
     public static String ALARM_intent_alert_time_long = "alarm_alerttime_long";
     public static String ALARM_intent_small_title = "alarm_small_title";
 
+    public static String INTENT_ACTION_EDIT_SCHEDULE = "action_edit_schedule";
+
 
     public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
 
@@ -87,6 +89,17 @@ public class Utills{
             }
         }
     }
+
+    public static void cancleAlarm(Context context, int target_id, RealmResults<SmallScheduleRealm> obect_list){
+        for(int i=0; i<obect_list.size(); i++) {
+            int ALARM_ID = Utills.alarmIdBuilder(target_id, i);
+            Intent intentForCancle = new Intent(context, AlarmReceiver.class);
+            PendingIntent pendingIntentForCancle
+                    = PendingIntent.getBroadcast(context, ALARM_ID, intentForCancle, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmReceiver.cancelAlarm(pendingIntentForCancle, context);
+         }
+    }
+
 
     public static long setTriggerTime(long input_time_long){
         Calendar calendar = Calendar.getInstance();

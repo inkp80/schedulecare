@@ -33,7 +33,6 @@ public class AlarmReceiver extends BroadcastReceiver{
     String title;
     long date_in_long;
     int week_of_days;
-
     String small_title;
 
     @Override
@@ -57,42 +56,62 @@ public class AlarmReceiver extends BroadcastReceiver{
         title = intent.getStringExtra(Utills.ALARM_intent_title);
         date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
         week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
+        small_title = intent.getStringExtra(Utills.ALARM_intent_small_title);
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<SmallScheduleRealm> mSmallSchedule
                 = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAll();
-        Log.d("mSmallSize", String.valueOf(mSmallSchedule.size()));
+
         if(mSmallSchedule.size() == 0){
             //cancelAlarm(setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), context);
+            Log.d("mSmallSize", "Small schedule is empty, db error");
             return;
         }
 
-        small_title = mSmallSchedule.get(idx).getSmall_tilte();
 
 
-
-        long alert_time_long = intent.getLongExtra(Utills.ALARM_intent_alert_time_long, 0);
-        long triggertime = Utills.setTriggerTime(alert_time_long);
 
 
         //반복성 schedule인 경우
         if (week_of_days != 0) {
-            int check_day = Utills.checkTargetWeekOfDayIsSet
-                    (week_of_days, calendar.get(Calendar.DAY_OF_WEEK));
-            if (check_day != 0) {
-                Intent alert_intent = new Intent(context, AlarmActivity.class);
-                alert_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(alert_intent);
-            } else {
-                //Utills.enrollAlarm(context, pendingIntent);
-                //재등록 24시간 이후로
-            }
-        }
-        else{ //단발성 알람
-            context.startActivity(makeAlarmActivityIntent());
+            int check_day = Utills.checkTargetWeekOfDayIsSet(week_of_days, calendar.get(Calendar.DAY_OF_WEEK));
 
+            if (check_day != 0) {
+                if(idx != mSmallSchedule.size() - 1) {
+                    intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx+1).getSmall_tilte());
+                    intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx+1);
+
+                    int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx+1);
+                    long alert_time_long = mSmallSchedule.get(idx+1).getAlarm_start_time();
+                    long triggertime = Utills.setTriggerTime(alert_time_long);
+
+                    setPendingIntent(new_alarm_id, intent);
+                    Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                    }
+                context.startActivity(makeAlarmActivityIntent());
+            }
+            else
+                Utills.enrollAlarm(context, setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx),intent), Calendar.getInstance().getTimeInMillis()+24*60*60*1000);
         }
+        else {
+            if(idx != mSmallSchedule.size() - 1) {
+                intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx+1).getSmall_tilte());
+                intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx+1);
+
+                int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx+1);
+                long alert_time_long = mSmallSchedule.get(idx+1).getAlarm_start_time();
+                long triggertime = Utills.setTriggerTime(alert_time_long);
+
+                setPendingIntent(new_alarm_id, intent);
+                Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+            }
+            context.startActivity(makeAlarmActivityIntent());
+        }
+
     }
+
+
+
 
     public static void cancelAlarm(PendingIntent pendingIntent, Context context) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -110,6 +129,7 @@ public class AlarmReceiver extends BroadcastReceiver{
         intent.putExtra(Utills.ALARM_intent_title, title);
         intent.putExtra(Utills.ALARM_intent_date, date_in_long);
         intent.putExtra(Utills.ALARM_intent_small_title, small_title);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 }

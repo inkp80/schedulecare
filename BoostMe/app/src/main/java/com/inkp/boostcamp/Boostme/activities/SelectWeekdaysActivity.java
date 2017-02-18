@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.internal.Util;
 
 /**
@@ -51,11 +53,17 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
             R.id.week_of_day_sat
     };
 
+    @BindView(R.id.toolbar_weekday_save)
+    ImageButton mSaveWeekday;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actvity_weekofdays);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+        ButterKnife.bind(this);
+
+
+        setSupportActionBar((Toolbar) findViewById(R.id.weekday_toolbar));
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
         weekday_bit = getIntent().getIntExtra("curVal", 0);
         for (int item : items) {
             RelativeLayout item_layout = (RelativeLayout) findViewById(item);
@@ -63,8 +71,22 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
         }
         setCheckState();
         Toast.makeText(this, "요일 반복 설정 시, 날짜 설정 값은 무시됩니다.", Toast.LENGTH_SHORT).show();
-    }
 
+        mSaveWeekday.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getDataFromBox();
+                        Intent intentReturn = new Intent(SelectWeekdaysActivity.this, AddTaskActivity.class);
+                        intentReturn.putExtra("weekdaysVal", weekday_bit);
+                        setResult(Utills.weekdays_resultCode, intentReturn);
+                        //Toast.makeText(SelectWeekdaysActivity.this, String.valueOf(weekday_bit), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+        );
+    }
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar actionBar = getSupportActionBar();
@@ -98,7 +120,7 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
         );
         //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
         return true;
-    }
+    }*/
 
     @Override
     public void onClick(View v) {

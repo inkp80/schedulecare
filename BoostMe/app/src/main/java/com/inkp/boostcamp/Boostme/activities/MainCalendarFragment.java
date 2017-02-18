@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
@@ -54,8 +55,8 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
     public RecyclerView mScheduleRecyclerView;
     public RobotoCalendarView mRobotoCalendar;
-
     public RealmResults<ScheduleRealm> mSchedules;
+
 
     Calendar mToday;
     Calendar mTomorrow;
@@ -104,11 +105,13 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onResume() {
         super.onResume();
+        makeCheckMarkOnDay();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        makeCheckMarkOnDay();
     }
 
     @Override
@@ -133,7 +136,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
         mRobotoCalendar = (RobotoCalendarView) v.findViewById(R.id.main_calendar);
         mRobotoCalendar.setRobotoCalendarListener((RobotoCalendarView.RobotoCalendarListener) this);
-        mRobotoCalendar.setShortWeekDays(false);
+        mRobotoCalendar.setShortWeekDays(true);
         mRobotoCalendar.showDateTitle(true);
         mRobotoCalendar.updateView();
 
