@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,13 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
         holder.smallTitleView.setText(smallSchedules.get(position).getSmall_tilte() );
 
         holder.smallTimeView.setText(Utills.format_hhmm_a.format(date) +"(" +String.valueOf(hour*60 + minute)+"분)");
+
+        holder.pos = position;
+        holder.isAlarm = smallSchedules.get(position).isAlarm_flag();
+        if(holder.isAlarm){
+            holder.smallAlarmButton.setImageResource(R.drawable.alarm_orange);
+        }else
+            holder.smallAlarmButton.setImageResource(R.drawable.alarm_white);
     }
 
     @Override
@@ -116,17 +124,30 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
     class SmallScheduleViewHolder extends RecyclerView.ViewHolder implements RVHViewHolder{
         final TextView smallTitleView;
         final TextView smallTimeView;
-        final boolean isAlarm = false;
+        final ImageButton smallAlarmButton;
+        int pos=0;
+        boolean isAlarm = false;
 
         public SmallScheduleViewHolder(View itemView) {
             super(itemView);
             smallTitleView = (TextView) itemView.findViewById(R.id.small_schedule_title);
             smallTimeView = (TextView) itemView.findViewById(R.id.small_schedule_time);
+            smallAlarmButton = (ImageButton) itemView.findViewById(R.id.small_schedule_alarm);
         }
+
 
         @Override
         public void onItemSelected(int actionstate) {
-            Log.d("Item Selected", "######");
+            if(isAlarm){
+                smallAlarmButton.setImageResource(R.drawable.alarm_white);
+                isAlarm=false;
+                smallSchedules.get(pos).setAlarm_flag(false);
+            }
+            else{
+                smallAlarmButton.setImageResource(R.drawable.alarm_orange);
+                isAlarm=true;
+                smallSchedules.get(pos).setAlarm_flag(true);
+            }
         }
 
         @Override

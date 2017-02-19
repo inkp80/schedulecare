@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -196,8 +197,18 @@ public class AddTaskActivity extends AppCompatActivity {
                 new RVHItemClickListener(this, new RVHItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        SmallSchedule temp = smallScheduleAdapter.printOnclick(position);
-                        Toast.makeText(getBaseContext(), temp.getSmall_tilte(), Toast.LENGTH_SHORT).show();
+                        //SmallSchedule temp = smallScheduleAdapter.printOnclick(position);
+                        //Toast.makeText(getBaseContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+
+                        smallScheduleAdapter.notifyDataSetChanged();
+                        boolean isAlarm = smallSchedules.get(position).isAlarm_flag();
+                        if(isAlarm){
+                            smallSchedules.get(position).setAlarm_flag(false);
+                        }
+                        else{
+                            smallSchedules.get(position).setAlarm_flag(true);
+                        }
+                        smallScheduleAdapter.notifyDataSetChanged();
                     }
                 })
         );
