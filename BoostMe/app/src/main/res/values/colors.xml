@@ -19,6 +19,11 @@
     <!--select color-->
     <color name="selected_object">#e67d64</color>
 
+    <!--textColor-->
+    <color name="alarm_on">#000000</color>
+    <color name="alarm_off">#a5a5a5</color>
+    <color name="text_color">#bababa</color>
+
     <!--Roboto-->
     <color name="roboto_calendar_background">#4d5966</color>
     <color name="roboto_calendar_month_font">#eb7d64</color>

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/top_bot_margin"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginTop="@dimen/top_bot_margin"
     android:paddingLeft="@dimen/left_margin"
-    android:paddingRight="@dimen/left_margin"
+    android:paddingRight="3dp"
+    android:scaleType="centerInside"
+    android:background="@drawable/small_schedule_background"
     >
 
     <LinearLayout
@@ -18,19 +21,19 @@
         android:id="@+id/detail_viewholder_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"/>
+        />
     <TextView
         android:layout_below="@+id/detail_viewholder_title"
         android:id="@+id/detail_viewholder_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF" />
+        />
     </LinearLayout>
+
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/detail_viewholder_alarm_button"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
 </RelativeLayout>

@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/default_background_color">
+    android:background="@color/default_background_color"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_toolbar"
-        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        android:contentInsetRight="0dp"
+        android:background="@color/toolbar_background_color"
         android:contentInsetEnd="0dp"
-        app:contentInsetRight="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetStart="0dp"
+        android:minHeight="?attr/actionBarSize"
         app:contentInsetEnd="0dp"
-        android:background="@color/toolbar_background_color">
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text="DETAIL"
-                    android:textSize="@dimen/base_font_size"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/base_font_size" />
+
                 <ImageButton
                     android:id="@+id/toolbar_detail_edit"
                     android:layout_width="wrap_content"
@@ -45,134 +48,157 @@
                     android:layout_marginRight="@dimen/left_margin"
                     android:background="@null"
                     android:src="@android:drawable/ic_menu_edit" />
+
                 <Button
-                    android:layout_alignParentLeft="true"
                     android:id="@+id/toolbar_detail_delete"
-                    android:layout_toLeftOf="@+id/detail_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete"
-                    />
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/detail_edit_button"
+                    android:text="Delete" />
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/top_bot_margin"
+        android:background="@color/etc_menu_color"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/top_bot_margin"
         android:paddingLeft="@dimen/left_margin"
         android:paddingRight="@dimen/left_margin"
-        android:background="@color/etc_menu_color">
+        android:paddingTop="@dimen/top_bot_margin">
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_sun"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="일"
-            android:textSize="@dimen/detail_weekday_size"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/detail_weekday_size" />
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_mon"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="월"
-            android:textSize="@dimen/detail_weekday_size"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/detail_weekday_size" />
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_tue"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="화"
-            android:textSize="@dimen/detail_weekday_size"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/detail_weekday_size" />
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_wed"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="수"
-            android:textSize="@dimen/detail_weekday_size"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/detail_weekday_size" />
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_thu"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="목"
-            android:textSize="@dimen/detail_weekday_size"
             android:textColor="#FFFFFF"
-            android:gravity="center"
-            />
+            android:textSize="@dimen/detail_weekday_size" />
+
         <TextView
-            android:padding="3dp"
             android:id="@+id/detail_weekday_fri"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="금"
-            android:textSize="@dimen/detail_weekday_size"
-            android:textColor="#FFFFFF"
+            android:layout_weight="1"
             android:gravity="center"
-            />
-        <TextView
             android:padding="3dp"
+            android:text="금"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/detail_weekday_size" />
+
+        <TextView
             android:id="@+id/detail_weekday_sat"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="토"
-            android:textSize="@dimen/detail_weekday_size"
-            android:textColor="#FFFFFF"
+            android:layout_weight="1"
             android:gravity="center"
-            />
+            android:padding="3dp"
+            android:text="토"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/detail_weekday_size" />
     </LinearLayout>
 
 
     <TextView
         android:id="@+id/detail_title"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:background="@color/default_background_color"/>
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginTop="@dimen/top_bot_margin"
+        android:background="@color/default_background_color"
+        android:textColor="#ffffff" />
+
+
     <TextView
         android:id="@+id/detail_date"
-        android:layout_marginLeft="@dimen/left_margin"
-        android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:background="@color/default_background_color"/>
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginTop="@dimen/top_bot_margin"
+        android:background="@color/default_background_color"
+        android:textColor="#ffffff" />
+
     <TextView
         android:id="@+id/detail_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginTop="@dimen/top_bot_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:background="@color/default_background_color"/>
+        android:background="@color/default_background_color"
+        android:text="Location"
+        android:textColor="#ffffff" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/detail_recyclerview"
+    <TextView
+        android:id="@+id/detail_location_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/default_background_color"></android.support.v7.widget.RecyclerView>
+        android:layout_marginLeft="@dimen/left_margin"
+        android:layout_marginTop="@dimen/top_bot_margin"
+        android:text="30Min"
+        android:textColor="#ffffff" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/top_bot_margin"
+        android:background="@color/etc_menu_color">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/default_background_color"
+            android:paddingLeft="@dimen/left_margin"
+            android:paddingRight="@dimen/left_margin"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 </LinearLayout>

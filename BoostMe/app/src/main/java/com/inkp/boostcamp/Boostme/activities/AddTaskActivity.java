@@ -138,10 +138,19 @@ public class AddTaskActivity extends AppCompatActivity {
         mDates.setSeconds(0);
         mWeekOfDays = 0;
 
+        Calendar tmp_calendar = Calendar.getInstance();
+        tmp_calendar.set(Calendar.HOUR_OF_DAY, 0);
+        tmp_calendar.set(Calendar.MINUTE, 0);
         smallSchedules = new ArrayList<>();
         departSchedule = new SmallSchedule();
+        departSchedule.setDepart_time(true);
+        departSchedule.setSmall_tilte("출발");
+        departSchedule.setSmall_time(new Date(tmp_calendar.getTimeInMillis()));
+        departSchedule.setSmall_time_long(tmp_calendar.getTimeInMillis());
+        smallSchedules.add(departSchedule);
 
 
+        //Detail -> Add로 편집 요청이 들어왔다면..
         Intent intent = getIntent();
         String check_start_act = intent.getStringExtra("intentAction");
         if (check_start_act != null && check_start_act.equals(Utills.INTENT_ACTION_EDIT_SCHEDULE)) {
@@ -157,10 +166,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 tmp.setSmall_time_long(small_objects.get(i).getSmall_time().getTime());
                 tmp.setSmall_time(small_objects.get(i).getSmall_time());
                 tmp.setAlarm_flag(small_objects.get(i).isAlarm_flag());
-                if (i == small_objects.size() - 1) {
-                    tmp.setDepart_time(true);
-                } else
-                    tmp.setDepart_time(false);
+
+                smallSchedules.clear();
                 smallSchedules.add(tmp);
             }
             mDates.setTime(mCalendar.getTimeInMillis());
@@ -169,7 +176,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
         dateView.setText(format_yymmdd_hhmm_a.format(mDates));
-
 
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
 
@@ -279,7 +285,7 @@ public class AddTaskActivity extends AppCompatActivity {
         smallScheduleAddToRealm();
         //Utills.alarmRegister(getBaseContext(), main_schedule_id);
         addAlarmRegister(main_schedule_id);
-        if(action_flag == 1){
+        if (action_flag == 1) {
             Intent returnIntent = new Intent(getBaseContext(), DetailActivity.class);
             returnIntent.putExtra(Utills.ALARM_intent_title, mTitle);
             returnIntent.putExtra(Utills.ALARM_intent_date, mCalendar.getTimeInMillis());
@@ -300,7 +306,6 @@ public class AddTaskActivity extends AppCompatActivity {
         newTask.setDepart_time(false);
         smallSchedules.add(newTask);
     }
-
 
     List<SmallSchedule> newSchedule = new ArrayList<SmallSchedule>();
 
@@ -360,13 +365,16 @@ public class AddTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (isDepartTimeSet) {
-                    smallSchedules.remove(smallSchedules.size() - 1);
-                    AddSmallTask(s_title, calendar.getTimeInMillis());
-                    smallSchedules.add(departSchedule);
-                } else {
+                //if (isDepartTimeSet) {
+
+                smallSchedules.remove(smallSchedules.size() - 1);
+                AddSmallTask(s_title, calendar.getTimeInMillis());
+                smallSchedules.add(departSchedule);
+
+                /*} else {
                     AddSmallTask(s_title, calendar.getTimeInMillis());
                 }
+                */
                 refreshRecyclerView(smallSchedules, departSchedule, mDates);
                 imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
 
@@ -513,13 +521,13 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 locationDepartTimeView.setText("소요시간 " + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)) + "분");
 
-                if (isDepartTimeSet && smallSchedules.size() != 0) {
-                    smallSchedules.remove(smallSchedules.size() - 1);
-                    smallSchedules.add(departSchedule);
-                } else {
-                    smallSchedules.add(departSchedule);
-                    isDepartTimeSet = true;
-                }
+                //if (isDepartTimeSet && smallSchedules.size() != 0) {
+                smallSchedules.remove(smallSchedules.size() - 1);
+                smallSchedules.add(departSchedule);
+                //} else {
+                //    smallSchedules.add(departSchedule);
+                //    isDepartTimeSet = true;
+                //}
 
                 refreshRecyclerView(smallSchedules, departSchedule, mDates);
             }
@@ -543,7 +551,7 @@ public class AddTaskActivity extends AppCompatActivity {
         smallSchedules = new ArrayList<SmallSchedule>();
         smallSchedules.addAll(newSchedule);
 
-        if(action_flag == 1){
+        if (action_flag == 1) {
             final RealmResults<SmallScheduleRealm> smallScheduleRealm = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
             Utills.cancleAlarm(getBaseContext(), main_schedule_id, smallScheduleRealm);
             realm.executeTransaction(new Realm.Transaction() {
@@ -562,20 +570,21 @@ public class AddTaskActivity extends AppCompatActivity {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm bgRealm) {
-                        SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
-                        SmallSchedule dataForTransaction = smallSchedules.get(idx);
-                        smallScheduleRealm.setSchedule_id(main_schedule_id);
-                        smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
-                        smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
-                        smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
-                        smallScheduleRealm.setOrder_value(idx);
-                        smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
+                    SmallScheduleRealm smallScheduleRealm = bgRealm.createObject(SmallScheduleRealm.class, getNextKeySmallSchedule(bgRealm));
+                    SmallSchedule dataForTransaction = smallSchedules.get(idx);
+                    smallScheduleRealm.setSchedule_id(main_schedule_id);
+                    smallScheduleRealm.setSmall_tilte(dataForTransaction.getSmall_tilte());
+                    smallScheduleRealm.setSmall_time(dataForTransaction.getSmall_time());
+                    smallScheduleRealm.setAlarm_flag(dataForTransaction.isAlarm_flag());
+                    smallScheduleRealm.setOrder_value(idx);
+                    smallScheduleRealm.setAlarm_start_time(dataForTransaction.getAlert_time());
 
-                        //Realm realmForQuery = Realm.getDefaultInstance();
-                        //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
-                        //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
-                        bgRealm.insertOrUpdate(smallScheduleRealm);
-                }},new Realm.Transaction.OnSuccess() {
+                    //Realm realmForQuery = Realm.getDefaultInstance();
+                    //ScheduleRealm mainSchedule = bgRealm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+                    //mainSchedule.getSmall_schedule().add(smallScheduleRealm);
+                    bgRealm.insertOrUpdate(smallScheduleRealm);
+                }
+            }, new Realm.Transaction.OnSuccess() {
                 @Override
                 public void onSuccess() {
                     Log.d("REALM", "small Data Sucess");
@@ -668,7 +677,7 @@ public class AddTaskActivity extends AppCompatActivity {
         }
     }
 
-    public void setWeekdaysRealm(ScheduleRealm obj, int val){
+    public void setWeekdaysRealm(ScheduleRealm obj, int val) {
         initWeekdays(obj);
         for (int i = 1; i < 8; i++) {
             int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
@@ -700,7 +709,7 @@ public class AddTaskActivity extends AppCompatActivity {
         }
     }
 
-    public void initWeekdays(ScheduleRealm obj){
+    public void initWeekdays(ScheduleRealm obj) {
         obj.setSun(false);
         obj.setMon(false);
         obj.setTue(false);
@@ -712,10 +721,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void refreshRecyclerView(List<SmallSchedule> newData, SmallSchedule depart, Date newDate) {
         smallScheduleAdapter.dataChagned(newData, newDate);
-    }
-
-    public boolean checkDepartTimeisSet() {
-        return isDepartTimeSet;
     }
 
     private void initKeyBoard() {
@@ -744,7 +749,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 calendar.setTime(triger_date);
 
 
-
                 //메인 아이디, 메인 타이틀, 메인 시간, 세부 인덱스, 요일반복
                 //
                 intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id); //메인아이디
@@ -756,9 +760,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 break;
             }
         }
-        if( (current.getTimeInMillis() > trigger_time) && (mWeekOfDays == 0) ) {
+        if ((current.getTimeInMillis() > trigger_time) && (mWeekOfDays == 0)) {
             Log.d("시간", "시간이 맞지 않음");
-           return; //현재 시간보다 알림 시간이 이전 시간이면서, 동시에 요일 반복도 설정이 안되어 있으면 알람 등록하지 않음.
+            return; //현재 시간보다 알림 시간이 이전 시간이면서, 동시에 요일 반복도 설정이 안되어 있으면 알람 등록하지 않음.
         }
         PendingIntent pendingIntent
                 = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
