@@ -29,7 +29,7 @@
     <color name="roboto_calendar_month_font">#eb7d64</color>
     <color name="roboto_calendar_day_of_the_week_font">#FFFFFF</color>
     <color name="roboto_calendar_selected_day_font">#FFFFFF</color>
-    <color name="roboto_calendar_selected_day_background">#FD4A72</color>
+    <color name="roboto_calendar_selected_day_background">#eb7d64</color>
     <color name="roboto_calendar_current_day_ring">#eb7d64</color>
     <color name="roboto_calendar_day_of_the_month_font">#FFFFFF</color>
     <color name="roboto_calendar_circle_1">#eb7d64</color>

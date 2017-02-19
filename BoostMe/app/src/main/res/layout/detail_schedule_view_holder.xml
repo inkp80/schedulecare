@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="50dp"
     android:layout_marginTop="@dimen/top_bot_margin"
     android:paddingLeft="@dimen/left_margin"
     android:paddingRight="3dp"

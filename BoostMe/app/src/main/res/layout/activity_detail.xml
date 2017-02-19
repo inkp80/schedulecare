@@ -191,7 +191,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/top_bot_margin"
-        android:background="@color/etc_menu_color">
+        android:paddingLeft="3dp"
+        android:background="@drawable/detail_rectangle_recyclerview">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/detail_recyclerview"

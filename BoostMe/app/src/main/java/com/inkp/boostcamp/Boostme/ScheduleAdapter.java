@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.inkp.boostcamp.Boostme.activities.DetailActivity;
 import com.inkp.boostcamp.Boostme.activities.MainActivity;
 import com.inkp.boostcamp.Boostme.data.ScheduleParcel;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
+import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,16 +30,20 @@ import java.util.List;
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
 import github.nisrulz.recyclerviewhelper.RVHViewHolder;
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 
-public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, ScheduleAdapter.ScheduleViewHolder>{
+public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, ScheduleAdapter.ScheduleViewHolder> {
 
+    Realm realm;
     Context mContext;
     RealmResults<ScheduleRealm> mScheduleData;
-    public ScheduleAdapter(Context context, RealmResults<ScheduleRealm> results){
+
+    public ScheduleAdapter(Context context, RealmResults<ScheduleRealm> results) {
         super(context, results, true);
+        realm = Realm.getDefaultInstance();
         mScheduleData = results;
         mContext = context;
     }
@@ -52,62 +59,181 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         ScheduleRealm obj = getData().get(position);
         holder.data = obj;
 
-        if(holder.data.getWeek_of_day_repit() != 0){
+        if (holder.data.getWeek_of_day_repit() != 0) {
             holder.ViewHolder_date.setText(Utills.format_a_hhmm.format(holder.data.getDate()));
             holder.ViewHolder_date.append(", ");
             setWeekdayOnView(holder.data.getWeek_of_day_repit(), holder.ViewHolder_date);
-        }
-        else
+        } else
             holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
 
         holder.ViewHolder_title.setText(holder.data.getTitle());
-        holder.ViewHolder_alarmButton.setChecked(holder.data.isAlarm_flag());
+        holder.mViewHolder_alarmButton.setChecked(holder.data.isAlarm_flag());
         holder.holder_schedule_id = obj.getId();
     }
 
-    public void dataChaged(RealmResults<ScheduleRealm> new_result){
+    public void dataChaged(RealmResults<ScheduleRealm> new_result) {
         mScheduleData = new_result;
         notifyDataSetChanged();
     }
 
-    class ScheduleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ScheduleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView ViewHolder_title;
         public TextView ViewHolder_date;
-        public SwitchCompat ViewHolder_alarmButton;
+        public SwitchCompat mViewHolder_alarmButton;
         public ScheduleRealm data;
 
         int holder_schedule_id;
 
-        public ScheduleViewHolder(View view){
+        public ScheduleViewHolder(View view) {
             super(view);
+
             ViewHolder_title = (TextView) view.findViewById(R.id.schedule_view_holder_Title);
             ViewHolder_date = (TextView) view.findViewById(R.id.schedule_view_holder_date);
-            ViewHolder_alarmButton = (SwitchCompat) view.findViewById(R.id.schedule_view_holder_alarmbutton);
+            mViewHolder_alarmButton = (SwitchCompat) view.findViewById(R.id.schedule_view_holder_alarmbutton);
+
+            mViewHolder_alarmButton.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            if (mViewHolder_alarmButton.isChecked()) {
+                                //mViewHolder_alarmButton.setChecked(false);
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm bgRealm) {
+                                        //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                        ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                        schedule.setAlarm_flag(false);
+                                        bgRealm.insertOrUpdate(schedule);
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.d("REALM", "main Data Sucess");
+                                    }
+                                });
+                            } else {
+                                //mViewHolder_alarmButton.setChecked(true);
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm bgRealm) {
+                                        //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                        ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                        schedule.setAlarm_flag(true);
+                                        bgRealm.insertOrUpdate(schedule);
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.d("REALM", "main Data Sucess1");
+                                    }
+                                });
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
+
+            /*mViewHolder_alarmButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm bgRealm) {
+                                //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                schedule.setAlarm_flag(false);
+                                bgRealm.insertOrUpdate(schedule);
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("REALM", "main Data Sucess");
+                            }
+                        });
+                    }else{
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm bgRealm) {
+                                //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                schedule.setAlarm_flag(false);
+                                bgRealm.insertOrUpdate(schedule);
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("REALM", "main Data Sucess");
+                            }
+                        });
+                    }
+                }
+            });*/
             view.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.schedule_view_holder_alarmbutton :
-                    //alarm on/off
-                    if(ViewHolder_alarmButton.isChecked())
-                        ViewHolder_alarmButton.setChecked(false);
-                    else
-                        ViewHolder_alarmButton.setChecked(true);
+            Log.d("check in", "inhere");
+            switch (v.getId()) {
+                case R.id.schedule_view_holder_alarmbutton:
+                    Log.d("check in", "to false");
+                    if (mViewHolder_alarmButton.isChecked()) {
+                        mViewHolder_alarmButton.setChecked(false);
+                        Log.d("check in", "to false");
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm bgRealm) {
+                                //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                schedule.setAlarm_flag(false);
+                                bgRealm.insertOrUpdate(schedule);
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("REALM", "main Data Sucess");
+                            }
+                        });
+                    } else {
+                        mViewHolder_alarmButton.setChecked(true);
+                        Log.d("check in", "to true");
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm bgRealm) {
+                                //mSmallSchedule.get(idx).setAlarm_flag(false);
+                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
+                                schedule.setAlarm_flag(false);
+                                bgRealm.insertOrUpdate(schedule);
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("REALM", "main Data Sucess");
+                            }
+                        });
+                    }
                     break;
-                    default:
-                        Intent intent = new Intent(mContext, DetailActivity.class);
-                        intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
-                        mContext.startActivity(intent);
-                        Toast.makeText(context, "To Detail View", Toast.LENGTH_SHORT).show();
-                        break;
+                default:
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
+                    mContext.startActivity(intent);
+                    Toast.makeText(context, "To Detail View", Toast.LENGTH_SHORT).show();
+                    break;
             }
 
         }
+
     }
 
-    public void setWeekdayOnView(int val, TextView tv){
+    public void setWeekdayOnView(int val, TextView tv) {
         for (int i = 1; i < 8; i++) {
             int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
             if (flag != 0) {

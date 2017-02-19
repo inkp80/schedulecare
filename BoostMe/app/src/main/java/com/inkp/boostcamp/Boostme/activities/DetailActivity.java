@@ -96,20 +96,23 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         setSupportActionBar((Toolbar) findViewById(R.id.detail_toolbar));
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.actionbar_color)));
+
         realm = Realm.getDefaultInstance();
         Intent intent = getIntent();
         targetId = intent.getIntExtra(Utills.access_Schedule_id, -1);
-        //Bundle bundle = getIntent().getExtras();
-        //ScheduleParcel scheduleParcel = bundle.getParcelable("scheduleParcel");
 
         mScheduleObject = realm.where(ScheduleRealm.class).equalTo("id", targetId).findFirst();
         mSmallScheduleObjectList = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
-        mSmallScheduleObjectList.sort("order_value", Sort.ASCENDING);
+        mSmallScheduleObjectList = mSmallScheduleObjectList.sort("order_value", Sort.ASCENDING);
         setWeekdayOnView(mScheduleObject.getWeek_of_day_repit());
 
         detail_titleView.setText(mScheduleObject.getTitle());
-        detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(mScheduleObject.getDate()));
+        if(mScheduleObject.getWeek_of_day_repit()==0)
+            detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(mScheduleObject.getDate()));
+        else{
+            detail_dateView.setText("요일 반복, "+Utills.format_a_hhmm.format(mScheduleObject.getDate()));
+        }
+
         //RealmList<SmallScheduleRealm> result = new RealmList<>();
         //result = Schedules.getSmall_schedule();
 

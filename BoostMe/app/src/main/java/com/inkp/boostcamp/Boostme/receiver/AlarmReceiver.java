@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.activities.AlarmActivity;
+import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
@@ -19,6 +20,7 @@ import java.util.GregorianCalendar;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.internal.Util;
 
 /**
@@ -59,16 +61,14 @@ public class AlarmReceiver extends BroadcastReceiver{
         small_title = intent.getStringExtra(Utills.ALARM_intent_small_title);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<SmallScheduleRealm> mSmallSchedule
-                = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAll();
+        final RealmResults<SmallScheduleRealm> mSmallSchedule
+                = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAllSorted("order_value", Sort.ASCENDING);
 
         if(mSmallSchedule.size() == 0){
             //cancelAlarm(setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), context);
             Log.d("mSmallSize", "Small schedule is empty, db error");
             return;
         }
-
-
 
 
 
@@ -98,16 +98,59 @@ public class AlarmReceiver extends BroadcastReceiver{
         }
         else {
             Log.d("Receiver", "one shot");
-            if(idx != mSmallSchedule.size() - 1) {
-                intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx+1).getSmall_tilte());
-                intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx+1);
 
-                int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx+1);
-                long alert_time_long = mSmallSchedule.get(idx+1).getAlarm_start_time();
-                long triggertime = Utills.setTriggerTime(alert_time_long);
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+                    //mSmallSchedule.get(idx).setAlarm_flag(false);
+                    SmallScheduleRealm schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).equalTo("order_value", idx).findFirst();
+                    schedule.setAlarm_flag(false);
+                    bgRealm.insertOrUpdate(schedule);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "main Data Sucess");
+                }
+            });
 
-                setPendingIntent(new_alarm_id, intent);
-                Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+
+            if(idx == mSmallSchedule.size()-1) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm bgRealm) {
+                        ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", schedule_id).findFirst();
+                        schedule.setAlarm_flag(false);
+                        bgRealm.insertOrUpdate(schedule);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("REALM", "main Data Sucess");
+                    }
+                });
+                context.startActivity(makeAlarmActivityIntent());
+                return;
+            }
+
+            idx++;
+            while(true) {
+                if (idx >= mSmallSchedule.size() - 1) {
+                    if(mSmallSchedule.get(idx).isAlarm_flag() == false) {
+                        idx++;
+                        continue;
+                    }
+                    intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx).getSmall_tilte());
+                    intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx);
+
+                    int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx);
+                    long alert_time_long = mSmallSchedule.get(idx).getAlarm_start_time();
+                    long triggertime = Utills.setTriggerTime(alert_time_long);
+
+                    setPendingIntent(new_alarm_id, intent);
+                    Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                    break;
+                }else break;
             }
             context.startActivity(makeAlarmActivityIntent());
         }

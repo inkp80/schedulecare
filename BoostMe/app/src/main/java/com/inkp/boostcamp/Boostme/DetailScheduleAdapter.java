@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
@@ -44,9 +45,11 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
     public void onBindViewHolder(DetailScheduleViewHolder holder, int position) {
         SmallScheduleRealm obj = getData().get(position);
         holder.data = obj;
+        holder.orderval=obj.getOrder_value();
         Date viewDate = new Date(holder.data.getAlarm_start_time());
-        holder.holder_title.setText(holder.data.getSmall_tilte());
+        holder.holder_title.setText(holder.data.getSmall_tilte() +","+ position);
         holder.holder_date.setText(Utills.format_hhmm_a.format(viewDate));
+        holder.alarm_on_off.setChecked(holder.data.isAlarm_flag());
     }
 
 
@@ -55,14 +58,17 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
         public TextView holder_date;
         public SmallScheduleRealm data;
         public SwitchCompat alarm_on_off;
+        public int orderval;
         public DetailScheduleViewHolder(View view){
             super(view);
             alarm_on_off = (SwitchCompat) view.findViewById(R.id.detail_viewholder_alarm_button);
             holder_title = (TextView) view.findViewById(R.id.detail_viewholder_title);
             holder_date = (TextView) view.findViewById(R.id.detail_viewholder_date);
+            view.setOnClickListener(this);
         }
         @Override
         public void onClick(View v) {
+            Toast.makeText(mContext, String.valueOf(orderval), Toast.LENGTH_SHORT).show();
 
         }
     }

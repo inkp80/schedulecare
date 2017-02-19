@@ -147,6 +147,7 @@ public class AddTaskActivity extends AppCompatActivity {
         departSchedule.setSmall_tilte("출발");
         departSchedule.setSmall_time(new Date(tmp_calendar.getTimeInMillis()));
         departSchedule.setSmall_time_long(tmp_calendar.getTimeInMillis());
+        departSchedule.setAlarm_flag(true);
         smallSchedules.add(departSchedule);
 
 
@@ -159,6 +160,7 @@ public class AddTaskActivity extends AppCompatActivity {
             main_schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
             mWeekOfDays = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
             setWeekDayToView(mWeekOfDays);
+            smallSchedules.clear();
             RealmResults<SmallScheduleRealm> small_objects = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
             for (int i = 0; i < small_objects.size(); i++) {
                 SmallSchedule tmp = new SmallSchedule();
@@ -166,8 +168,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 tmp.setSmall_time_long(small_objects.get(i).getSmall_time().getTime());
                 tmp.setSmall_time(small_objects.get(i).getSmall_time());
                 tmp.setAlarm_flag(small_objects.get(i).isAlarm_flag());
-
-                smallSchedules.clear();
                 smallSchedules.add(tmp);
             }
             mDates.setTime(mCalendar.getTimeInMillis());
