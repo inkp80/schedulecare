@@ -69,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
     RealmResults<SmallScheduleRealm> mSmallScheduleObjectList;
     int targetId;
     public static int REQUEST_CODE = 134;
-    public static int RESPONSE_CODE = 431;
+    public static int RESULT_CODE = 431;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +94,6 @@ public class DetailActivity extends AppCompatActivity {
         RealmResults<SmallScheduleRealm> result = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
         result = result.sort("order_value", Sort.ASCENDING);
 
-        for(int i=0; i<result.size(); i++){
-            Log.d("get idx", String.valueOf(result.get(i).getOrder_value()));
-        }
 
         DetailScheduleAdapter detailScheduleAdapter = new DetailScheduleAdapter(getBaseContext(), result);
         detail_recyclerView.hasFixedSize();
@@ -131,6 +128,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), AddTaskActivity.class);
+                Utills.cancleAlarm(getBaseContext(), targetId, mSmallScheduleObjectList);
                 intent.putExtra("intentAction", Utills.INTENT_ACTION_EDIT_SCHEDULE);
                 intent.putExtra(Utills.ALARM_intent_scheduleId, mScheduleObject.getId());
                 intent.putExtra(Utills.ALARM_intent_title, mScheduleObject.getTitle());
@@ -145,65 +143,61 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Utills.weekdays_resultCode) {
-            //처리 => View 갱신
+        Log.d("intente", "received");
+        if (resultCode == RESULT_CODE) {
+            //mScheduleObject = realm.where(ScheduleRealm.class).equalTo("id", targetId).findFirst();
+            mSmallScheduleObjectList = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
+            Log.d("intente", "result in");
+            detail_titleView.setText(data.getStringExtra(Utills.ALARM_intent_title));
+            detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(new Date(data.getLongExtra(Utills.ALARM_intent_date,0))));
+            //RealmList<SmallScheduleRealm> result = new RealmList<>();
+            //result = Schedules.getSmall_schedule();
+
+            RealmResults<SmallScheduleRealm> result = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
+            result = result.sort("order_value", Sort.ASCENDING);
+
+
+            DetailScheduleAdapter detailScheduleAdapter = new DetailScheduleAdapter(getBaseContext(), result);
+            detail_recyclerView.hasFixedSize();
+            detail_recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+            detail_recyclerView.setAdapter(detailScheduleAdapter);
         }
 
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar_detail, null);
-
-        actionBar.setCustomView(actionbar);
-        Toolbar parent = (Toolbar) actionbar.getParent();
-        parent.setContentInsetsAbsolute(0, 0);
-
-
-        View view = getSupportActionBar().getCustomView();
-
-        Button bt = (Button) view.findViewById(R.id.detail_delete_button);
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-
-                        for(int i=0; i<mSmallScheduleObjectList.size(); i++) {
-                            int ALARM_ID = Utills.alarmIdBuilder(targetId, i);
-                            Intent intentForCancle = new Intent(getBaseContext(), AlarmReceiver.class);
-                            PendingIntent pendingIntentForCancle
-                                    = PendingIntent.getBroadcast(getBaseContext(), ALARM_ID, intentForCancle, PendingIntent.FLAG_CANCEL_CURRENT);
-                            AlarmReceiver.cancelAlarm(pendingIntentForCancle, getBaseContext());
-
-                            //AlarmManager CancleAlarmManager = (AlarmManager) getBaseContext().getSystemService(Context.ALARM_SERVICE);
-                            //CancleAlarmManager.cancel(pendingIntentForCancle);
-                        }
-
-                        mScheduleObject.deleteFromRealm(); // 비 직접적인 객체 삭제
-                        mSmallScheduleObjectList.deleteAllFromRealm();
-                        finish();
-                    }
-                });
-
-            }
-        });
-        return true;
-    }*/
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    public void setWeekdayOnView(int val, TextView tv) {
+        for (int i = 1; i < 8; i++) {
+            int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
+            if (flag != 0) {
+                switch (i) {
+                    case 1:
+                        tv.append("일 ");
+                        break;
+                    case 2:
+                        tv.append("월 ");
+                        break;
+                    case 3:
+                        tv.append("화 ");
+                        break;
+                    case 4:
+                        tv.append("수 ");
+                        break;
+                    case 5:
+                        tv.append("목 ");
+                        break;
+                    case 6:
+                        tv.append("금 ");
+                        break;
+                    case 7:
+                        tv.append("토 ");
+                        break;
+                }
+            }
+        }
     }
 
 }

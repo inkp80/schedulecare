@@ -8,6 +8,8 @@
     >
 
     <LinearLayout
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,16 +17,17 @@
     <TextView
         android:id="@+id/detail_viewholder_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"/>
     <TextView
         android:layout_below="@+id/detail_viewholder_title"
         android:id="@+id/detail_viewholder_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF" />
     </LinearLayout>
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/detail_viewholder_alarm_button"
-        android:layout_marginRight="@dimen/left_margin"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"

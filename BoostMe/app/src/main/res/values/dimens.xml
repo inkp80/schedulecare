@@ -3,13 +3,22 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="left_margin">16dp</dimen>
+    <dimen name="left_margin">21dp</dimen>
     <dimen name="top_bot_margin">12dp</dimen>
+    <dimen name="weekday_top_bot_margin">12dp</dimen>
+
+    <!--toolbar icon size-->
+    <dimen name="toolbar_icon">20dp</dimen>
+
+    <!--font size-->
     <dimen name="base_font_size">18sp</dimen>
     <dimen name="menu_font_size">25sp</dimen>
+    <dimen name="detail_weekday_size">15sp</dimen>
 
     <!--AddTask layout-->
     <dimen name="small_task_box">8dp</dimen>
+
+    <dimen name="weekday_ring">10dp</dimen>
 
     <!--Roboto Calendar-->
     <dimen name="roboto_calendar_padding">8dp</dimen>

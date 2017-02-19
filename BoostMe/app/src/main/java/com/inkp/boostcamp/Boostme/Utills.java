@@ -42,8 +42,12 @@ public class Utills{
 
     public static String INTENT_ACTION_EDIT_SCHEDULE = "action_edit_schedule";
 
+    public static String[] WEEKDAYS={null, "sun", "mon", "tue", "wed", "thu", "fri", "sat" };
+
 
     public static SimpleDateFormat format_hhmm_a = new SimpleDateFormat("hh : mm a");
+
+    public static SimpleDateFormat format_a_hhmm = new SimpleDateFormat("a hh : mm");
 
     public static SimpleDateFormat format_yymmdd_hhmm_a = new SimpleDateFormat("yy-MM-dd, a hh:mm");
 
@@ -95,7 +99,7 @@ public class Utills{
             int ALARM_ID = Utills.alarmIdBuilder(target_id, i);
             Intent intentForCancle = new Intent(context, AlarmReceiver.class);
             PendingIntent pendingIntentForCancle
-                    = PendingIntent.getBroadcast(context, ALARM_ID, intentForCancle, PendingIntent.FLAG_CANCEL_CURRENT);
+                    = PendingIntent.getBroadcast(context, ALARM_ID, intentForCancle, 0);
             AlarmReceiver.cancelAlarm(pendingIntentForCancle, context);
          }
     }
@@ -103,7 +107,7 @@ public class Utills{
 
     public static long setTriggerTime(long input_time_long){
         Calendar calendar = Calendar.getInstance();
-        long cur_time_long = calendar.getTimeInMillis();
+        long cur_time_long = System.currentTimeMillis();
         if(cur_time_long < input_time_long){
             return input_time_long;
         }else {

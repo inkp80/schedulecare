@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_toolbar"
@@ -55,6 +56,93 @@
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingRight="@dimen/left_margin"
+        android:background="@color/etc_menu_color">
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_sun"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="일"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_mon"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="월"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_tue"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="화"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_wed"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="수"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_thu"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="목"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_fri"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="금"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+        <TextView
+            android:padding="3dp"
+            android:id="@+id/detail_weekday_sat"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="토"
+            android:textSize="@dimen/detail_weekday_size"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            />
+    </LinearLayout>
 
 
     <TextView
@@ -62,22 +150,29 @@
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="@color/default_background_color"/>
     <TextView
         android:id="@+id/detail_date"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="@color/default_background_color"/>
     <TextView
         android:id="@+id/detail_location"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginTop="@dimen/top_bot_margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="@color/default_background_color"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/detail_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:background="@color/default_background_color"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

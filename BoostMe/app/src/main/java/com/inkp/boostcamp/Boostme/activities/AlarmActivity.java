@@ -12,8 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.inkp.boostcamp.Boostme.R;
+import com.inkp.boostcamp.Boostme.Utills;
+
+import org.w3c.dom.Text;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +31,14 @@ import butterknife.OnClick;
 
 public class AlarmActivity extends AppCompatActivity{
 
+    @BindView(R.id.alarm_title)
+    TextView mAlarmTitle;
+    @BindView(R.id.alarm_small_title)
+    TextView mAlarmSmall;
+    @BindView(R.id.alarm_time)
+    TextView mAlarmTime;
+
+
     @BindView(R.id.button2)
     Button bt2;
     @OnClick(R.id.button2)
@@ -35,7 +49,7 @@ public class AlarmActivity extends AppCompatActivity{
 
     private Vibrator vibe;
     private SoundPool sp;
-    private int soundID = 0;
+    private int SOUND_ID = 0;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -45,8 +59,17 @@ public class AlarmActivity extends AppCompatActivity{
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         setContentView(R.layout.activity_alarm);
         ButterKnife.bind(this);
-        Sound();
+
+        Intent intent = getIntent();
+        Date tmp = new Date();
+        tmp.setTime(intent.getLongExtra(Utills.ALARM_intent_date, 0));
+        mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title));
+        mAlarmSmall.setText(intent.getStringExtra(Utills.ALARM_intent_small_title));
+        mAlarmTime.setText(Utills.format_yymmdd_hhmm_a.format(tmp));
+
+        checkMode();
     }
+
 
     @Override
     protected void onDestroy() {
@@ -56,13 +79,13 @@ public class AlarmActivity extends AppCompatActivity{
     @Override
     protected void onPause(){
         super.onPause();
-        sp.stop(soundID);
+        vibe.cancel();
+        sp.stop(SOUND_ID);
     }
 
-    private void Sound() {
-        Log.e("#### Sound", "OK");
+    private void makeSound() {
         sp = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
-        soundID = sp.load(this, R.raw.bojangles, 20);
+        SOUND_ID = sp.load(this, R.raw.bojangles, 20);
 
         sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
@@ -70,6 +93,27 @@ public class AlarmActivity extends AppCompatActivity{
                 soundPool.play(soundID, 1, 1, 0, -1, 1);
             }
         });
+    }
+
+    private void makeVibrate() {
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] patten = {0, 1000, 500, 2000, 1000};
+        vibe.vibrate(patten, 0);
+    }
+    private void checkMode(){
+        AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+        switch (am.getRingerMode()) {
+            case AudioManager.RINGER_MODE_SILENT:
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                makeVibrate();
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                makeVibrate();
+                makeSound();
+                break;
+        }
     }
 
 }

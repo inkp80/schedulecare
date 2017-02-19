@@ -11,6 +11,14 @@
     <!--toolbar-->
     <color name="toolbar_background_color">#4d5966</color>
 
+    <!--defalt background theme color-->
+    <color name="default_background_color">#4d5966</color>
+
+    <!--etc bar color-->
+    <color name="etc_menu_color">#3f4a51</color>
+    <!--select color-->
+    <color name="selected_object">#e67d64</color>
+
     <!--Roboto-->
     <color name="roboto_calendar_background">#4d5966</color>
     <color name="roboto_calendar_month_font">#eb7d64</color>

@@ -105,6 +105,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onResume() {
         super.onResume();
+        mRobotoCalendar.updateView();
         makeCheckMarkOnDay();
     }
 
@@ -142,7 +143,8 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
         makeCheckMarkOnDay();
 
-        mSchedules = realm.where(ScheduleRealm.class).greaterThan("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
+        mSchedules = realm.where(ScheduleRealm.class).greaterThan("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).equalTo("week_of_day_repit", 0).or().equalTo(Utills.WEEKDAYS[mToday.get(Calendar.DAY_OF_WEEK)], true).findAll();
+        mSchedules = mSchedules.sort("week_of_day_repit", Sort.DESCENDING, "date_in_long", Sort.ASCENDING);
 
         ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
         mScheduleRecyclerView.hasFixedSize();
@@ -162,11 +164,11 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         mTomorrow.setTimeInMillis(mToday.getTimeInMillis() + 24*60*60*1000);
 
 
-        mSchedules = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).findAll();
-
+        mSchedules = realm.where(ScheduleRealm.class).greaterThanOrEqualTo("date_in_long", mToday.getTimeInMillis()).lessThan("date_in_long", mTomorrow.getTimeInMillis()).equalTo("week_of_day_repit", 0).or().equalTo(Utills.WEEKDAYS[mToday.get(Calendar.DAY_OF_WEEK)], true).findAll();
+        mSchedules = mSchedules.sort("week_of_day_repit", Sort.DESCENDING, "date_in_long", Sort.ASCENDING);
         ScheduleAdapter mScheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
         mScheduleRecyclerView.setAdapter(mScheduleAdapter);
-        Toast.makeText(getActivity(), "onDayClick: " + mToday.getTime() + "/" + mTomorrow.getTime(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "onDayClick: " + mToday.getTime() + "/" + mTomorrow.getTime(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -203,6 +205,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
         Calendar marking = new GregorianCalendar();
 
         for(int i=0; i<mListOfMonth.size(); i++) {
+            if(mListOfMonth.get(i).getWeek_of_day_repit()!=0) continue;
             marking.setTimeInMillis(mListOfMonth.get(i).getDate_in_long());
             mRobotoCalendar.markCircleImage1(marking);
         }

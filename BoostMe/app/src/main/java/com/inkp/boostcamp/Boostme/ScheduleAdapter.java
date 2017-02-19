@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.inkp.boostcamp.Boostme.data.ScheduleParcel;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +51,16 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
         ScheduleRealm obj = getData().get(position);
         holder.data = obj;
+
+        if(holder.data.getWeek_of_day_repit() != 0){
+            holder.ViewHolder_date.setText(Utills.format_a_hhmm.format(holder.data.getDate()));
+            holder.ViewHolder_date.append(", ");
+            setWeekdayOnView(holder.data.getWeek_of_day_repit(), holder.ViewHolder_date);
+        }
+        else
+            holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
+
         holder.ViewHolder_title.setText(holder.data.getTitle());
-        holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
         holder.ViewHolder_alarmButton.setChecked(holder.data.isAlarm_flag());
         holder.holder_schedule_id = obj.getId();
     }
@@ -88,17 +98,44 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
                     break;
                     default:
                         Intent intent = new Intent(mContext, DetailActivity.class);
-                        //int flag=0;
-                        //if(data.isAlarm_flag()) flag = 1;
-                        //ScheduleParcel scheduleParcel = new ScheduleParcel(data.getId(), data.getTitle(), data.getDate().getTime(), data.getWeek_of_day_repit(), flag);
-                        //intent.putExtra("scheduleParcel", scheduleParcel);
                         intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
-                        Log.d("####111",String.valueOf(holder_schedule_id));
                         mContext.startActivity(intent);
-                        //intent.putExtra("RealmData", data);
                         Toast.makeText(context, "To Detail View", Toast.LENGTH_SHORT).show();
                         break;
             }
+
+        }
+    }
+
+    public void setWeekdayOnView(int val, TextView tv){
+        for (int i = 1; i < 8; i++) {
+            int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
+            if (flag != 0) {
+                switch (i) {
+                    case 1:
+                        tv.append("일 ");
+                        break;
+                    case 2:
+                        tv.append("월 ");
+                        break;
+                    case 3:
+                        tv.append("화 ");
+                        break;
+                    case 4:
+                        tv.append("수 ");
+                        break;
+                    case 5:
+                        tv.append("목 ");
+                        break;
+                    case 6:
+                        tv.append("금 ");
+                        break;
+                    case 7:
+                        tv.append("토 ");
+                        break;
+                }
+            }
+
 
         }
     }

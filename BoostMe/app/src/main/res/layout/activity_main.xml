@@ -39,8 +39,8 @@
                     android:scaleType="centerInside"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="@dimen/left_margin"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="@dimen/toolbar_icon"
+                    android:layout_height="@dimen/toolbar_icon"
                     android:src="@drawable/orange_setup"
                     android:background="@color/toolbar_background_color"/>
                 <TextView
@@ -57,8 +57,8 @@
                     android:scaleType="centerInside"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/left_margin"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="@dimen/toolbar_icon"
+                    android:layout_height="@dimen/toolbar_icon"
                     android:src="@drawable/orange_plus"
                     android:background="@color/toolbar_background_color"
                     />

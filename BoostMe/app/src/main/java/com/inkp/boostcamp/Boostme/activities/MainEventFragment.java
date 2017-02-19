@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.ScheduleAdapter;
+import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,9 +38,10 @@ public class MainEventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
-        RealmResults<ScheduleRealm> Schedule = realm.where(ScheduleRealm.class).findAll();
-        Schedule = Schedule.sort("date", Sort.ASCENDING);
-        Event_scheduleAdapter = new ScheduleAdapter(getActivity(), Schedule);
+        RealmResults<ScheduleRealm> mSchedules = realm.where(ScheduleRealm.class).findAll();
+        mSchedules = mSchedules.sort("week_of_day_repit", Sort.DESCENDING, "date_in_long", Sort.ASCENDING);
+
+        Event_scheduleAdapter = new ScheduleAdapter(getActivity(), mSchedules);
     }
 
     @Override

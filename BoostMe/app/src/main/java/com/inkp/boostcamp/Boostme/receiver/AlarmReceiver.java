@@ -74,6 +74,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         //반복성 schedule인 경우
         if (week_of_days != 0) {
+            Log.d("Receiver", "repeat week day");
             int check_day = Utills.checkTargetWeekOfDayIsSet(week_of_days, calendar.get(Calendar.DAY_OF_WEEK));
 
             if (check_day != 0) {
@@ -90,10 +91,13 @@ public class AlarmReceiver extends BroadcastReceiver{
                     }
                 context.startActivity(makeAlarmActivityIntent());
             }
-            else
-                Utills.enrollAlarm(context, setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx),intent), Calendar.getInstance().getTimeInMillis()+24*60*60*1000);
+            else {
+                Log.d("Receiver", "repeat but not today");
+                Utills.enrollAlarm(context, setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+            }
         }
         else {
+            Log.d("Receiver", "one shot");
             if(idx != mSmallSchedule.size() - 1) {
                 intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx+1).getSmall_tilte());
                 intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx+1);

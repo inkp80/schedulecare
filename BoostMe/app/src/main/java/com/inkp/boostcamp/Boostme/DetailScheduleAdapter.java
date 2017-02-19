@@ -66,4 +66,5 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
 
         }
     }
+
 }

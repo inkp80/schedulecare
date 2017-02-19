@@ -86,41 +86,6 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
                 }
         );
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar_weekofday, null);
-
-        actionBar.setCustomView(actionbar);
-        Toolbar parent = (Toolbar) actionbar.getParent();
-        parent.setContentInsetsAbsolute(0, 0);
-
-        View view = getSupportActionBar().getCustomView();
-        ImageButton saveButton = (ImageButton) view.findViewById(R.id.weekofday_save_button);
-        saveButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        getDataFromBox();
-                        Intent intentReturn = new Intent(SelectWeekdaysActivity.this, AddTaskActivity.class);
-                        intentReturn.putExtra("weekdaysVal", weekday_bit);
-                        setResult(Utills.weekdays_resultCode, intentReturn);
-                        //Toast.makeText(SelectWeekdaysActivity.this, String.valueOf(weekday_bit), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }
-        );
-        //final ImageView saveListButton = (ImageView) view.findViewById(R.id.add_save_button);
-        return true;
-    }*/
 
     @Override
     public void onClick(View v) {
