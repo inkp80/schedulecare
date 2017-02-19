@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -101,6 +102,35 @@ public class Utills{
             PendingIntent pendingIntentForCancle
                     = PendingIntent.getBroadcast(context, ALARM_ID, intentForCancle, 0);
             AlarmReceiver.cancelAlarm(pendingIntentForCancle, context);
+        }
+    }
+
+
+    public static void cancleAlarmInMain(Context context, int target_id, final RealmResults<SmallScheduleRealm> obect_list){
+        Realm realm = Realm.getDefaultInstance();
+        for(int i=0; i<obect_list.size(); i++) {
+
+            final int id_small = obect_list.get(i).getId();
+            final int idx = i;
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+                    SmallScheduleRealm small_schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("id", id_small).findFirst();
+                    small_schedule.setAlarm_flag(false);
+                    bgRealm.insertOrUpdate(small_schedule);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "small Data Sucess");
+                }
+            });
+
+            int ALARM_ID = Utills.alarmIdBuilder(target_id, i);
+            Intent intentForCancle = new Intent(context, AlarmReceiver.class);
+            PendingIntent pendingIntentForCancle
+                    = PendingIntent.getBroadcast(context, ALARM_ID, intentForCancle, 0);
+            AlarmReceiver.cancelAlarm(pendingIntentForCancle, context);
          }
     }
 
@@ -151,4 +181,81 @@ public class Utills{
                 = PendingIntent.getBroadcast(context, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Utills.enrollAlarm(context, pendingIntent, trigger_time);
     }
+
+    public static void cancelAlarmByMainButton(Context context, int main_schedule_id){
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SmallScheduleRealm> small_objs = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
+        Log.d("cancelAlarmButton", "start with size, " +  small_objs.size());
+        cancleAlarmInMain(context, main_schedule_id, small_objs);
+    }
+
+    public static void setAlarmByMainButton(Context context, int main_schedule_id, ScheduleRealm main_obj){
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SmallScheduleRealm> small_objs = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
+        Log.d("setAlarmButton", "start with size, " +  small_objs.size());
+
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        long trigger_time = 0;
+        int alarm_id = 0;
+        Calendar calendar = Calendar.getInstance();
+        Calendar current = Calendar.getInstance();
+        //Log.d("alarm size", String.valueOf(smallSchedules.size()));
+
+        boolean alarm_is_set=false;
+
+        for (int i = 0; i < small_objs.size(); i++) {
+
+            if (small_objs.get(i).isAlarm_flag()) {
+                trigger_time = small_objs.get(i).getAlarm_start_time();
+
+
+                //알람 필터링
+                Date triger_date = new Date(trigger_time);
+                calendar.setTime(triger_date);
+
+                if ((current.getTimeInMillis() > trigger_time) && (main_obj.getWeek_of_day_repit() == 0)) {
+                    Log.d("시간", "시간이 맞지 않음");
+                    continue; //현재 시간보다 알림 시간이 이전 시간이면서, 동시에 요일 반복도 설정이 안되어 있으면 알람 등록하지 않음.
+                }
+
+                final int small_id = small_objs.get(i).getId();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm bgRealm) {
+                        SmallScheduleRealm small_schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("id", small_id).findFirst();
+                        small_schedule.setAlarm_flag(true);
+                        bgRealm.insertOrUpdate(small_schedule);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("REALM", "small Data Sucess");
+                    }
+                });
+
+                Log.d("bef to","alarm");
+                //메인 아이디, 메인 타이틀, 메인 시간, 세부 인덱스, 요일반복
+                if(!alarm_is_set) {
+                    Log.d("in to","alarm");
+                    alarm_is_set = true;
+                    alarm_id = Utills.alarmIdBuilder(main_schedule_id, 0);
+                    intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id); //메인아이디
+                    intent.putExtra(Utills.ALARM_intent_title, main_obj.getTitle()); //메인 타이틀
+                    intent.putExtra(Utills.ALARM_intent_date, main_obj.getDate_in_long()); //메인 시간
+                    intent.putExtra(Utills.ALARM_intent_scheduleIdx, i); //세부 인덱스
+                    intent.putExtra(Utills.ALARM_intent_weekofday, main_obj.getWeek_of_day_repit()); //요일 반복
+                    intent.putExtra(Utills.ALARM_intent_small_title, small_objs.get(i).getSmall_tilte());
+
+                    PendingIntent pendingIntent
+                            = PendingIntent.getBroadcast(context, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    Utills.enrollAlarm(context, pendingIntent, Utills.setTriggerTime(trigger_time));
+                }
+            }
+        }
+
+    }
+
+
 }

@@ -112,6 +112,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
     @Override
     public void onStart() {
         super.onStart();
+        mRobotoCalendar.updateView();
         makeCheckMarkOnDay();
     }
 

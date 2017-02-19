@@ -20,6 +20,7 @@ import com.inkp.boostcamp.Boostme.activities.DetailActivity;
 import com.inkp.boostcamp.Boostme.activities.MainActivity;
 import com.inkp.boostcamp.Boostme.data.ScheduleParcel;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
+import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
     Realm realm;
     Context mContext;
     RealmResults<ScheduleRealm> mScheduleData;
+    RealmResults<SmallScheduleRealm> mSmallSchedules;
 
     public ScheduleAdapter(Context context, RealmResults<ScheduleRealm> results) {
         super(context, results, true);
@@ -100,6 +102,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
 
                             if (mViewHolder_alarmButton.isChecked()) {
                                 //mViewHolder_alarmButton.setChecked(false);
+                                Utills.cancelAlarmByMainButton(mContext, holder_schedule_id);
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm bgRealm) {
@@ -116,6 +119,7 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
                                 });
                             } else {
                                 //mViewHolder_alarmButton.setChecked(true);
+                                Utills.setAlarmByMainButton(mContext, holder_schedule_id, data);
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm bgRealm) {
@@ -139,42 +143,6 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
                 }
             });
 
-            /*mViewHolder_alarmButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm bgRealm) {
-                                //mSmallSchedule.get(idx).setAlarm_flag(false);
-                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
-                                schedule.setAlarm_flag(false);
-                                bgRealm.insertOrUpdate(schedule);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("REALM", "main Data Sucess");
-                            }
-                        });
-                    }else{
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm bgRealm) {
-                                //mSmallSchedule.get(idx).setAlarm_flag(false);
-                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
-                                schedule.setAlarm_flag(false);
-                                bgRealm.insertOrUpdate(schedule);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("REALM", "main Data Sucess");
-                            }
-                        });
-                    }
-                }
-            });*/
             view.setOnClickListener(this);
         }
 
@@ -183,44 +151,6 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         public void onClick(View v) {
             Log.d("check in", "inhere");
             switch (v.getId()) {
-                case R.id.schedule_view_holder_alarmbutton:
-                    Log.d("check in", "to false");
-                    if (mViewHolder_alarmButton.isChecked()) {
-                        mViewHolder_alarmButton.setChecked(false);
-                        Log.d("check in", "to false");
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm bgRealm) {
-                                //mSmallSchedule.get(idx).setAlarm_flag(false);
-                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
-                                schedule.setAlarm_flag(false);
-                                bgRealm.insertOrUpdate(schedule);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("REALM", "main Data Sucess");
-                            }
-                        });
-                    } else {
-                        mViewHolder_alarmButton.setChecked(true);
-                        Log.d("check in", "to true");
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm bgRealm) {
-                                //mSmallSchedule.get(idx).setAlarm_flag(false);
-                                ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", holder_schedule_id).findFirst();
-                                schedule.setAlarm_flag(false);
-                                bgRealm.insertOrUpdate(schedule);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("REALM", "main Data Sucess");
-                            }
-                        });
-                    }
-                    break;
                 default:
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
@@ -230,7 +160,6 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
             }
 
         }
-
     }
 
     public void setWeekdayOnView(int val, TextView tv) {

@@ -292,10 +292,11 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void InsertSchduleToDatabase() {
         getDataFromView();
+        updateSmallSchedule();
+        addAlarmRegister(main_schedule_id);
         mainScheduleAddtoRealm();
         smallScheduleAddToRealm();
         //Utills.alarmRegister(getBaseContext(), main_schedule_id);
-        addAlarmRegister(main_schedule_id);
         if (action_flag == 1) {
             Intent returnIntent = new Intent(getBaseContext(), DetailActivity.class);
             returnIntent.putExtra(Utills.ALARM_intent_title, mTitle);
@@ -555,13 +556,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void smallScheduleAddToRealm() {
 
-        newSchedule = null;
-        newSchedule = new ArrayList<SmallSchedule>();
-        newSchedule = smallScheduleAdapter.getSmallSchedules();
-        smallSchedules = null;
-        smallSchedules = new ArrayList<SmallSchedule>();
-        smallSchedules.addAll(newSchedule);
-
         if (action_flag == 1) {
             final RealmResults<SmallScheduleRealm> smallScheduleRealm = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
             Utills.cancleAlarm(getBaseContext(), main_schedule_id, smallScheduleRealm);
@@ -626,7 +620,7 @@ public class AddTaskActivity extends AppCompatActivity {
             }, new Realm.Transaction.OnSuccess() {
                 @Override
                 public void onSuccess() {
-                    Log.d("REALM", "main Data Sucess");
+                    Log.d("REALM", "main Data Sucess3");
                 }
             });
         }
@@ -740,11 +734,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void addAlarmRegister(int schedule_id) {
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-
-
         long trigger_time = 0;
-        int alarm_id = Utills.alarmIdBuilder(schedule_id, 0);
-
+        int alarm_id=0;
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
         //Log.d("alarm size", String.valueOf(smallSchedules.size()));
@@ -754,31 +745,44 @@ public class AddTaskActivity extends AppCompatActivity {
             if (smallSchedules.get(i).isAlarm_flag()) {
                 trigger_time = smallSchedules.get(i).getAlert_time();
 
+                alarm_id = Utills.alarmIdBuilder(schedule_id, i);
 
                 //알람 필터링
                 Date triger_date = new Date(trigger_time);
                 calendar.setTime(triger_date);
 
 
+                if ((current.getTimeInMillis() > trigger_time) && (mWeekOfDays == 0)) {
+                    smallSchedules.get(i).setAlarm_flag(false);
+                    Log.d("시간", "시간이 맞지 않음");
+                    continue; //현재 시간보다 알림 시간이 이전 시간이면서, 동시에 요일 반복도 설정이 안되어 있으면 알람 등록하지 않음.
+                }
+
                 //메인 아이디, 메인 타이틀, 메인 시간, 세부 인덱스, 요일반복
-                //
                 intent.putExtra(Utills.ALARM_intent_scheduleId, main_schedule_id); //메인아이디
                 intent.putExtra(Utills.ALARM_intent_title, mTitle); //메인 타이틀
                 intent.putExtra(Utills.ALARM_intent_date, mCalendar.getTimeInMillis()); //메인 시간
                 intent.putExtra(Utills.ALARM_intent_scheduleIdx, i); //세부 인덱스
                 intent.putExtra(Utills.ALARM_intent_weekofday, mWeekOfDays); //요일 반복
                 intent.putExtra(Utills.ALARM_intent_small_title, smallSchedules.get(i).getSmall_tilte());
+
+                PendingIntent pendingIntent
+                        = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Utills.enrollAlarm(getBaseContext(), pendingIntent, Utills.setTriggerTime(trigger_time));
                 break;
             }
         }
-        if ((current.getTimeInMillis() > trigger_time) && (mWeekOfDays == 0)) {
-            Log.d("시간", "시간이 맞지 않음");
-            return; //현재 시간보다 알림 시간이 이전 시간이면서, 동시에 요일 반복도 설정이 안되어 있으면 알람 등록하지 않음.
-        }
-        PendingIntent pendingIntent
-                = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Utills.enrollAlarm(getBaseContext(), pendingIntent, Utills.setTriggerTime(trigger_time));
+    }
+
+    public void updateSmallSchedule(){
+        newSchedule = null;
+        newSchedule = new ArrayList<SmallSchedule>();
+        newSchedule = smallScheduleAdapter.getSmallSchedules();
+        smallSchedules = null;
+        smallSchedules = new ArrayList<SmallSchedule>();
+        smallSchedules.addAll(newSchedule);
     }
 
 
