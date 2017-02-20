@@ -39,7 +39,7 @@ public class TagAdapter extends RealmRecyclerViewAdapter<TagRealm, TagAdapter.Ta
     public void onBindViewHolder(TagViewHolder holder, int position) {
         holder.data = mTags.get(position);
         holder.mTagTitle.setText(holder.data.getTag_name());
-        holder.mTagId = holder.data.getTag_id();
+        holder.mTagId = holder.data.getId();
     }
 
 

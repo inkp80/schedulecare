@@ -39,7 +39,7 @@
                     android:textColor="#ffffff"/>
 
                 <ImageButton
-                    android:id="@+id/toolbar_tag_add"
+                    android:id="@+id/toolbar_tag_add_button"
                     android:layout_centerVertical="true"
                     android:scaleType="centerInside"
                     android:layout_alignParentRight="true"

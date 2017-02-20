@@ -11,19 +11,19 @@ import io.realm.annotations.PrimaryKey;
 
 public class TagListRealm extends RealmObject {
     @PrimaryKey
-    private int tag_list_id;
+    private int id;
     private  String tag_list_name;
     private int tag_id;
     private int tag_order;
     private long tag_time_long;
     private Date tag_date;
 
-    public int getTag_list_id() {
-        return tag_list_id;
+    public int getId() {
+        return id;
     }
 
-    public void setTag_list_id(int tag_list_id) {
-        this.tag_list_id = tag_list_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTag_list_name() {

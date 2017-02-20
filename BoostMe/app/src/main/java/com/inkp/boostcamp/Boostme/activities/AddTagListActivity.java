@@ -36,8 +36,6 @@ public class AddTagListActivity extends AppCompatActivity {
     List<TagListObject> mTagList;
     Realm realm;
 
-
-
     private InputMethodManager imm;
     int mTagId;
     String mTagTitle;

@@ -6,7 +6,7 @@
     android:background="@drawable/border_bottom_main_viewholder"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="@dimen/top_bot_margin">
+    android:paddingTop="8dp">
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/schedule_view_holder_alarmbutton"

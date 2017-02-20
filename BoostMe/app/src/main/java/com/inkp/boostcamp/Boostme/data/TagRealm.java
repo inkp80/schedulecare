@@ -9,15 +9,15 @@ import io.realm.annotations.PrimaryKey;
 
 public class TagRealm extends RealmObject {
     @PrimaryKey
-    private int tag_id;
+    private int id;
     private  String tag_name;
 
-    public int getTag_id() {
-        return tag_id;
+    public int getId() {
+        return id;
     }
 
-    public void setTag_id(int tag_id) {
-        this.tag_id = tag_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTag_name() {

@@ -66,13 +66,13 @@ public class Utills {
     synchronized public static int getNextKeyTagList(Realm realm) {
         if (realm.where(TagListRealm.class).max("id") == null) return 1;
         else
-            return realm.where(SmallScheduleRealm.class).max("id").intValue() + 1;
+            return realm.where(TagListRealm.class).max("id").intValue() + 1;
     }
 
     synchronized public static int getNextKeyTag(Realm realm) {
         if (realm.where(TagRealm.class).max("id") == null) return 1;
         else
-            return realm.where(SmallScheduleRealm.class).max("id").intValue() + 1;
+            return realm.where(TagRealm.class).max("id").intValue() + 1;
     }
 
 
