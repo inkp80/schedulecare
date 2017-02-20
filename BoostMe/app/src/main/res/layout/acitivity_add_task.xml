@@ -1,157 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/default_background_color">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_toolbar"
-        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        android:contentInsetRight="0dp"
+        android:background="@color/toolbar_background_color"
         android:contentInsetEnd="0dp"
-        app:contentInsetRight="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetStart="0dp"
+        android:minHeight="?attr/actionBarSize"
         app:contentInsetEnd="0dp"
-        android:background="@color/toolbar_background_color">
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text="ADD"
-                    android:textSize="@dimen/base_font_size"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/base_font_size" />
+
                 <ImageButton
                     android:id="@+id/toolbar_add_save"
-                    android:layout_centerVertical="true"
-                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/toolbar_icon"
+                    android:layout_height="@dimen/toolbar_icon"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/left_margin"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/orange_plus"
                     android:background="@color/toolbar_background_color"
-                    />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ok_save" />
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/add_week_of_day_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:text="요일 반복 "
+        android:textColor="#ffffff"
+        android:textSize="@dimen/base_font_size" />
+
 
     <EditText
         android:id="@+id/add_task_title"
-        android:paddingLeft="@dimen/left_margin"
-        android:paddingTop="@dimen/top_bot_margin"
-        android:paddingBottom="@dimen/top_bot_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/default_background_color"
         android:hint="일정 제목을 입력하세요."
-        android:background="@drawable/box_border_bot"/>
+        android:textColor="#ffffff"
+        android:textColorHint="#a5a5a5"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_background_color"
+        android:orientation="vertical"
+
+        android:paddingTop="@dimen/top_bot_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/left_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/location_orange"
+                android:background="@color/default_background_color"/>
+
+            <TextView
+                android:id="@+id/add_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:text="장소를 입력하세요"
+                android:textColor="#a5a5a5"
+                android:textSize="@dimen/base_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/left_margin"
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:gravity="center_vertical|center_horizontal"
+                android:textSize="8sp"
+                android:text="소요시간"
+                android:textColor="@color/selected_object"/>
+            <!--<ImageButton
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/left_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/time_day_orange"
+                android:background="@color/default_background_color"/>-->
+
+            <TextView
+                android:id="@+id/add_location_depart_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:text="소요 시간 "
+                android:textColor="#a5a5a5"
+                android:textSize="@dimen/base_font_size" />
+        </LinearLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/add_datetime_linear"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/top_bot_margin"
+        android:background="@color/default_background_color"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/top_bot_margin"
-        android:background="@drawable/box_border_bot">
-        <TextView
-            android:id="@+id/add_task_time"
+        android:paddingTop="@dimen/top_bot_margin"
+        >
+
+        <ImageButton
+            android:layout_width="@dimen/input_icon"
+            android:layout_height="@dimen/input_icon"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/left_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/base_font_size"
-            android:text="일정 시간"/>
+            android:scaleType="centerInside"
+            android:src="@drawable/time_day_orange"
+            android:background="@color/default_background_color"/>
+
         <TextView
             android:id="@+id/add_task_date"
-            android:layout_marginLeft="@dimen/left_margin"
-            android:textSize="@dimen/base_font_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DATE----------"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:text="DATE----------"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/base_font_size" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/add_week_of_day_repeat"
-        android:paddingTop="@dimen/top_bot_margin"
-        android:paddingLeft="@dimen/left_margin"
-        android:paddingBottom="@dimen/top_bot_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="요일 반복 "
-        android:textSize="@dimen/base_font_size"
-        android:background="@drawable/box_border_bot"/>
 
     <LinearLayout
-        android:paddingBottom="@dimen/top_bot_margin"
-        android:paddingTop="@dimen/top_bot_margin"
-        android:orientation="vertical"
+        android:layout_margin="12dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/box_border_bot">
-        <TextView
-            android:id="@+id/add_location"
-            android:layout_marginLeft="@dimen/left_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/base_font_size"
-            android:text="서울시 강남구 메리츠타워"/>
-        <TextView
-            android:layout_marginLeft="@dimen/left_margin"
-            android:layout_marginTop="@dimen/top_bot_margin"
-            android:id="@+id/add_location_depart_time"
-            android:textSize="@dimen/base_font_size"
-            android:text="소요 시간 "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:background="@drawable/box_border_bot"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/detail_rectangle_recyclerview"
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginTop="10dp">
+
             <TextView
-                android:textSize="20sp"
-                android:layout_marginLeft="@dimen/left_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="small tasks"
+                android:layout_marginLeft="@dimen/left_margin"
+                android:text="세부 일정"
+                android:textColor="@color/selected_object"
+                android:textSize="20sp"
                 />
+
             <ImageView
                 android:id="@+id/add_load_small_task_button"
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:scaleType="centerInside"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/add_small_task_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_save"/>
+                android:src="@drawable/tag_orange" />
+
             <ImageView
                 android:id="@+id/add_small_task_button"
-                android:layout_marginRight="@dimen/left_margin"
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:scaleType="centerInside"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_add"/>
+                android:layout_marginRight="@dimen/left_margin"
+                android:src="@drawable/orange_plus"
+                />
 
         </RelativeLayout>
 

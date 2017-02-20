@@ -64,7 +64,7 @@ public class DetailActivity extends AppCompatActivity {
     RecyclerView detail_recyclerView;
 
     @BindView(R.id.toolbar_detail_delete)
-    Button mDeleteButton;
+    ImageView mDeleteButton;
     @BindView(R.id.toolbar_detail_edit)
     ImageButton mEditButton;
 

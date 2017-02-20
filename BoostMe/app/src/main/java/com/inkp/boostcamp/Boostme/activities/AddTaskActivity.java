@@ -95,8 +95,6 @@ public class AddTaskActivity extends AppCompatActivity {
     TextView titleView;
     @BindView(R.id.add_task_date)
     TextView dateView;
-    @BindView(R.id.add_task_time)
-    TextView timeView;
     @BindView(R.id.add_location)
     TextView locationView;
     @BindView(R.id.add_datetime_linear)

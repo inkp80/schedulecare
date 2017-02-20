@@ -10,6 +10,7 @@
         android:layout_centerVertical="true"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
         android:text="Titlsdsadsdsadasdasde"/>
 
     <TextView
@@ -18,17 +19,18 @@
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
         android:text="times"/>
 
     <ImageButton
         android:id="@+id/small_schedule_alarm"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@drawable/alarm_orange"
         android:scaleType="centerInside"
-        android:background="#ffffff"
+        android:background="@color/toolbar_background_color"
         android:layout_marginRight="@dimen/left_margin"
         />
 </RelativeLayout>

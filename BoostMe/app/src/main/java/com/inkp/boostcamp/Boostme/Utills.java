@@ -33,6 +33,9 @@ public class Utills {
     public static int weekdays_requestCode = 1313;
     public static int weekdays_resultCode = 3131;
 
+    public static int GOOGLE_AUTOCOMPLETE_REQUESTCODE = 1717;
+    public static int GOOGLE_AUTOCOMPLETE_RESULTCODE = 7171;
+
     public static String ALARM_intent_scheduleId = "alarm_scheduleId";
     public static String ALARM_intent_scheduleIdx = "alarm_scheduleIdx";
     public static String ALARM_intent_title = "alarm_title";
