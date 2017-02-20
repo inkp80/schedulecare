@@ -18,7 +18,7 @@
     <!--AddTask layout-->
     <dimen name="small_task_box">8dp</dimen>
     <dimen name="weekday_ring">11dp</dimen>
-    <dimen name="input_icon">30dp</dimen>
+    <dimen name="input_icon">25dp</dimen>
 
     <!--Roboto Calendar-->
     <dimen name="roboto_calendar_padding">8dp</dimen>

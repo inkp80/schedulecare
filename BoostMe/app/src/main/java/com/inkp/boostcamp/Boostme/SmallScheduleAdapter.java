@@ -138,16 +138,6 @@ public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdap
 
         @Override
         public void onItemSelected(int actionstate) {
-            if(isAlarm){
-                smallAlarmButton.setImageResource(R.drawable.alarm_white);
-                isAlarm=false;
-                smallSchedules.get(pos).setAlarm_flag(false);
-            }
-            else{
-                smallAlarmButton.setImageResource(R.drawable.alarm_orange);
-                isAlarm=true;
-                smallSchedules.get(pos).setAlarm_flag(true);
-            }
         }
 
         @Override

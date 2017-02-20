@@ -31,6 +31,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.SmallScheduleAdapter;
 import com.inkp.boostcamp.Boostme.Utills;
@@ -96,7 +101,7 @@ public class AddTaskActivity extends AppCompatActivity {
     @BindView(R.id.add_task_date)
     TextView dateView;
     @BindView(R.id.add_location)
-    TextView locationView;
+    EditText locationView;
     @BindView(R.id.add_datetime_linear)
     LinearLayout datetime_linearViewer;
     @BindView(R.id.add_week_of_day_repeat)
@@ -108,6 +113,8 @@ public class AddTaskActivity extends AppCompatActivity {
     ImageView loadSmallTaskButton;
     @BindView(R.id.add_location_depart_time)
     TextView locationDepartTimeView;
+    @BindView(R.id.add_location_icon_auto)
+    ImageButton mLocationIcon_AutoCompleate;
 
     @BindView(R.id.toolbar_add_save)
     ImageButton mSaveListButton;
@@ -177,6 +184,7 @@ public class AddTaskActivity extends AppCompatActivity {
         dateView.setText(format_yymmdd_hhmm_a.format(mDates));
 
         smallScheduleRecyclerView = (RecyclerView) findViewById(R.id.add_addtask_recycler_view);
+        //smallScheduleRecyclerView.
 
         smallScheduleAdapter = new SmallScheduleAdapter(smallSchedules, mDates, mCalendar.getTimeInMillis(), departSchedule, finalSchedule);
         smallScheduleRecyclerView.hasFixedSize();
@@ -200,10 +208,9 @@ public class AddTaskActivity extends AppCompatActivity {
 
                         smallScheduleAdapter.notifyDataSetChanged();
                         boolean isAlarm = smallSchedules.get(position).isAlarm_flag();
-                        if(isAlarm){
+                        if (isAlarm) {
                             smallSchedules.get(position).setAlarm_flag(false);
-                        }
-                        else{
+                        } else {
                             smallSchedules.get(position).setAlarm_flag(true);
                         }
                         smallScheduleAdapter.notifyDataSetChanged();
@@ -235,7 +242,13 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
 
-        locationView.setOnClickListener(new View.OnClickListener() {
+        /*locationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog_location();
+            }
+        });*/
+        locationDepartTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CustomDialog_location();
@@ -254,6 +267,13 @@ public class AddTaskActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        mLocationIcon_AutoCompleate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findPlace(v);
+            }
+        });
         initKeyBoard();
     }
 
@@ -265,6 +285,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Utills.weekdays_resultCode) {
             mWeekOfDays = data.getIntExtra("weekdaysVal", -1);
@@ -275,9 +296,23 @@ public class AddTaskActivity extends AppCompatActivity {
                 setWeekDayToView(mWeekOfDays);
             }
             Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
-
         }
+        if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
+                locationView.setText(place.getAddress().toString());
+                initKeyBoard();
 
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.e("Tag", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 
 
@@ -471,7 +506,7 @@ public class AddTaskActivity extends AppCompatActivity {
     public void CustomDialog_location() {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog_location, null);
-        final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
+        //final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mCalendar.getTimeInMillis());
@@ -518,7 +553,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 smallSchedules = new ArrayList<SmallSchedule>();
                 smallSchedules.addAll(newSchedule);
 
-                mLocation = locationName.getText().toString();
+                //mLocation = locationName.getText().toString();
 
 
                 Date temp = new Date(calendar.getTimeInMillis());
@@ -733,7 +768,7 @@ public class AddTaskActivity extends AppCompatActivity {
     public void addAlarmRegister(int schedule_id) {
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
         long trigger_time = 0;
-        int alarm_id=0;
+        int alarm_id = 0;
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
         //Log.d("alarm size", String.valueOf(smallSchedules.size()));
@@ -774,7 +809,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
-    public void updateSmallSchedule(){
+    public void updateSmallSchedule() {
         newSchedule = null;
         newSchedule = new ArrayList<SmallSchedule>();
         newSchedule = smallScheduleAdapter.getSmallSchedules();
@@ -783,5 +818,18 @@ public class AddTaskActivity extends AppCompatActivity {
         smallSchedules.addAll(newSchedule);
     }
 
+
+    public void findPlace(View view) {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .build(this);
+            startActivityForResult(intent, Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // TODO: Handle the error.
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // TODO: Handle the error.
+        }
+    }
 
 }

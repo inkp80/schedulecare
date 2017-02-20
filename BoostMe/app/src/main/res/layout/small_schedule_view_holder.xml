@@ -2,10 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/border_bottom"
+    android:layout_marginTop="9dp"
     >
     <TextView
         android:id="@+id/small_schedule_title"
-        android:layout_margin="18dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="3dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_width="100dp"
@@ -30,7 +35,7 @@
         android:layout_height="25dp"
         android:src="@drawable/alarm_orange"
         android:scaleType="centerInside"
-        android:background="@color/toolbar_background_color"
-        android:layout_marginRight="@dimen/left_margin"
+        android:background="#3f4a51"
+        android:layout_marginRight="3dp"
         />
 </RelativeLayout>

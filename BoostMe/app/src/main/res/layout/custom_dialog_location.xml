@@ -3,22 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    <TextView
-        android:id="@+id/dialog_location"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="서울시 강남구 메리츠타워"
-        android:textSize="40sp"
-        android:background="@drawable/textview_border"
-        />
     <TimePicker
         android:id="@+id/dialog_location_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:timePickerMode="spinner">
     </TimePicker>
-
-
-
 </LinearLayout>
+
+<!--
+<EditText
+android:id="@+id/dialog_location"
+android:gravity="center"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="서울시 강남구 메리츠타워"
+android:textSize="40sp"
+android:textColorHint="a5a5a5"
+android:hint="장소를 직접 입력해주세요"
+    />-->

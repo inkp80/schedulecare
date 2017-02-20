@@ -71,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/default_background_color"
-        android:hint="일정 제목을 입력하세요."
+        android:hint="제목"
         android:textColor="#ffffff"
         android:textColorHint="#a5a5a5"
         android:paddingBottom="@dimen/top_bot_margin"
@@ -92,6 +92,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/add_location_icon_auto"
                 android:layout_width="@dimen/input_icon"
                 android:layout_height="@dimen/input_icon"
                 android:layout_gravity="center_vertical"
@@ -100,14 +101,16 @@
                 android:src="@drawable/location_orange"
                 android:background="@color/default_background_color"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/add_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:text="장소를 입력하세요"
-                android:textColor="#a5a5a5"
+                android:layout_marginLeft="18dp"
+                android:hint="장소"
+                android:background="@color/default_background_color"
+                android:textColorHint="#a5a5a5"
+                android:textColor="#ffffff"
                 android:textSize="@dimen/base_font_size" />
         </LinearLayout>
 
@@ -122,27 +125,19 @@
             <TextView
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/left_margin"
-                android:layout_width="@dimen/input_icon"
+                android:layout_width="32dp"
                 android:layout_height="@dimen/input_icon"
                 android:gravity="center_vertical|center_horizontal"
                 android:textSize="8sp"
                 android:text="소요시간"
                 android:textColor="@color/selected_object"/>
-            <!--<ImageButton
-                android:layout_width="@dimen/input_icon"
-                android:layout_height="@dimen/input_icon"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/left_margin"
-                android:scaleType="centerInside"
-                android:src="@drawable/time_day_orange"
-                android:background="@color/default_background_color"/>-->
 
             <TextView
                 android:id="@+id/add_location_depart_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="11dp"
                 android:text="소요 시간 "
                 android:textColor="#a5a5a5"
                 android:textSize="@dimen/base_font_size" />
@@ -216,6 +211,7 @@
                 android:layout_width="@dimen/input_icon"
                 android:layout_height="@dimen/input_icon"
                 android:scaleType="centerInside"
+                android:layout_marginLeft="3dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/left_margin"
                 android:src="@drawable/orange_plus"
@@ -226,7 +222,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/add_addtask_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp">
 
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>

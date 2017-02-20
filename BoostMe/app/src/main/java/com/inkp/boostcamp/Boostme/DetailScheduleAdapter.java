@@ -47,7 +47,7 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
         holder.data = obj;
         holder.orderval=obj.getOrder_value();
         Date viewDate = new Date(holder.data.getAlarm_start_time());
-        holder.holder_title.setText(holder.data.getSmall_tilte() +","+ position);
+        holder.holder_title.setText(holder.data.getSmall_tilte());
         holder.holder_date.setText(Utills.format_hhmm_a.format(viewDate));
         holder.alarm_on_off.setChecked(holder.data.isAlarm_flag());
     }

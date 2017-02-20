@@ -5,6 +5,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_event_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingRight="@dimen/left_margin">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
