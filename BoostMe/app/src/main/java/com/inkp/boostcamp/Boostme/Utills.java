@@ -4,24 +4,20 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
 
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
-import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
+import com.inkp.boostcamp.Boostme.data.TagListRealm;
+import com.inkp.boostcamp.Boostme.data.TagRealm;
 import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -66,6 +62,19 @@ public class Utills {
         else
             return realm.where(SmallScheduleRealm.class).max("id").intValue() + 1;
     }
+
+    synchronized public static int getNextKeyTagList(Realm realm) {
+        if (realm.where(TagListRealm.class).max("id") == null) return 1;
+        else
+            return realm.where(SmallScheduleRealm.class).max("id").intValue() + 1;
+    }
+
+    synchronized public static int getNextKeyTag(Realm realm) {
+        if (realm.where(TagRealm.class).max("id") == null) return 1;
+        else
+            return realm.where(SmallScheduleRealm.class).max("id").intValue() + 1;
+    }
+
 
     public static int checkTargetWeekOfDayIsSet(int val, int Target_WeekOfDay) {
         int flag = val & (1 << Target_WeekOfDay);

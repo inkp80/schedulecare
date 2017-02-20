@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_background_color"
     android:gravity="center">
     <DatePicker
         android:id="@+id/add_task_datepicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:datePickerMode="spinner"
-        android:calendarViewShown="false"></DatePicker>
+        android:calendarViewShown="false"
+        ></DatePicker>
 
     <TimePicker
         android:id="@+id/add_task_timepicker"

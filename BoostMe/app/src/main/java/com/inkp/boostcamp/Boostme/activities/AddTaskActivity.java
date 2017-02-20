@@ -1,16 +1,10 @@
 package com.inkp.boostcamp.Boostme.activities;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.BoolRes;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -44,14 +37,11 @@ import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,9 +49,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
-import io.realm.RealmAsyncTask;
 import io.realm.RealmResults;
-import io.realm.internal.Util;
 
 import static com.inkp.boostcamp.Boostme.Utills.format_yymmdd_hhmm_a;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
@@ -124,7 +112,7 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acitivity_add_task);
+        setContentView(R.layout.activity_add_task);
         ButterKnife.bind(this);
 
         setSupportActionBar((Toolbar) findViewById(R.id.add_toolbar));
@@ -300,14 +288,14 @@ public class AddTaskActivity extends AppCompatActivity {
         if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
+                Log.e("TagRealm", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
                 locationView.setText(place.getAddress().toString());
                 initKeyBoard();
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.
-                Log.e("Tag", status.getStatusMessage());
+                Log.e("TagRealm", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
@@ -497,8 +485,15 @@ public class AddTaskActivity extends AppCompatActivity {
                 //do nothing
             }
         });
+
         AlertDialog dialog = buider.create();
         dialog.setCanceledOnTouchOutside(false);
+        if(Build.VERSION.SDK_INT > 16)
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackground(getResources().getDrawable(R.drawable.box_border_bot));
+        else
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundDrawable(getResources().getDrawable(R.drawable.box_border_bot));
+
+
         dialog.show();
 
     }
