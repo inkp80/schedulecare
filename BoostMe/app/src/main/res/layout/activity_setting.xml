@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/setuo_toolbar"
@@ -18,7 +19,7 @@
         android:contentInsetEnd="0dp"
         app:contentInsetRight="0dp"
         app:contentInsetEnd="0dp"
-        android:background="@color/toolbar_background_color">
+        android:background="@color/default_background_color">
 
         <LinearLayout
             android:orientation="vertical"
@@ -45,10 +46,11 @@
         android:paddingTop="@dimen/top_bot_margin"
         android:paddingBottom="@dimen/top_bot_margin"
         android:textSize="@dimen/menu_font_size"
+        android:textColor="#ffffff"
         android:text="태그 등록하기"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/box_border_bot"/>
+        android:background="@color/etc_menu_color"/>
     <TextView
         android:id="@+id/setting_location"
         android:paddingLeft="@dimen/left_margin"
@@ -56,9 +58,10 @@
         android:paddingBottom="@dimen/top_bot_margin"
         android:text="위치 설정하기"
         android:textSize="@dimen/menu_font_size"
+        android:textColor="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/box_border_bot"/>
+        android:background="@color/etc_menu_color"/>
     <TextView
         android:id="@+id/setting_application_information"
         android:paddingLeft="@dimen/left_margin"
@@ -66,8 +69,9 @@
         android:paddingBottom="@dimen/top_bot_margin"
         android:text="어플리케이션 정보"
         android:textSize="@dimen/menu_font_size"
+        android:textColor="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/box_border_bot"
+        android:background="@color/etc_menu_color"
         />
 </LinearLayout>

@@ -273,18 +273,21 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Utills.weekdays_resultCode) {
+        if (requestCode == Utills.weekdays_requestCode) {
+
             mWeekOfDays = data.getIntExtra("weekdaysVal", -1);
             if (mWeekOfDays == -1) {
                 Toast.makeText(this, "ERROR : weekdaysVal is illegal value", Toast.LENGTH_SHORT).show();
                 return;
             } else if (mWeekOfDays > 0) {
                 setWeekDayToView(mWeekOfDays);
-            }
+            } else
+            weekofdaysView.setText("요일 반복");
             Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
         }
+
+
         if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
@@ -322,6 +325,7 @@ public class AddTaskActivity extends AppCompatActivity {
             Intent returnIntent = new Intent(getBaseContext(), DetailActivity.class);
             returnIntent.putExtra(Utills.ALARM_intent_title, mTitle);
             returnIntent.putExtra(Utills.ALARM_intent_date, mCalendar.getTimeInMillis());
+            returnIntent.putExtra(Utills.ALARM_intent_weekofday, mWeekOfDays);
             setResult(DetailActivity.RESULT_CODE, returnIntent);
         }
         finish();
@@ -488,11 +492,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
         AlertDialog dialog = buider.create();
         dialog.setCanceledOnTouchOutside(false);
-        if(Build.VERSION.SDK_INT > 16)
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackground(getResources().getDrawable(R.drawable.box_border_bot));
-        else
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundDrawable(getResources().getDrawable(R.drawable.box_border_bot));
-
 
         dialog.show();
 

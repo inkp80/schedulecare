@@ -34,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
     long backKeyTime = 0;
 
     @BindView(R.id.toolbar_main_calendar)
-    TextView mCalendarListFragment;
+    ImageButton mCalendarListFragment;
     @BindView(R.id.toolbar_main_event)
-    TextView mEventListFragment;
+    ImageButton mEventListFragment;
+    @BindView(R.id.toolbar_main_tag)
+    ImageButton mTagListActivity;
     @BindView(R.id.toolbar_main_add)
     ImageButton mAddListButton;
     @BindView(R.id.toolbar_main_setup)
@@ -77,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        mTagListActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShowTagActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         mAddListButton.setOnClickListener(

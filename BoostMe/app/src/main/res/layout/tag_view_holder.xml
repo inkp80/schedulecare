@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_bottom_main_viewholder"
+    android:layout_marginTop="9dp"
+    >
+    <TextView
+        android:id="@+id/tag_title"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="3dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:text="Titlsdsadsdsadasdasde"/>
+
+</RelativeLayout>

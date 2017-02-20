@@ -79,7 +79,7 @@ public class SelectWeekdaysActivity extends AppCompatActivity implements View.On
                         getDataFromBox();
                         Intent intentReturn = new Intent(SelectWeekdaysActivity.this, AddTaskActivity.class);
                         intentReturn.putExtra("weekdaysVal", weekday_bit);
-                        setResult(Utills.weekdays_resultCode, intentReturn);
+                        setResult(Utills.weekdays_requestCode, intentReturn);
                         //Toast.makeText(SelectWeekdaysActivity.this, String.valueOf(weekday_bit), Toast.LENGTH_SHORT).show();
                         finish();
                     }

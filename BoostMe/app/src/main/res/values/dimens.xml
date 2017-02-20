@@ -7,6 +7,9 @@
     <dimen name="top_bot_margin">12dp</dimen>
     <dimen name="weekday_top_bot_margin">12dp</dimen>
 
+    <!--main cal, even, tag icon-->
+    <dimen name="main_c_e_t_icon">20dp</dimen>
+
     <!--toolbar icon size-->
     <dimen name="toolbar_icon">23dp</dimen>
 

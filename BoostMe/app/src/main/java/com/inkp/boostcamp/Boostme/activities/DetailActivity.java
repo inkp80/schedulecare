@@ -173,12 +173,24 @@ public class DetailActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("intente", "received");
-        if (resultCode == RESULT_CODE) {
+        if (requestCode == REQUEST_CODE) {
             //mScheduleObject = realm.where(ScheduleRealm.class).equalTo("id", targetId).findFirst();
             mSmallScheduleObjectList = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
             Log.d("intente", "result in");
             detail_titleView.setText(data.getStringExtra(Utills.ALARM_intent_title));
-            detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(new Date(data.getLongExtra(Utills.ALARM_intent_date,0))));
+
+            if(data.getIntExtra(Utills.ALARM_intent_weekofday, 0)==0){
+                detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(new Date(data.getLongExtra(Utills.ALARM_intent_date,0))));
+            }
+            else{
+                detail_dateView.setText("요일 반복, "+Utills.format_a_hhmm.format(new Date(data.getLongExtra(Utills.ALARM_intent_date,0))));
+            }
+
+
+
+            //detail_dateView.setText(Utills.format_yymmdd_hhmm_a.format(new Date(data.getLongExtra(Utills.ALARM_intent_date,0))));
+            setWeekdayOnView(data.getIntExtra(Utills.ALARM_intent_weekofday, 0));
+
             //RealmList<SmallScheduleRealm> result = new RealmList<>();
             //result = Schedules.getSmall_schedule();
 
