@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/verinform_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
+        android:background="@color/default_background_color">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="정보"
+                    android:textSize="@dimen/base_font_size"
+                    android:textColor="#ffffff"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="SchduleCare, ver 1.0.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="inkp80@gmail.com - 박인규"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+    <TextView
+        android:layout_marginTop="40dp"
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="Special Thanks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="Boostcamp - 최선일"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="Team Mojito"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="Team Endroid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+    <TextView
+        android:paddingLeft="@dimen/left_margin"
+        android:paddingTop="@dimen/top_bot_margin"
+        android:paddingBottom="@dimen/top_bot_margin"
+        android:textSize="@dimen/base_font_size"
+        android:textColor="#ffffff"
+        android:text="Kday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/etc_menu_color"
+        android:gravity="center"/>
+</LinearLayout>

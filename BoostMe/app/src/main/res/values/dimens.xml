@@ -14,9 +14,9 @@
     <dimen name="toolbar_icon">23dp</dimen>
 
     <!--font size-->
-    <dimen name="base_font_size">18sp</dimen>
-    <dimen name="menu_font_size">25sp</dimen>
-    <dimen name="detail_weekday_size">15sp</dimen>
+    <dimen name="base_font_size">18dp</dimen>
+    <dimen name="menu_font_size">25dp</dimen>
+    <dimen name="detail_weekday_size">15dp</dimen>
 
     <!--AddTask layout-->
     <dimen name="small_task_box">8dp</dimen>
@@ -30,7 +30,7 @@
     <dimen name="roboto_calendar_day_of_the_month_background_size">40dp</dimen>
     <dimen name="roboto_calendar_circle_size">4dp</dimen>
     <dimen name="roboto_calendar_ring_size">18dp</dimen>
-    <dimen name="roboto_calendar_month_font">16sp</dimen>
-    <dimen name="roboto_calendar_day_of_week_font">10sp</dimen>
-    <dimen name="roboto_calendar_day_of_the_month_font">16sp</dimen>
+    <dimen name="roboto_calendar_month_font">16dp</dimen>
+    <dimen name="roboto_calendar_day_of_week_font">10dp</dimen>
+    <dimen name="roboto_calendar_day_of_the_month_font">16dp</dimen>
 </resources>

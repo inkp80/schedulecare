@@ -24,6 +24,8 @@ public class SettingActivity extends AppCompatActivity{
 
     @BindView(R.id.setting_tag)
     TextView mTagTextView;
+    @BindView(R.id.setting_application_information)
+    TextView mVerInform;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -36,6 +38,14 @@ public class SettingActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this, ShowTagActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mVerInform.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, AppInformationActivity.class);
                 startActivity(intent);
             }
         });

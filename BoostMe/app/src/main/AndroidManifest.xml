@@ -49,6 +49,7 @@
 
         <activity android:name=".activities.ShowTagActivity"></activity>
         <activity android:name=".activities.AddTagListActivity"></activity>
+        <activity android:name=".activities.AppInformationActivity"></activity>
 
         <receiver android:name=".receiver.AlarmReceiver"/>
 

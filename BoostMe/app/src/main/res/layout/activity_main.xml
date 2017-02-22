@@ -10,7 +10,6 @@
 
 
     <android.support.v7.widget.Toolbar
-        android:layout_marginTop="10dp"
         android:id="@+id/main_toolbar"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
@@ -67,7 +66,7 @@
                 <ImageButton
                     android:layout_marginRight="5dp"
                     android:paddingTop="2dp"
-                    android:paddingRight="4dp"
+                    android:paddingRight="7dp"
                     android:layout_marginTop="@dimen/top_bot_margin"
                     android:layout_marginBottom="@dimen/top_bot_margin"
                     android:id="@+id/toolbar_main_tag"
@@ -86,10 +85,9 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="40dp">
         <ImageButton
             android:padding="5dp"
-            android:layout_marginTop="@dimen/top_bot_margin"
             android:layout_marginBottom="@dimen/top_bot_margin"
             android:id="@+id/toolbar_main_event"
             android:layout_weight="1"
@@ -100,8 +98,7 @@
             android:layout_height="wrap_content"
             android:background="#4f4f4f"/>
         <ImageButton
-            android:padding="3dp"
-            android:layout_marginTop="@dimen/top_bot_margin"
+            android:padding="5dp"
             android:layout_marginBottom="@dimen/top_bot_margin"
             android:id="@+id/toolbar_main_calendar"
             android:layout_weight="1"
