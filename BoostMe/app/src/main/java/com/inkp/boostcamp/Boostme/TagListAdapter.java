@@ -27,17 +27,20 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagListV
     Date MainDate;
     List<TagListObject> mTagList;
 
-    public List<TagListObject> getmTagListRealm(){
+    public List<TagListObject> getmTagList(){
         return mTagList;
     }
 
     public TagListAdapter(List<TagListObject> lists){
+        Log.d("####", " 생성자");
         mTagList =lists;
+        Log.d("###", String.valueOf(mTagList.size()));
     }
 
 
     @Override
-    public TagListAdapter.TagListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TagListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d("####,", "create viewholder");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.taglist_view_holder, parent, false);
         return new TagListViewHolder(view);
@@ -48,11 +51,15 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagListV
         holder.data = mTagList.get(position);
         holder.mTagListName.setText(mTagList.get(position).getTag_list_name());
         holder.mTagListTime.setText(Utills.format_a_hhmm.format(mTagList.get(position).getTag_date()));
+
+
+        Log.d("###", "in Bind");
+        Log.d("###", String.valueOf(mTagList.get(position).getTag_list_name()));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mTagList.size();
     }
 
     @Override
@@ -105,6 +112,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagListV
         mTagList = new_tag_list;
         notifyDataSetChanged();
     }
+
 
 
 }

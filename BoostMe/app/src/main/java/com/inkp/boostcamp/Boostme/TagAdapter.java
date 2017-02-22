@@ -42,6 +42,11 @@ public class TagAdapter extends RealmRecyclerViewAdapter<TagRealm, TagAdapter.Ta
         holder.mTagId = holder.data.getId();
     }
 
+    @Override
+    public int getItemCount() {
+        return mTags.size();
+    }
+
 
     class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         int mTagId;

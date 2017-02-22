@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/default_background_color"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tag_add_toolbar"
@@ -59,18 +59,52 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_marginRight="@dimen/left_margin"
-        android:hint="제목"
-        android:textSize="@dimen/base_font_size"
         android:background="@drawable/border_bottom"
-        android:textColorHint="@color/hint_text"/>
+        android:hint="제목"
+        android:textColor="#ffffff"
+        android:textColorHint="@color/hint_text"
+        android:textSize="18dp"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/addtag_taglist_recyclerview"
-        android:background="@drawable/detail_rectangle_recyclerview"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/left_margin">
+        android:layout_margin="@dimen/left_margin"
+        android:background="@drawable/detail_rectangle_recyclerview"
+        >
 
-    </android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_margin="@dimen/left_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_horizontal"
+                android:textSize="14dp"
+                android:text="세부 일정"
+                android:textColor="#ffffff"/>
+
+            <ImageButton
+                android:id="@+id/addtag_taglist_additem"
+                android:layout_alignParentRight="true"
+                android:gravity="center_horizontal"
+                android:layout_margin="@dimen/left_margin"
+                android:layout_width="@dimen/input_icon"
+                android:layout_height="@dimen/input_icon"
+                android:src="@drawable/orange_plus"
+                android:background="#3f4a51"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/addtag_taglist_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </LinearLayout>

@@ -349,13 +349,13 @@ public class AddTaskActivity extends AppCompatActivity {
     public void CustomDialogForSmallTasks() {
 
         final Calendar calendar = Calendar.getInstance();
-        //calendar.setTimeInMillis(mCalendar.getTimeInMillis());
-        Log.d("when just click happen", String.valueOf(calendar.getTime()));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
         final EditText edit_title = (EditText) dialogView.findViewById(R.id.dialog_small_title);
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_small_timer);
         timePicker.setIs24HourView(true);
+
+
         if (Build.VERSION.SDK_INT >= 23) {
             timePicker.setHour(0);
             timePicker.setMinute(0);
@@ -592,6 +592,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     smallScheduleRealm.deleteAllFromRealm();
                 }
             });
+            return;
         }
 
         for (int i = 0; i < smallSchedules.size(); i++) {
