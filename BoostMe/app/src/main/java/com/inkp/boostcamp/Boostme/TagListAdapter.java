@@ -13,6 +13,7 @@ import com.inkp.boostcamp.Boostme.data.TagListRealm;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import github.nisrulz.recyclerviewhelper.RVHAdapter;
@@ -50,7 +51,9 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.TagListV
     public void onBindViewHolder(TagListAdapter.TagListViewHolder holder, int position) {
         holder.data = mTagList.get(position);
         holder.mTagListName.setText(mTagList.get(position).getTag_list_name());
-        holder.mTagListTime.setText(Utills.format_a_hhmm.format(mTagList.get(position).getTag_date()));
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis((mTagList.get(position).getTag_time_long()));
+        holder.mTagListTime.setText(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)*60 + calendar.get(Calendar.MINUTE))+"분");
 
 
         Log.d("###", "in Bind");

@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.TagAdapter;
+import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.TagRealm;
 
 import butterknife.BindView;

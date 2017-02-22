@@ -3,6 +3,7 @@ package com.inkp.boostcamp.Boostme;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,25 +49,24 @@ public class TagAdapter extends RealmRecyclerViewAdapter<TagRealm, TagAdapter.Ta
     }
 
 
-    class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class TagViewHolder extends RecyclerView.ViewHolder{
         int mTagId;
         TagRealm data;
         TextView mTagTitle;
         public TagViewHolder(View view){
             super(view);
             mTagTitle = (TextView) view.findViewById(R.id.tag_title);
+            mTagTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AddTagListActivity.class);
+                    intent.putExtra(Utills.TAG_intent_tagid, data.getId());
+                    intent.putExtra(Utills.Tag_intent_title, mTagTitle.getText().toString());
+                    intent.putExtra(Utills.Tag_intent_action, 1);
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            if(v.getId() == R.id.tag_title){
-                //data to Add TagList
-                //Intent intent = new Intent(mContext, AddTagListActivity.class);
-                //intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
-                //mContext.startActivity(intent);
-                return;
-            }
-
-        }
     }
 }

@@ -1,6 +1,8 @@
 package com.inkp.boostcamp.Boostme.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -38,6 +40,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemClickListener;
 import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by inkp on 2017-02-20.
@@ -46,8 +49,11 @@ import io.realm.Realm;
 public class AddTagListActivity extends AppCompatActivity {
     public TagListAdapter mTagListAdapter;
     RecyclerView mTagListRecylcerView;
+    RealmResults<TagListRealm> mTagListRealm;
     List<TagListObject> mTagList;
     Realm realm;
+
+    int mActionFlag = 0;
 
     private InputMethodManager imm;
     int mTagId;
@@ -62,9 +68,12 @@ public class AddTagListActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar_addtag_save)
     ImageButton mAddTagButton;
+    @BindView(R.id.toolbar_addtag_delete)
+    ImageButton mDeleteTagButton;
+
 
     @Override
-    public void onCreate(Bundle savedInstantState){
+    public void onCreate(Bundle savedInstantState) {
         super.onCreate(savedInstantState);
         setContentView(R.layout.activity_add_tag);
         ButterKnife.bind(this);
@@ -73,12 +82,30 @@ public class AddTagListActivity extends AppCompatActivity {
 
         mTagListRecylcerView = (RecyclerView) findViewById(R.id.addtag_taglist_recyclerview);
 
-        calendar = new GregorianCalendar(); date = new Date();
+        calendar = new GregorianCalendar();
+        date = new Date();
         realm = Realm.getDefaultInstance();
         mTagId = Utills.getNextKeyTag(realm);
         mTagList = new ArrayList<>();
-        addTagListItem("title", new Date());
-        Log.d("333333", mTagList.get(0).getTag_list_name());
+
+
+        Intent intent = getIntent();
+        mActionFlag = intent.getIntExtra(Utills.Tag_intent_action, 0);
+        if (mActionFlag == 1) {
+            mTagId = intent.getIntExtra(Utills.TAG_intent_tagid, 0);
+            mTagTitleView.setText(intent.getStringExtra(Utills.Tag_intent_title));
+            mTagListRealm = realm.where(TagListRealm.class).equalTo("tag_id", mTagId).findAllSorted("tag_order");
+            for (int i = 0; i < mTagListRealm.size(); i++) {
+                TagListObject tmp = new TagListObject();
+                tmp.setTag_list_id(mTagListRealm.get(i).getId());
+                tmp.setTag_id(mTagListRealm.get(i).getTag_id());
+                tmp.setTag_date(mTagListRealm.get(i).getTag_date());
+                tmp.setTag_time_long(mTagListRealm.get(i).getTag_time_long());
+                tmp.setTag_list_name(mTagListRealm.get(i).getTag_list_name());
+                mTagList.add(tmp);
+            }
+        }
+
 
         mTagListAdapter = new TagListAdapter(mTagList);
         mTagListRecylcerView.setHasFixedSize(true);
@@ -119,6 +146,36 @@ public class AddTagListActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mDeleteTagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mActionFlag == 1) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm bgRealm) {
+                            TagRealm mTag;
+                            mTag = bgRealm.where(TagRealm.class).equalTo("id", mTagId).findFirst();
+                            //mTagListRealm.deleteAllFromRealm();
+                            mTag.deleteFromRealm();
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d("REALM", "TAG sucess");
+                        }
+                    });
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            mTagListRealm.deleteAllFromRealm();
+                        }
+                    });
+                }
+                finish();
+            }
+        });
+
+        initKeyBoard();
     }
 
     public void CustomDialogForAddTagListItem() {
@@ -177,6 +234,7 @@ public class AddTagListActivity extends AppCompatActivity {
                 addTagListItem(s_title, new Date(calendar.getTimeInMillis()));
                 mTagListAdapter.dataChagned(mTagList);
                 //imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
             }
         });
 
@@ -184,6 +242,7 @@ public class AddTagListActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //do nothing
+                imm.hideSoftInputFromWindow(edit_title.getWindowToken(), 0);
             }
         });
 
@@ -192,25 +251,26 @@ public class AddTagListActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void addTagListItem(String title, Date time){
+    public void addTagListItem(String title, Date time) {
         TagListObject obj = new TagListObject();
         obj.setTag_list_name(title);
         obj.setTag_date(time);
         obj.setTag_time_long(time.getTime());
-        Log.d("ㅇㄴㅇㄴㅇㄴㅇ", "ㅇㄴㅇㄴㅇ");
         mTagList.add(obj);
-        Log.d("after", mTagList.get(0).getTag_list_name());
     }
 
 
-    public void addTagToRealm(){
+    public void addTagToRealm() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-                TagRealm mTag = bgRealm.createObject(TagRealm.class, mTagId);
-
+                TagRealm mTag;
+                if (mActionFlag == 1) {
+                    mTag = bgRealm.where(TagRealm.class).equalTo("id", mTagId).findFirst();
+                } else {
+                    mTag = bgRealm.createObject(TagRealm.class, mTagId);
+                }
                 mTag.setTag_name(mTagTitle);
-
                 bgRealm.insertOrUpdate(mTag);
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -223,18 +283,27 @@ public class AddTagListActivity extends AppCompatActivity {
     }
 
     public void addTagListToRealm() {
+
+        if (mActionFlag == 1) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    mTagListRealm.deleteAllFromRealm();
+                }
+            });
+        }
         for (int i = 0; i < mTagList.size(); i++) {
 
-            final int small_id=Utills.getNextKeyTagList(realm);
+            //final int small_id=Utills.getNextKeyTagList(realm);
             final int idx = i;
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm bgRealm) {
-                    TagListRealm mTagItem = bgRealm.createObject(TagListRealm.class, small_id);
-
+                    TagListRealm mTagItem = bgRealm.createObject(TagListRealm.class, Utills.getNextKeyTagList(bgRealm));
                     mTagItem.setTag_id(mTagId);
                     mTagItem.setTag_date(mTagList.get(idx).getTag_date());
                     mTagItem.setTag_time_long(mTagList.get(idx).getTag_time_long());
+                    mTagItem.setTag_list_name(mTagList.get(idx).getTag_list_name());
                     mTagItem.setTag_order(idx);
 
                     bgRealm.insertOrUpdate(mTagItem);
@@ -248,8 +317,11 @@ public class AddTagListActivity extends AppCompatActivity {
         }
     }
 
-    public void getDataFromView(){
+    public void getDataFromView() {
         mTagTitle = mTagTitleView.getText().toString();
     }
 
+    private void initKeyBoard() {
+        imm = (InputMethodManager) getSystemService(getBaseContext().INPUT_METHOD_SERVICE);
+    }
 }

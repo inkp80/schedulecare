@@ -52,6 +52,14 @@
 
         <receiver android:name=".receiver.AlarmReceiver"/>
 
+        <receiver android:name=".receiver.RebootReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="LocationLoggerServiceManager" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

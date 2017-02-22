@@ -35,6 +35,8 @@ import com.inkp.boostcamp.Boostme.Utills;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
+import com.inkp.boostcamp.Boostme.data.TagListRealm;
+import com.inkp.boostcamp.Boostme.data.TagRealm;
 import com.inkp.boostcamp.Boostme.receiver.AlarmReceiver;
 
 import java.util.ArrayList;
@@ -68,6 +70,8 @@ public class AddTaskActivity extends AppCompatActivity {
     RecyclerView smallScheduleRecyclerView;
     List<SmallSchedule> smallSchedules;
 
+    List<String> mTagTitles;
+    RealmResults<TagRealm> mTag;
 
     SmallSchedule departSchedule;
     SmallSchedule finalSchedule;
@@ -121,7 +125,11 @@ public class AddTaskActivity extends AppCompatActivity {
         //realm database setup
         realm = Realm.getDefaultInstance();
         main_schedule_id = getNextKeyMainSchedule(realm);
-
+        mTag = realm.where(TagRealm.class).findAll();
+        mTagTitles = new ArrayList<>();
+        for(int i=0; i<mTag.size(); i++){
+            mTagTitles.add(mTag.get(i).getTag_name());
+        }
 
         mDates = new Date();
         mCalendar = new GregorianCalendar();
@@ -255,6 +263,12 @@ public class AddTaskActivity extends AppCompatActivity {
                     }
                 }
         );
+        loadSmallTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogSelectOption();
+            }
+        });
 
         mLocationIcon_AutoCompleate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,34 +290,38 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Utills.weekdays_requestCode) {
 
-            mWeekOfDays = data.getIntExtra("weekdaysVal", -1);
-            if (mWeekOfDays == -1) {
-                Toast.makeText(this, "ERROR : weekdaysVal is illegal value", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (mWeekOfDays > 0) {
-                setWeekDayToView(mWeekOfDays);
-            } else
-            weekofdaysView.setText("요일 반복");
-            Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
-        }
+            if (resultCode == Utills.weekdays_resultCode) {
+                mWeekOfDays = data.getIntExtra("weekdaysVal", -1);
+                if (mWeekOfDays == -1) {
+                    Toast.makeText(this, "ERROR : weekdaysVal is illegal value", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (mWeekOfDays > 0) {
+                    setWeekDayToView(mWeekOfDays);
+                } else
+                    weekofdaysView.setText("요일 반복");
+                Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
+            }
 
 
-        if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.e("TagRealm", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
-                locationView.setText(place.getAddress().toString());
-                initKeyBoard();
+            if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlaceAutocomplete.getPlace(this, data);
+                    Log.e("TagRealm", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
+                    locationView.setText(place.getAddress().toString());
+                    initKeyBoard();
 
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.e("TagRealm", status.getStatusMessage());
+                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                    Status status = PlaceAutocomplete.getStatus(this, data);
+                    // TODO: Handle the error.
+                    Log.e("TagRealm", status.getStatusMessage());
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+                } else if (resultCode == RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
             }
         }
+        else
+            return;
     }
 
 
@@ -581,6 +599,33 @@ public class AddTaskActivity extends AppCompatActivity {
         dialog.show();
     }
 
+
+    private void DialogSelectOption() {
+        final String items[] =  mTagTitles.toArray(new String[0]);
+
+
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle("Title");
+        ab.setSingleChoiceItems(items, 0,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        setLoadTagIndex(whichButton);
+                    }
+                }).setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        loadTag(getLoadTagIndex());
+                        // OK 버튼 클릭시 , 여기서 선택한 값을 메인 Activity 로 넘기면 된다.
+                    }
+                }).setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Cancel 버튼 클릭시
+                    }
+                });
+        ab.show();
+    }
+
     public void smallScheduleAddToRealm() {
 
         if (action_flag == 1) {
@@ -592,7 +637,6 @@ public class AddTaskActivity extends AppCompatActivity {
                     smallScheduleRealm.deleteAllFromRealm();
                 }
             });
-            return;
         }
 
         for (int i = 0; i < smallSchedules.size(); i++) {
@@ -825,6 +869,27 @@ public class AddTaskActivity extends AppCompatActivity {
         } catch (GooglePlayServicesNotAvailableException e) {
             // TODO: Handle the error.
         }
+    }
+
+    int index;
+    public void setLoadTagIndex(int idx){
+        index = idx;
+    }
+    public int getLoadTagIndex(){
+        return index;
+    }
+    public void loadTag(int idx){
+        RealmResults<TagListRealm> taglists = realm.where(TagListRealm.class).equalTo("tag_id", mTag.get(idx).getId()).findAll();
+        smallSchedules = new ArrayList<>();
+        for(int i=0; i<taglists.size(); i++) {
+            SmallSchedule tmp = new SmallSchedule();
+            tmp.setSmall_time(taglists.get(i).getTag_date());
+            tmp.setSmall_time_long(taglists.get(i).getTag_time_long());
+            tmp.setSmall_tilte(taglists.get(i).getTag_list_name());
+            tmp.setAlarm_flag(false);
+            smallSchedules.add(tmp);
+        }
+        refreshRecyclerView(smallSchedules, departSchedule, mDates);
     }
 
 }

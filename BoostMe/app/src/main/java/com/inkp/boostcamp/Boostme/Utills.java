@@ -26,6 +26,8 @@ import io.realm.RealmResults;
 
 public class Utills {
     public static String TAG_intent_tagid = "tag_id";
+    public static String Tag_intent_action = "tag_action";
+    public static String Tag_intent_title = "tag_title";
     public static String access_Schedule_id = "schedule_id";
     public static int weekdays_requestCode = 1313;
     public static int weekdays_resultCode = 3131;

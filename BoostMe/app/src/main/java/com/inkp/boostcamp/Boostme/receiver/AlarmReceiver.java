@@ -27,7 +27,7 @@ import io.realm.internal.Util;
  * Created by macbook on 2017. 2. 16..
  */
 
-public class AlarmReceiver extends BroadcastReceiver{
+public class AlarmReceiver extends BroadcastReceiver {
     Context mContext;
 
     int schedule_id;
@@ -55,6 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver{
         schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
         Log.d("schedule id", String.valueOf(schedule_id));
         idx = intent.getIntExtra(Utills.ALARM_intent_scheduleIdx, 0);
+        Log.d("초기 idx값", String.valueOf(idx));
         title = intent.getStringExtra(Utills.ALARM_intent_title);
         date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
         week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
@@ -64,12 +65,11 @@ public class AlarmReceiver extends BroadcastReceiver{
         final RealmResults<SmallScheduleRealm> mSmallSchedule
                 = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAllSorted("order_value", Sort.ASCENDING);
 
-        if(mSmallSchedule.size() == 0){
+        if (mSmallSchedule.size() == 0) {
             //cancelAlarm(setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), context);
             Log.d("mSmallSize", "Small schedule is empty, db error");
             return;
         }
-
 
 
         //반복성 schedule인 경우
@@ -78,48 +78,13 @@ public class AlarmReceiver extends BroadcastReceiver{
             int check_day = Utills.checkTargetWeekOfDayIsSet(week_of_days, calendar.get(Calendar.DAY_OF_WEEK));
 
             if (check_day != 0) {
-                if(idx != mSmallSchedule.size() - 1) {
-                    intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx+1).getSmall_tilte());
-                    intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx+1);
-
-                    int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx+1);
-                    long alert_time_long = mSmallSchedule.get(idx+1).getAlarm_start_time();
-                    long triggertime = Utills.setTriggerTime(alert_time_long);
-
-                    setPendingIntent(new_alarm_id, intent);
-                    Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
-                    }
-                context.startActivity(makeAlarmActivityIntent());
-            }
-            else {
-                Log.d("Receiver", "repeat but not today");
-                Utills.enrollAlarm(context, setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), System.currentTimeMillis() + 24 * 60 * 60 * 1000);
-            }
-        }
-        else {
-            Log.d("Receiver", "one shot");
-
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm bgRealm) {
-                    //mSmallSchedule.get(idx).setAlarm_flag(false);
-                    SmallScheduleRealm schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).equalTo("order_value", idx).findFirst();
-                    schedule.setAlarm_flag(false);
-                    bgRealm.insertOrUpdate(schedule);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    Log.d("REALM", "main Data Sucess");
-                }
-            });
-
-
-            if(idx == mSmallSchedule.size()-1) {
+                //해당 요일이 맞다
+                final int sem = idx;
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm bgRealm) {
-                        ScheduleRealm schedule = bgRealm.where(ScheduleRealm.class).equalTo("id", schedule_id).findFirst();
+                        //mSmallSchedule.get(idx).setAlarm_flag(false);
+                        SmallScheduleRealm schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).equalTo("order_value", sem).findFirst();
                         schedule.setAlarm_flag(false);
                         bgRealm.insertOrUpdate(schedule);
                     }
@@ -129,28 +94,67 @@ public class AlarmReceiver extends BroadcastReceiver{
                         Log.d("REALM", "main Data Sucess");
                     }
                 });
-                context.startActivity(makeAlarmActivityIntent());
-                return;
-            }
 
-            idx++;
-            while(true) {
-                if (idx >= mSmallSchedule.size() - 1) {
-                    if(mSmallSchedule.get(idx).isAlarm_flag() == false) {
-                        idx++;
-                        continue;
+
+                while (true) {
+                    idx++;
+                    if (idx == mSmallSchedule.size()) break;
+                    //포문으로 알람 설정된 것 찾아서 등록
+                    if (mSmallSchedule.get(idx).isAlarm_flag()) {
+                        intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx).getSmall_tilte());
+                        intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx);
+
+                        int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx);
+                        long alert_time_long = mSmallSchedule.get(idx).getAlarm_start_time();
+                        long triggertime = Utills.setTriggerTime(alert_time_long);
+
+                        setPendingIntent(new_alarm_id, intent);
+                        Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                        break;
                     }
-                    intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx).getSmall_tilte());
-                    intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx);
+                }
+                context.startActivity(makeAlarmActivityIntent());
+            } else {
+                Log.d("Receiver", "repeat, not today");
+                Utills.enrollAlarm(context, setPendingIntent(Utills.alarmIdBuilder(schedule_id, idx), intent), System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+            }
+        } else {
+            Log.d("Receiver", "one shot");
 
-                    int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx);
-                    long alert_time_long = mSmallSchedule.get(idx).getAlarm_start_time();
-                    long triggertime = Utills.setTriggerTime(alert_time_long);
+            Log.d("####", String.valueOf(idx));
+            final int sem = idx;
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+                    //mSmallSchedule.get(idx).setAlarm_flag(false);
+                    RealmResults<SmallScheduleRealm> mScheduleObj = bgRealm.where(SmallScheduleRealm.class).equalTo("schedule_id", schedule_id).findAllSorted("order_value",Sort.ASCENDING);
+                    mScheduleObj.get(sem).setAlarm_flag(false);
+                    bgRealm.insertOrUpdate(mScheduleObj);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d("REALM", "main Data Sucess");
+                }
+            });
 
-                    setPendingIntent(new_alarm_id, intent);
-                    Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
-                    break;
-                }else break;
+
+
+
+            while (true) {
+                idx++;
+                if (idx == mSmallSchedule.size()) break;
+
+                intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx).getSmall_tilte());
+                intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx);
+
+                int new_alarm_id = Utills.alarmIdBuilder(schedule_id, idx);
+                long alert_time_long = mSmallSchedule.get(idx).getAlarm_start_time();
+                long triggertime = Utills.setTriggerTime(alert_time_long);
+
+                setPendingIntent(new_alarm_id, intent);
+                Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                break;
             }
             context.startActivity(makeAlarmActivityIntent());
         }
@@ -158,20 +162,18 @@ public class AlarmReceiver extends BroadcastReceiver{
     }
 
 
-
-
     public static void cancelAlarm(PendingIntent pendingIntent, Context context) {
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
 
-    public PendingIntent setPendingIntent(int alarm_id, Intent intent){
+    public PendingIntent setPendingIntent(int alarm_id, Intent intent) {
         PendingIntent pendingIntent
                 = PendingIntent.getBroadcast(mContext, alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
 
-    public Intent makeAlarmActivityIntent(){
+    public Intent makeAlarmActivityIntent() {
         Intent intent = new Intent(mContext, AlarmActivity.class);
         intent.putExtra(Utills.ALARM_intent_title, title);
         intent.putExtra(Utills.ALARM_intent_date, date_in_long);

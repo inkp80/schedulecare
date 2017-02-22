@@ -3,6 +3,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border_bottom"
     android:layout_marginTop="9dp"
+    android:layout_marginLeft="@dimen/left_margin"
+    android:layout_marginRight="@dimen/left_margin"
     >
     <TextView
         android:id="@+id/taglist_name"
