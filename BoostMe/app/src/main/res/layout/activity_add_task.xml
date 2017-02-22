@@ -151,7 +151,9 @@
         android:paddingTop="@dimen/top_bot_margin"
         android:text="요일 반복 "
         android:textColor="#ffffff"
-        android:textSize="@dimen/base_font_size" />
+        android:textSize="@dimen/base_font_size"
+        android:visibility="gone"
+        />
 
 
     <EditText

@@ -216,44 +216,44 @@ public class DetailActivity extends AppCompatActivity {
             if (flag != 0) {
                 switch (i) {
                     case 1:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailSunSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailSunSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailSunSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 2:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailMonSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailMonSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailMonSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 3:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailTueSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailTueSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailTueSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 4:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailWedSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailWedSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailWedSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 5:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailThuSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailThuSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailThuSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 6:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailFriSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailFriSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailFriSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;
                     case 7:
-                        if (Build.VERSION.SDK_INT >= 16)
-                            mDetailSatSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring));
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mDetailSatSelected.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
                         else
                             mDetailSatSelected.setTextColor(getResources().getColor(R.color.selected_object));
                         break;

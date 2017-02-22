@@ -64,7 +64,7 @@ import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
 
 //UUID.randomUUID().toString();
 
-public class AddTaskActivity extends AppCompatActivity {
+public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener {
     private InputMethodManager imm;
     SmallScheduleAdapter smallScheduleAdapter;
     RecyclerView smallScheduleRecyclerView;
@@ -111,6 +111,23 @@ public class AddTaskActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_add_save)
     ImageButton mSaveListButton;
 
+
+    @BindView(R.id.add_weekday_sun)
+    TextView mWeekday_sun;
+    @BindView(R.id.add_weekday_mon)
+    TextView mWeekday_mon;
+    @BindView(R.id.add_weekday_tue)
+    TextView mWeekday_tue;
+    @BindView(R.id.add_weekday_wed)
+    TextView mWeekday_wed;
+    @BindView(R.id.add_weekday_thu)
+    TextView mWeekday_thu;
+    @BindView(R.id.add_weekday_fri)
+    TextView mWeekday_fri;
+    @BindView(R.id.add_weekday_sat)
+    TextView mWeekday_sat;
+
+
     Realm realm;
 
     @Override
@@ -127,7 +144,7 @@ public class AddTaskActivity extends AppCompatActivity {
         main_schedule_id = getNextKeyMainSchedule(realm);
         mTag = realm.where(TagRealm.class).findAll();
         mTagTitles = new ArrayList<>();
-        for(int i=0; i<mTag.size(); i++){
+        for (int i = 0; i < mTag.size(); i++) {
             mTagTitles.add(mTag.get(i).getTag_name());
         }
 
@@ -161,6 +178,7 @@ public class AddTaskActivity extends AppCompatActivity {
             mCalendar.setTimeInMillis(intent.getLongExtra(Utills.ALARM_intent_date, 0));
             main_schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
             mWeekOfDays = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
+            setWeekCheckState();
             setWeekDayToView(mWeekOfDays);
             smallSchedules.clear();
             RealmResults<SmallScheduleRealm> small_objects = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAll();
@@ -276,6 +294,13 @@ public class AddTaskActivity extends AppCompatActivity {
                 findPlace(v);
             }
         });
+        mWeekday_sun.setOnClickListener(this);
+        mWeekday_mon.setOnClickListener(this);
+        mWeekday_tue.setOnClickListener(this);
+        mWeekday_wed.setOnClickListener(this);
+        mWeekday_thu.setOnClickListener(this);
+        mWeekday_fri.setOnClickListener(this);
+        mWeekday_sat.setOnClickListener(this);
         initKeyBoard();
     }
 
@@ -319,8 +344,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     // The user canceled the operation.
                 }
             }
-        }
-        else
+        } else
             return;
     }
 
@@ -601,7 +625,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
     private void DialogSelectOption() {
-        final String items[] =  mTagTitles.toArray(new String[0]);
+        final String items[] = mTagTitles.toArray(new String[0]);
 
 
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
@@ -722,35 +746,127 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     public void setWeekDayToView(int val) {
+        resetWeekDaysView();
         weekofdaysView.setText("요일 반복 ");
         //init textView
         for (int i = 1; i < 8; i++) {
             int flag = Utills.checkTargetWeekOfDayIsSet(val, i);
-            if (flag != 0) {
-                switch (i) {
-                    case 1:
-                        weekofdaysView.append("일 ");
-                        break;
-                    case 2:
-                        weekofdaysView.append("월 ");
-                        break;
-                    case 3:
-                        weekofdaysView.append("화 ");
-                        break;
-                    case 4:
-                        weekofdaysView.append("수 ");
-                        break;
-                    case 5:
-                        weekofdaysView.append("목 ");
-                        break;
-                    case 6:
-                        weekofdaysView.append("금 ");
-                        break;
-                    case 7:
-                        weekofdaysView.append("토 ");
-                        break;
-                }
+
+            switch (i) {
+                case 1:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_sun.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_sun.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_sun.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_sun.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 2:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_mon.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_mon.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_mon.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_mon.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 3:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_tue.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_tue.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_tue.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_tue.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 4:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_wed.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_wed.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_wed.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_wed.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 5:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_thu.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_thu.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_thu.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_thu.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 6:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_fri.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_fri.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_fri.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_fri.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
+                case 7:
+                    if (flag != 0) {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_sat.setBackground(getResources().getDrawable(R.drawable.weekday_ring, getTheme()));
+                        else
+                            mWeekday_sat.setTextColor(getResources().getColor(R.color.selected_object));
+                    } else {
+                        if (Build.VERSION.SDK_INT >= 21)
+                            mWeekday_sat.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                        else
+                            mWeekday_sat.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                    }
+                    break;
             }
+
+
+        }
+    }
+
+    public void resetWeekDaysView() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            mWeekday_sun.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_mon.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_tue.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_wed.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_thu.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_fri.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+            mWeekday_sat.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+        } else {
+            mWeekday_sun.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_mon.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_tue.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_wed.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_thu.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_fri.setTextColor(getResources().getColor(R.color.etc_menu_color));
+            mWeekday_sat.setTextColor(getResources().getColor(R.color.etc_menu_color));
         }
     }
 
@@ -872,16 +988,19 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     int index;
-    public void setLoadTagIndex(int idx){
+
+    public void setLoadTagIndex(int idx) {
         index = idx;
     }
-    public int getLoadTagIndex(){
+
+    public int getLoadTagIndex() {
         return index;
     }
-    public void loadTag(int idx){
+
+    public void loadTag(int idx) {
         RealmResults<TagListRealm> taglists = realm.where(TagListRealm.class).equalTo("tag_id", mTag.get(idx).getId()).findAll();
         smallSchedules = new ArrayList<>();
-        for(int i=0; i<taglists.size(); i++) {
+        for (int i = 0; i < taglists.size(); i++) {
             SmallSchedule tmp = new SmallSchedule();
             tmp.setSmall_time(taglists.get(i).getTag_date());
             tmp.setSmall_time_long(taglists.get(i).getTag_time_long());
@@ -892,4 +1011,127 @@ public class AddTaskActivity extends AppCompatActivity {
         refreshRecyclerView(smallSchedules, departSchedule, mDates);
     }
 
+
+    boolean[] mWeekDaysSetState = {false, false, false, false, false, false, false};
+
+    @Override
+    public void onClick(View v) {
+        Log.d("요일체크", "요일");
+        int unCheck = (1 << 8) - 1; // 1111 1111
+        switch (v.getId()) {
+            case R.id.add_weekday_sun:
+                if (mWeekDaysSetState[0]) {
+                    mWeekDaysSetState[0] = false;
+                } else {
+                    mWeekDaysSetState[0] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_mon:
+                Log.d("요일체크", "화요일");
+                if (mWeekDaysSetState[1]) {
+                    mWeekDaysSetState[1] = false;
+                } else {
+                    mWeekDaysSetState[1] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_tue:
+                if (mWeekDaysSetState[2]) {
+                    mWeekDaysSetState[2] = false;
+                } else {
+                    mWeekDaysSetState[2] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_wed:
+                if (mWeekDaysSetState[3]) {
+                    mWeekDaysSetState[3] = false;
+                } else {
+                    mWeekDaysSetState[3] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_thu:
+                if (mWeekDaysSetState[4]) {
+                    mWeekDaysSetState[4] = false;
+                } else {
+                    mWeekDaysSetState[4] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_fri:
+                if (mWeekDaysSetState[5]) {
+                    mWeekDaysSetState[5] = false;
+                } else {
+                    mWeekDaysSetState[5] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            case R.id.add_weekday_sat:
+                if (mWeekDaysSetState[6]) {
+                    mWeekDaysSetState[6] = false;
+                } else {
+                    mWeekDaysSetState[6] = true;
+                }
+                getDataFromWeekView();
+                setWeekDayToView(mWeekOfDays);
+                break;
+
+            default:
+                break;
+        }
+        Log.d("값체크", String.valueOf(mWeekOfDays));
+    }
+
+
+    public void setWeekCheckState() {
+        for (int i = 1; i < 8; i++) {
+            int flag = Utills.checkTargetWeekOfDayIsSet(mWeekOfDays, i);
+            if (flag != 0) {
+                mWeekDaysSetState[0] = true;
+            }
+        }
+    }
+
+    public void getDataFromWeekView() {
+
+        int idx = 1;
+        int unCheck = (1 << 8) - 1; // 1111 1111
+        for (boolean isChecked : mWeekDaysSetState) {
+
+            if(isChecked) {
+                Log.d("체크여부", "참");
+            } else{
+                Log.d("체크여부", "거짓");
+            }
+
+            if (isChecked) {
+                mWeekOfDays |= (1 << idx);
+            } else{
+                mWeekOfDays &= (unCheck ^ getExponential(2, idx));
+            }
+            idx++;
+        }
+    }
+
+    public int getExponential(int bot, int top){
+        int tmp=1;
+        for(int i=1; i<=top; i++){
+            tmp *= bot;
+        }
+        return tmp;
+    }
 }
