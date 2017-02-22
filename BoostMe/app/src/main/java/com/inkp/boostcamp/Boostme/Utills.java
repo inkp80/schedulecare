@@ -42,6 +42,8 @@ public class Utills {
     public static String ALARM_intent_alert_time_long = "alarm_alerttime_long";
     public static String ALARM_intent_small_title = "alarm_small_title";
 
+    public static String ALARM_intent_small_next_idx;
+
     public static String INTENT_ACTION_EDIT_SCHEDULE = "action_edit_schedule";
 
     public static String[] WEEKDAYS = {null, "sun", "mon", "tue", "wed", "thu", "fri", "sat"};

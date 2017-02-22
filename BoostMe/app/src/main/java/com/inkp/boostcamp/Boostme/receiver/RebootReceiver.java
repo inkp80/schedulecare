@@ -17,11 +17,15 @@ public class RebootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        Log.d("rebooted", "onreceived");
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            final Intent RebootIntent = new Intent(context, Rebooted.class);
+            Log.d("rebooted", "onreceived, ENTER IF");
             Intent intentBootNoti = new Intent(context, MainActivity.class);
             NotificationUtills.NotificationSomethings(context, intentBootNoti);
+
+            final Intent RebootIntent = new Intent(context, Rebooted.class);
             context.startService(RebootIntent);
+            Log.d("rebooted", "call service");
         } else {
             Log.e("Rebooted,", "Received unexpected intent " + intent.toString());
         }

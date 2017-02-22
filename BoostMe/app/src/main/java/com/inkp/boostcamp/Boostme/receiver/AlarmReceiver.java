@@ -30,6 +30,7 @@ import io.realm.internal.Util;
 public class AlarmReceiver extends BroadcastReceiver {
     Context mContext;
 
+    int next_idx=-1;
     int schedule_id;
     int idx;
     String title;
@@ -110,6 +111,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                         setPendingIntent(new_alarm_id, intent);
                         Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                        next_idx = idx;
                         break;
                     }
                 }
@@ -145,6 +147,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 idx++;
                 if (idx == mSmallSchedule.size()) break;
 
+                intent.putExtra(Utills.ALARM_intent_scheduleId, schedule_id);
                 intent.putExtra(Utills.ALARM_intent_small_title, mSmallSchedule.get(idx).getSmall_tilte());
                 intent.putExtra(Utills.ALARM_intent_scheduleIdx, idx);
 
@@ -154,6 +157,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 setPendingIntent(new_alarm_id, intent);
                 Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
+                next_idx = idx;
                 break;
             }
             context.startActivity(makeAlarmActivityIntent());
@@ -179,6 +183,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.putExtra(Utills.ALARM_intent_date, date_in_long);
         intent.putExtra(Utills.ALARM_intent_small_title, small_title);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Utills.ALARM_intent_small_next_idx, next_idx);
         return intent;
     }
 }

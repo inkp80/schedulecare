@@ -16,14 +16,20 @@ import android.widget.TextView;
 
 import com.inkp.boostcamp.Boostme.R;
 import com.inkp.boostcamp.Boostme.Utills;
+import com.inkp.boostcamp.Boostme.data.SmallSchedule;
+import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by macbook on 2017. 2. 17..
@@ -31,18 +37,27 @@ import butterknife.OnClick;
 
 public class AlarmActivity extends AppCompatActivity{
 
+    Realm realm;
+
     @BindView(R.id.alarm_title)
     TextView mAlarmTitle;
-    @BindView(R.id.alarm_small_title)
+
     TextView mAlarmSmall;
     @BindView(R.id.alarm_time)
     TextView mAlarmTime;
+
+    @BindView(R.id.alarm_next_schedule_title)
+    TextView mAlarmNextTitle;
+    @BindView(R.id.alarm_next_schedule_time)
+    TextView mAlarmNextTime;
 
 
     @BindView(R.id.button2)
     Button bt2;
     @OnClick(R.id.button2)
     public void clickedBt(View view){
+        //vibe.cancel();
+        sp.stop(SOUND_ID);
         finish();
         return;
     }
@@ -61,12 +76,25 @@ public class AlarmActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
+        realm = Realm.getDefaultInstance();
+        RealmResults<SmallScheduleRealm> results = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0)).findAll();
+
         Date tmp = new Date();
         tmp.setTime(intent.getLongExtra(Utills.ALARM_intent_date, 0));
-        mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title));
-        mAlarmSmall.setText(intent.getStringExtra(Utills.ALARM_intent_small_title));
+        mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title) + intent.getStringExtra(Utills.ALARM_intent_small_title));
         mAlarmTime.setText(Utills.format_yymmdd_hhmm_a.format(tmp));
 
+        int next_idx = intent.getIntExtra(Utills.ALARM_intent_small_next_idx, 0);
+
+        if(next_idx != -1) {
+            Calendar nextTime = Calendar.getInstance();
+            nextTime.setTimeInMillis(results.get(next_idx).getAlarm_start_time());
+
+            mAlarmNextTitle.setText(results.get(next_idx).getSmall_tilte().toString());
+            mAlarmNextTime.setText(Utills.format_a_hhmm.format(new Date(nextTime.getTimeInMillis())));
+        } else{
+            mAlarmNextTitle.setText("없음");
+        }
         checkMode();
     }
 
@@ -79,7 +107,7 @@ public class AlarmActivity extends AppCompatActivity{
     @Override
     protected void onPause(){
         super.onPause();
-        vibe.cancel();
+        //vibe.cancel();
         sp.stop(SOUND_ID);
     }
 
@@ -107,10 +135,10 @@ public class AlarmActivity extends AppCompatActivity{
             case AudioManager.RINGER_MODE_SILENT:
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                makeVibrate();
+                //makeVibrate();
                 break;
             case AudioManager.RINGER_MODE_NORMAL:
-                makeVibrate();
+                //makeVibrate();
                 makeSound();
                 break;
         }

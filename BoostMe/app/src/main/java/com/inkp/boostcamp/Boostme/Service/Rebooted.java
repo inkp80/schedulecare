@@ -36,7 +36,7 @@ public class Rebooted extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("reboot", "reboot, start");
+        Log.d("Service", "Enter onHandler");
         realm = Realm.getDefaultInstance();
         mSchedule = realm.where(ScheduleRealm.class).findAll();
         for(int i=0; i<mSchedule.size(); i++){
@@ -86,5 +86,11 @@ public class Rebooted extends IntentService {
             }
         }
 
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        realm.close();
     }
 }

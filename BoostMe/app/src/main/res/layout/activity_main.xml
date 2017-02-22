@@ -63,6 +63,23 @@
                     android:src="@drawable/orange_plus"
                     android:background="@color/toolbar_background_color"
                     />
+
+                <ImageButton
+                    android:layout_marginRight="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="4dp"
+                    android:layout_marginTop="@dimen/top_bot_margin"
+                    android:layout_marginBottom="@dimen/top_bot_margin"
+                    android:id="@+id/toolbar_main_tag"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/tag_orange"
+                    android:layout_toLeftOf="@+id/toolbar_main_add"
+                    android:background="@color/default_background_color"
+
+                    android:gravity="center"
+                    android:layout_width="@dimen/main_c_e_t_icon"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
@@ -94,18 +111,6 @@
             android:layout_width="@dimen/main_c_e_t_icon"
             android:layout_height="wrap_content"
             android:background="#5f5f5f" />
-        <ImageButton
-            android:padding="2dp"
-            android:layout_marginTop="@dimen/top_bot_margin"
-            android:layout_marginBottom="@dimen/top_bot_margin"
-            android:id="@+id/toolbar_main_tag"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/tag_white"
-            android:gravity="center"
-            android:layout_width="@dimen/main_c_e_t_icon"
-            android:layout_height="wrap_content"
-            android:background="#3f3f3f"/>
     </LinearLayout>
 
 
