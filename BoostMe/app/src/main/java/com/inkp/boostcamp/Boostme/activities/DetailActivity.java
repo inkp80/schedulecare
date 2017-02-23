@@ -164,7 +164,9 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra(Utills.ALARM_intent_date, mScheduleObject.getDate_in_long());
                 intent.putExtra(Utills.ALARM_intent_weekofday, mScheduleObject.getWeek_of_day_repit());
 
-                startActivityForResult(intent, REQUEST_CODE);
+                //location & location time ㅁㅇㅇㅇ
+
+               startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }
@@ -191,6 +193,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 //RealmList<SmallScheduleRealm> result = new RealmList<>();
                 //result = Schedules.getSmall_schedule();
+
 
                 RealmResults<SmallScheduleRealm> result = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", targetId).findAll();
                 result = result.sort("order_value", Sort.ASCENDING);

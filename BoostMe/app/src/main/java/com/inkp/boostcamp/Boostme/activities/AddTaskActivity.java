@@ -1066,6 +1066,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             tmp.setAlarm_flag(false);
             smallSchedules.add(tmp);
         }
+        smallSchedules.add(departSchedule);
         refreshRecyclerView(smallSchedules, departSchedule, mDates);
     }
 

@@ -85,7 +85,9 @@ public class AlarmActivity extends AppCompatActivity{
         mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title) + " - " +  intent.getStringExtra(Utills.ALARM_intent_small_title));
         mAlarmTime.setText(Utills.format_a_hhmm.format(tmp));
 
-        int next_idx = intent.getIntExtra(Utills.ALARM_intent_small_next_idx, 0);
+        int next_idx = intent.getIntExtra(Utills.ALARM_intent_small_next_idx, -1);
+        Log.d("idx data", String.valueOf(next_idx));
+        Log.d("result.size", String .valueOf(results.size()));
 
         if(next_idx != -1) {
             Calendar nextTime = Calendar.getInstance();

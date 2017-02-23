@@ -184,6 +184,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.putExtra(Utills.ALARM_intent_small_title, small_title);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Utills.ALARM_intent_small_next_idx, next_idx);
+        intent.putExtra(Utills.ALARM_intent_scheduleId, schedule_id);
         return intent;
     }
 }
