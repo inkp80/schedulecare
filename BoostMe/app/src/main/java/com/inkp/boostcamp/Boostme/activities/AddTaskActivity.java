@@ -980,11 +980,13 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         int alarm_id = 0;
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
-        //Log.d("alarm size", String.valueOf(smallSchedules.size()));
+
 
         for (int i = 0; i < smallSchedules.size(); i++) {
+            Log.d("from detail", "for알람 등록 체크");
 
             if (smallSchedules.get(i).isAlarm_flag()) {
+                Log.d("from detail", "if알람 등록 체크");
                 trigger_time = smallSchedules.get(i).getAlert_time();
 
                 alarm_id = Utills.alarmIdBuilder(schedule_id, i);
@@ -1008,9 +1010,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra(Utills.ALARM_intent_weekofday, mWeekOfDays); //요일 반복
                 intent.putExtra(Utills.ALARM_intent_small_title, smallSchedules.get(i).getSmall_tilte());
 
+                Log.d("from detail", "pending알람 등록 체크");
                 PendingIntent pendingIntent
                         = PendingIntent.getBroadcast(getBaseContext(), alarm_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                Log.d("from detail", "endorll알람 등록 체크");
                 Utills.enrollAlarm(getBaseContext(), pendingIntent, Utills.setTriggerTime(trigger_time));
                 break;
             }

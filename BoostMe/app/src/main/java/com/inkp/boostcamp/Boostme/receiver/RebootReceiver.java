@@ -20,8 +20,6 @@ public class RebootReceiver extends BroadcastReceiver {
         Log.d("rebooted", "onreceived");
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Log.d("rebooted", "onreceived, ENTER IF");
-            Intent intentBootNoti = new Intent(context, MainActivity.class);
-            NotificationUtills.NotificationSomethings(context, intentBootNoti);
 
             final Intent RebootIntent = new Intent(context, Rebooted.class);
             context.startService(RebootIntent);

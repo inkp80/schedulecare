@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.inkp.boostcamp.Boostme.NotificationUtills;
 import com.inkp.boostcamp.Boostme.Utills;
+import com.inkp.boostcamp.Boostme.activities.MainActivity;
 import com.inkp.boostcamp.Boostme.data.ScheduleRealm;
 import com.inkp.boostcamp.Boostme.data.SmallSchedule;
 import com.inkp.boostcamp.Boostme.data.SmallScheduleRealm;
@@ -23,7 +25,6 @@ import io.realm.RealmResults;
 
 public class Rebooted extends IntentService {
 
-    Context mContext;
     Realm realm;
     RealmResults<ScheduleRealm> mSchedule;
     RealmResults<SmallScheduleRealm> mScheduleList;
@@ -41,9 +42,11 @@ public class Rebooted extends IntentService {
         mSchedule = realm.where(ScheduleRealm.class).findAll();
         for(int i=0; i<mSchedule.size(); i++){
             mScheduleList = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", mSchedule.get(i).getId()).findAll();
-            RegistAlarm(mContext, mScheduleList, mSchedule.get(i));
+            RegistAlarm(getBaseContext(), mScheduleList, mSchedule.get(i));
         }
-
+        realm.close();
+        Intent intentBootNoti = new Intent(getBaseContext(), MainActivity.class);
+        NotificationUtills.NotificationSomethings(getBaseContext(), intentBootNoti);
         return;
     }
 
@@ -53,11 +56,11 @@ public class Rebooted extends IntentService {
                 Calendar trigger_time = Calendar.getInstance();
                 trigger_time.setTimeInMillis(small_schedule_lists.get(i).getAlarm_start_time());
                 if(calendar.getTimeInMillis() > trigger_time.getTimeInMillis()) {
-                    final int idx = i;
+                    final int smallid = small_schedule_lists.get(i).getId();
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
-                            SmallScheduleRealm schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("id", small_schedule_lists.get(idx).getId()).findFirst();
+                            SmallScheduleRealm schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("id", smallid).findFirst();
                             schedule.setAlarm_flag(false);
                             bgRealm.insertOrUpdate(schedule);
                         }
@@ -91,6 +94,5 @@ public class Rebooted extends IntentService {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        realm.close();
     }
 }

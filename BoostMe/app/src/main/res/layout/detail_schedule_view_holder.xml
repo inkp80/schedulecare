@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/left_margin"
     android:paddingRight="3dp"
     android:scaleType="centerInside"
-    android:background="@drawable/small_schedule_background"
+    android:background="@drawable/detail_white_square"
     >
 
     <LinearLayout

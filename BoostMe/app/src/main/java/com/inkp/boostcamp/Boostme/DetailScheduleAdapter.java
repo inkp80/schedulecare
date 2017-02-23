@@ -89,6 +89,7 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
                 public void onClick(View v) {
                     final int pos = orderval;
                     final boolean flag = alarm_on_off.isChecked();
+                    Log.d("is true", String.valueOf(flag));
                     final int main_id = mMainSchedule.getId();
                     Utills.cancleAlarm(mContext, mMainSchedule.getId(), mSmallList);
                     enrollAlarm(pos, flag);
@@ -115,12 +116,13 @@ public class DetailScheduleAdapter extends RealmRecyclerViewAdapter<SmallSchedul
         Calendar calendar = Calendar.getInstance();
         Calendar trigger_time = Calendar.getInstance();
         for(int i=0; i<mSmallList.size(); i++){
-            if(!switch_flag && pos == i ) continue;
-            //if(!mSmallList.get(i).isAlarm_flag()) continue;
+            if(!switch_flag && pos==i) continue;
 
-            trigger_time.setTimeInMillis(mSmallList.get(i).getAlarm_start_time());
-            if(calendar.getTimeInMillis() > trigger_time.getTimeInMillis()) continue;
-            setAlarm(trigger_time.getTimeInMillis(), i);
+            if(mSmallList.get(i).isAlarm_flag() || (switch_flag && pos == i)) {
+                trigger_time.setTimeInMillis(mSmallList.get(i).getAlarm_start_time());
+                if (calendar.getTimeInMillis() > trigger_time.getTimeInMillis()) continue;
+                setAlarm(trigger_time.getTimeInMillis(), i);
+            }
         }
     }
 

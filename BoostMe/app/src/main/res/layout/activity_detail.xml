@@ -39,15 +39,18 @@
                     android:textColor="#ffffff"
                     android:textSize="@dimen/base_font_size" />
 
+
                 <ImageButton
                     android:id="@+id/toolbar_detail_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/toolbar_icon"
+                    android:layout_height="@dimen/toolbar_icon"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/left_margin"
-                    android:background="@null"
-                    android:src="@android:drawable/ic_menu_edit" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/eidt_orange"
+                    android:background="@color/toolbar_background_color"
+                    />
 
                 <ImageView
                     android:id="@+id/toolbar_detail_delete"
@@ -55,6 +58,7 @@
                     android:layout_height="@dimen/toolbar_icon"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:scaleType="centerInside"
                     android:layout_marginLeft="@dimen/left_margin"
                     android:src="@drawable/delete_orange2" />
 

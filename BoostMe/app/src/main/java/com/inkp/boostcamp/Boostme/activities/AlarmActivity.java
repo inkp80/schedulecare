@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -57,7 +58,7 @@ public class AlarmActivity extends AppCompatActivity{
     @OnClick(R.id.button2)
     public void clickedBt(View view){
         //vibe.cancel();
-        sp.stop(SOUND_ID);
+        //sp.stop(SOUND_ID);
         finish();
         return;
     }
@@ -81,8 +82,8 @@ public class AlarmActivity extends AppCompatActivity{
 
         Date tmp = new Date();
         tmp.setTime(intent.getLongExtra(Utills.ALARM_intent_date, 0));
-        mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title) + intent.getStringExtra(Utills.ALARM_intent_small_title));
-        mAlarmTime.setText(Utills.format_yymmdd_hhmm_a.format(tmp));
+        mAlarmTitle.setText(intent.getStringExtra(Utills.ALARM_intent_title) + " - " +  intent.getStringExtra(Utills.ALARM_intent_small_title));
+        mAlarmTime.setText(Utills.format_a_hhmm.format(tmp));
 
         int next_idx = intent.getIntExtra(Utills.ALARM_intent_small_next_idx, 0);
 
@@ -95,6 +96,17 @@ public class AlarmActivity extends AppCompatActivity{
         } else{
             mAlarmNextTitle.setText("없음");
         }
+
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sp = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .build();
+        } else {
+            sp = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
+        } //sp = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
+        SOUND_ID = sp.load(this, R.raw.bojangles, 20);
         checkMode();
     }
 
@@ -102,18 +114,18 @@ public class AlarmActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        vibe.cancel();
+        sp.stop(SOUND_ID);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        //vibe.cancel();
+        vibe.cancel();
         sp.stop(SOUND_ID);
     }
 
     private void makeSound() {
-        sp = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
-        SOUND_ID = sp.load(this, R.raw.bojangles, 20);
 
         sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
@@ -124,10 +136,10 @@ public class AlarmActivity extends AppCompatActivity{
     }
 
     private void makeVibrate() {
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] patten = {0, 1000, 500, 2000, 1000};
         vibe.vibrate(patten, 0);
     }
+
     private void checkMode(){
         AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
@@ -135,10 +147,10 @@ public class AlarmActivity extends AppCompatActivity{
             case AudioManager.RINGER_MODE_SILENT:
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                //makeVibrate();
+                makeVibrate();
                 break;
             case AudioManager.RINGER_MODE_NORMAL:
-                //makeVibrate();
+                makeVibrate();
                 makeSound();
                 break;
         }
