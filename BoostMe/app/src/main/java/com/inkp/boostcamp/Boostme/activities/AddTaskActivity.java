@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -326,26 +327,25 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     weekofdaysView.setText("요일 반복");
                 Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
             }
+        }
 
 
-            if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
-                if (resultCode == RESULT_OK) {
-                    Place place = PlaceAutocomplete.getPlace(this, data);
-                    Log.e("TagRealm", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
-                    locationView.setText(place.getAddress().toString());
-                    initKeyBoard();
+        if (requestCode == Utills.GOOGLE_AUTOCOMPLETE_REQUESTCODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.e("TagRealm", "Place: " + place.getAddress() + place.getPhoneNumber() + place.getLatLng().latitude);
+                locationView.setText(place.getAddress().toString());
+                initKeyBoard();
 
-                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                    Status status = PlaceAutocomplete.getStatus(this, data);
-                    // TODO: Handle the error.
-                    Log.e("TagRealm", status.getStatusMessage());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.e("TagRealm", status.getStatusMessage());
 
-                } else if (resultCode == RESULT_CANCELED) {
-                    // The user canceled the operation.
-                }
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
             }
-        } else
-            return;
+        }
     }
 
 
@@ -391,10 +391,18 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     public void CustomDialogForSmallTasks() {
 
         final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
         final EditText edit_title = (EditText) dialogView.findViewById(R.id.dialog_small_title);
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_small_timer);
+
+        final Button add_5min = (Button) dialogView.findViewById(R.id.dialog_small_5min);
+        final Button add_15min = (Button) dialogView.findViewById(R.id.dialog_small_15min);
+        final Button add_30min = (Button) dialogView.findViewById(R.id.dialog_small_30min);
+
         timePicker.setIs24HourView(true);
 
 
@@ -410,6 +418,52 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
+            }
+        });
+
+        add_5min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (5 * Utills.ONE_MINUTE_IN_MILLIS);
+                calendar.setTimeInMillis(cal_time);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_15min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (15*60*1000);
+                calendar.setTimeInMillis(cal_time);
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_30min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (30*60*1000);
+                calendar.setTimeInMillis(cal_time);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
             }
         });
 

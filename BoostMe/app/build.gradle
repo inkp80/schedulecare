@@ -34,8 +34,8 @@ android {
 
 
         //compile 'com.google.android.gms:play-services:8.4.0'
-        compile 'com.google.android.gms:play-services-base:10.2.0'
-        compile 'com.google.android.gms:play-services-places:10.2.0'
+        compile 'com.google.android.gms:play-services-base:9.2.0'
+        compile 'com.google.android.gms:play-services-places:9.2.0'
         //compile 'com.google.android.gms:play-services-maps:8.5.0'
         //compile 'com.google.android.gms:play-services-nearby:8.5.0'
 

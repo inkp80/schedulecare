@@ -17,4 +17,28 @@
         android:timePickerMode="spinner"
         >
     </TimePicker>
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/dialog_small_5min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+5분"/>
+        <Button
+            android:id="@+id/dialog_small_15min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+15분"/>
+        <Button
+            android:id="@+id/dialog_small_30min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+30분"/>
+
+    </LinearLayout>
+
+
 </LinearLayout>

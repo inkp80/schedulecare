@@ -35,7 +35,6 @@ import io.realm.RealmResults;
 
 public class SmallScheduleAdapter extends RecyclerView.Adapter<SmallScheduleAdapter.SmallScheduleViewHolder>
         implements RVHAdapter{
-    static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
     Date MainDate;
     long main_date_long;
     SmallSchedule departSchedule;

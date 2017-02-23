@@ -25,6 +25,9 @@ import io.realm.RealmResults;
  */
 
 public class Utills {
+
+    public static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
+
     public static String TAG_intent_tagid = "tag_id";
     public static String Tag_intent_action = "tag_action";
     public static String Tag_intent_title = "tag_title";
