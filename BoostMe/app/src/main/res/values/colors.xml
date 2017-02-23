@@ -6,6 +6,8 @@
     <color name="actionbar_text">#FF4081</color>
     <color name="actionbar_color">#8badd7</color>
 
+
+
     <color name="week_of_day_check">#91e9d9</color>
 
     <!--toolbar-->
@@ -20,6 +22,7 @@
     <color name="selected_object">#e67d64</color>
 
     <!--textColor-->
+    <color name="text_base_white">#ffffff</color>
     <color name="alarm_on">#000000</color>
     <color name="alarm_off">#a5a5a5</color>
     <color name="text_color">#bababa</color>

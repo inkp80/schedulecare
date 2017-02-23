@@ -815,9 +815,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_sun.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_sun.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_sun.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_sun.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_sun.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 2:
@@ -828,9 +828,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_mon.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_mon.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_mon.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_mon.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_mon.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 3:
@@ -841,9 +841,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_tue.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_tue.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_tue.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_tue.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_tue.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 4:
@@ -854,9 +854,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_wed.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_wed.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_wed.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_wed.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_wed.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 5:
@@ -867,9 +867,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_thu.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_thu.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_thu.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_thu.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_thu.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 6:
@@ -880,9 +880,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_fri.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_fri.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_fri.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_fri.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_fri.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
                 case 7:
@@ -893,9 +893,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                             mWeekday_sat.setTextColor(getResources().getColor(R.color.selected_object));
                     } else {
                         if (Build.VERSION.SDK_INT >= 21)
-                            mWeekday_sat.setBackground(getResources().getDrawable(R.color.etc_menu_color, getTheme()));
+                            mWeekday_sat.setBackground(getResources().getDrawable(R.color.text_base_white, getTheme()));
                         else
-                            mWeekday_sat.setTextColor(getResources().getColor(R.color.etc_menu_color));
+                            mWeekday_sat.setTextColor(getResources().getColor(R.color.text_base_white));
                     }
                     break;
             }
