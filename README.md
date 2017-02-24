@@ -8,3 +8,5 @@
 - Butter Knife
 - Google Play Service - Place
 
+##Special Thanks
+- Kangho Lee (cannalee90)
