@@ -15,25 +15,25 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
- 
+
     <!-- Custom Google Web Font -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
-	
+
     <!-- Custom CSS-->
     <link href="css/general.css" rel="stylesheet">
-	
+
 	 <!-- Owl-Carousel -->
     <link href="css/custom.css" rel="stylesheet">
 	<link href="css/owl.carousel.css" rel="stylesheet">
     <link href="css/owl.theme.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/animate.css" rel="stylesheet">
-	
+
 	<!-- Magnific Popup core CSS file -->
-	<link rel="stylesheet" href="css/magnific-popup.css"> 
-	
+	<link rel="stylesheet" href="css/magnific-popup.css">
+
 	<script src="js/modernizr-2.8.3.min.js"></script>  <!-- Modernizr /-->
 	<!--[if IE 9]>
 		<script src="js/PIE_IE9.js"></script>
@@ -54,7 +54,7 @@
 	<div id="preloader">
 		<div id="status"></div>
 	</div>
-	
+
 	<!-- FullScreen -->
     <div class="intro-header">
 		<div class="col-xs-12 text-center abcen1">
@@ -66,15 +66,15 @@
 				<li id="download" ><a href="#downloadlink" class="btn  btn-lg mybutton_standard wow swing wow fadeIn" data-wow-delay="1.2s"><span class="network-name">Free Download</span></a>
 				</li>
 			</ul>
-		</div>    
+		</div>
         <!-- /.container -->
 		<div class="col-xs-12 text-center abcen wow fadeIn">
-			<div class="button_down "> 
+			<div class="button_down ">
 				<a class="imgcircle wow bounceInUp" data-wow-duration="1.5s"  href="#whatis"> <img class="img_scroll" src="img/icon/circle.png" alt=""> </a>
 			</div>
 		</div>
     </div>
-	
+
 	<!-- NavBar-->
 	<nav class="navbar-default" role="navigation">
 		<div class="container">
@@ -90,7 +90,7 @@
 
 			<div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
-					
+
 					<li class="menuItem"><a href="#whatis">What is?</a></li>
 					<li class="menuItem"><a href="#useit">Use It</a></li>
 					<li class="menuItem"><a href="#screen">Screenshot</a></li>
@@ -98,146 +98,115 @@
 					<li class="menuItem"><a href="#contact">Contact</a></li>
 				</ul>
 			</div>
-		   
+
 		</div>
-	</nav> 
-	
+	</nav>
+
 	<!-- What is -->
 	<div id="whatis" class="content-section-b" style="border-top: 0">
 		<div class="container">
 
-			<div class="col-md-6 col-md-offset-3 text-center wrap_title">
-				<h2>What is?</h2>
-				<p class="lead" style="margin-top:0">무제</p>
-				
-			</div>
-			
+      <div class='row'>
+  			<div class="col-md-6 col-md-offset-3 text-center wrap_title">
+  				<h2>What is?</h2>
+  				<p class="lead" style="margin-top:0"></p>
+				<br><br><br><br><br><br><br><br>
+  			</div>
+      </div>
 			<div class="row">
-			<br/>
-			<br/><br/>
-			<br/><br/>
-			
-			
-			
-				<div class="col-sm-4 wow fadeInDown text-center">
-				  <img class="rotate" src="img/my_icon/visual.png" alt="Generic placeholder image" style="width:100px; height:100px">
-				  <h3>일정관리</h3>
-				  <p class="lead">한 눈에 일정을 확인할 수 있습니다. <br/>효율적인 일정 관리가 가능합니다. </p>
-
+				<div class="col-sm-3 wow fadeInDown text-center">
+				  <img src="img/my_icon/visual.png" alt="Generic placeholder image" style="width:100px; height:100px">
+				  <h3>일정 관리</h3>
+				  <p class="lead">캘린더/리스트 화면 제공 </p>
 				  <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
 				</div><!-- /.col-lg-4 -->
-
-				
-				<div class="col-sm-4 wow fadeInDown text-center">
-				  <img  class="rotate" src="img/my_icon/calculate.png" alt="Generic placeholder image" style="width:100px; height:100px">
+				<div class="col-sm-3 wow fadeInDown text-center">
+				  <img src="img/my_icon/calculate.png" alt="Generic placeholder image" style="width:100px; height:100px">
 				   <h3>시간 계산</h3>
-				   <p class="lead">'언제까지 뭐하지?, 출발하지?'<br/>시간 계산이 필요 없습니다.</p>
+				   <p class="lead">준비에서 출발까지<br/> 체계적인 알람</p>
 				   <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
 				</div><!-- /.col-lg-4 -->
-
-				<div class="col-sm-4 wow fadeInDown text-center">
-				  <img  class="rotate" src="img/my_icon/repeat.png" alt="Generic placeholder image" style="width:100px; height:100px">
-				   <h3>반복일정</h3>
-					<p class="lead">출근, 등교와 같은 반복적인 스케쥴도<br/> 손쉽게 등록하고 관리가 가능합니다.</p>
+				<div class="col-sm-3 wow fadeInDown text-center">
+				  <img src="img/my_icon/repeat.png" alt="Generic placeholder image" style="width:100px; height:100px">
+				   <h3>반복 일정</h3>
+					<p class="lead">요일 반복 기능 제공</p>
 				  <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
 				</div><!-- /.col-lg-4 -->
-				
-			</div><!-- /.row -->
-				
-			<div class="row tworow">
-			
-				<div class="col-sm-4  wow fadeInDown text-center">
-				  <img class="rotate" src="img/my_icon/tags.png" alt="Generic placeholder image" style="width:100px; height:100px">
-				  <h3>TAG</h3>
-				  <p class="lead">미팅, 데이트 같이 비슷한 유형의<br/> 일정 등록을 간편하게 할 수 있습니다. </p>
+				<div class="col-sm-3  wow fadeInDown text-center">
+				  <img src="img/my_icon/tags.png" alt="Generic placeholder image" style="width:100px; height:100px">
+				  <h3>태그</h3>
+				  <p class="lead">사용자 정의</p>
 				 <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
 				</div><!-- /.col-lg-4 -->
-				
-				<div class="col-sm-4 wow fadeInDown text-center">
-				  <img  class="rotate" src="img/icon/map.svg" alt="Generic placeholder image">
-				   <h3>Google</h3>
-				   <p class="lead">Epsum factorial non deposit quid pro quo hic escorol. Olypian quarrels et gorilla congolium sic ad nauseum. </p>
-				   <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
-				</div><!-- /.col-lg-4 -->
-				
-				<div class="col-sm-4 wow fadeInDown text-center">
-				  <img  class="rotate" src="img/icon/browser.svg" alt="Generic placeholder image">
-				   <h3>Bootstrap</h3>
-				 <p class="lead">Epsum factorial non deposit quid pro quo hic escorol. Olypian quarrels et gorilla congolium sic ad nauseum. </p>
-				  <!-- <p><a class="btn btn-embossed btn-primary view" role="button">View Details</a></p> -->
-				</div><!-- /.col-lg-4 -->
-				
 			</div><!-- /.row -->
+			<br><br><br><br><br><br><br><br><br><br><br><br><br>
 		</div>
 	</div>
-	
+
 	<!-- Use it -->
     <div id ="useit" class="content-section-a" >
 
         <div class="container" >
-			
+
             <div class="row">
-			
+
 				<div class="col-sm-6 pull-right wow fadeInRightBig" style="width:500px; height:450px">
-					
-                    
-                    <img class="img-responsive " src="img/cando/change.gif" alt="" >
+
+
+                    <img class="img-responsive " src="img/use_it/change.gif" alt="" >
                 </div>
-				
-                <div class="col-sm-6 wow fadeInLeftBig"  data-animation-delay="200">   
-                    <h3 class="section-heading">단일 설정으로 해결</h3>
-					<div class="sub-title lead3">준비부터 출발까지</div>
+
+                <div class="col-sm-6 wow fadeInLeftBig"  data-animation-delay="200">
+                    <h3 class="section-heading">단 하나의 일정</h3>
+					<div class="sub-title lead3">준비부터 출발까지 사용자 커스텀</div>
                     <p class="lead">
-						기상하기 위해, 잊지 않기 위해 수 개의 알람을 설정하셨죠? <br/>
-						더 이상 확인도 어렵고 관리도 힘든 다중 알람을 한번에 해결하세요!
-						
+						기상하기 위해, 잊지 않기 위해 수많은 알람을 설정하셨죠? <br/>
+						확인도 어렵고 관리도 힘든 다중 알람을 한 번에 해결하세요
+
 					</p>
 
-					 <p><a class="btn btn-embossed btn-primary" href="#" role="button">View Details</a> 
-					 <a class="btn btn-embossed btn-info" href="#" role="button">Visit Website</a></p>
-				</div>   
+				</div>
             </div>
         </div>
         <!-- /.container -->
     </div>
 
-    <div class="content-section-b"> 
-		
+    <div class="content-section-b">
+
 		<div class="container">
             <div class="row">
                 <div class="col-sm-6 wow fadeInLeftBig">
                      <div id="owl-demo-1" class="owl-carousel">
-						<a href="img/iphone.png" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="img/iphone.png" alt="">
-							</div>
-						</a>
-						<a href="img/iphone.png" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="img/iphone.png" alt="">
-							</div>
-						</a>
-						<a href="img/iphone.png" class="image-link">
-							<div class="item">
-								<img  class="img-responsive img-rounded" src="img/iphone.png" alt="">
-							</div>
-						</a>
-					</div>       
+                       <a href="img/iphone.png" class="image-link">
+           							<div class="item">
+           								<img  class="img-responsive img-rounded" src="img/use_it/addschedule.gif" alt="" style="width:238px; height:420px">
+           							</div>
+           						</a>
+           						<a href="img/iphone.png" class="image-link">
+           							<div class="item">
+           								<img  class="img-responsive img-rounded" src="img/use_it/edit.gif" alt="" style="width:238px; height:420px">
+           							</div>
+           						</a>
+           						<a href="img/iphone.png" class="image-link">
+           							<div class="item">
+           								<img  class="img-responsive img-rounded" src="img/use_it/delete.gif" alt="" style="width:238px; height:420px">
+           							</div>
+           						</a>
+					</div>
                 </div>
-				
-                <div class="col-sm-6 wow fadeInRightBig"  data-animation-delay="200">   
-                    <h3 class="section-heading">Drag Gallery</h3>
-					<div class="sub-title lead3">Lorem ipsum dolor sit atmet sit dolor greand fdanrh<br> sdfs sit atmet sit dolor greand fdanrh sdfs</div>
+
+                <div class="col-sm-6 wow fadeInRightBig"  data-animation-delay="200">
+                    <h3 class="section-heading">손쉬운 등록, 간단한 편집</h3>
+					<div class="sub-title lead3">drag & drop, 스와이프 편집 기능 제공</div>
                     <p class="lead">
-						In his igitur partibus duabus nihil erat, quod Zeno commuta rest gestiret. 
-						Sed virtutem ipsam inchoavit, nihil ampliusuma. Scien tiam pollicentur, 
-						uam non erat mirum sapientiae lorem cupido
-						patria esse cariorem. Quae qui non vident, nihilamane umquam magnum ac cognitione.
+
+					마음껏 추가하고, 수정하세요<br/>손쉬운 입력과 편집으로 체계적인 일정이 되도록 도와드립니다<br/>
+					
+           
 					</p>
 
-					 <p><a class="btn btn-embossed btn-primary" href="#" role="button">View Details</a> 
-					 <a class="btn btn-embossed btn-info" href="#" role="button">Visit Website</a></p>
-				</div>  			
+					
+				</div>
 			</div>
         </div>
     </div>
@@ -247,23 +216,22 @@
         <div class="container">
 
              <div class="row">
-			 
+
 				<div class="col-sm-6 pull-right wow fadeInRightBig">
-                    <img class="img-responsive " src="img/hsk.gif" alt="">
+                    <img class="img-responsive " src="img/use_it/tags.gif" alt="" style="width:238px; height:420px">
                 </div>
-			 
-                <div class="col-sm-6 wow fadeInLeftBig"  data-animation-delay="200">   
-                    <h3 class="section-heading">Font Awesome & Glyphicon</h3>
-                    <p class="lead">A special thanks to Death to the Stock Photo for 
-					providing the photographs that you see in this template. 
+
+                <div class="col-sm-6 wow fadeInLeftBig"  data-animation-delay="200">
+                    <h3 class="section-heading">태그 기능</h3>
+                    <p class="lead"> 비슷한 일정들의 등록을 더욱 쉽게할 수 있습니다
 					</p>
-					
+
 					<ul class="descp lead2">
-						<li><i class="glyphicon glyphicon-signal"></i> Reliable and Secure Platform</li>
-						<li><i class="glyphicon glyphicon-refresh"></i> Everything is perfectly orgainized for future</li>
-						<li><i class="glyphicon glyphicon-headphones"></i> Attach large file easily</li>
+						<li><i class="glyphicon glyphicon-signal"></i> 출근 : 기상 - 샤워 - 준비 - 아침 식사 - 출발</li>
+						<li><i class="glyphicon glyphicon-refresh"></i> 미팅 : 자료 준비 - 서류 준비 - 미팅 시작</li>
+						<li><i class="glyphicon glyphicon-headphones"></i> 출장 : 기상 - 샤워 - 출장 준비 - 출발</li>
 					</ul>
-				</div>           
+				</div>
             </div>
         </div>
 
@@ -280,82 +248,78 @@
 		  </div>
 		    <div class="row wow bounceInUp" >
               <div id="owl-demo" class="owl-carousel">
-				
+
 				<a href="img/slide/1.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/1.png" alt="Owl Image">
 					</div>
 				</a>
-				
+
                <a href="img/slide/2.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/2.png" alt="Owl Image">
 					</div>
 				</a>
-				
+
 				<a href="img/slide/3.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/3.png" alt="Owl Image">
 					</div>
 				</a>
-				
-				<a href="img/slide/1.png" class="image-link">
+
+				<a href="img/slide/4.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/4.png" alt="Owl Image">
 					</div>
 				</a>
-				
-               <a href="img/slide/2.png" class="image-link">
+
+               <a href="img/slide/5.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/5.png" alt="Owl Image">
 					</div>
 				</a>
-				
-				<a href="img/slide/3.png" class="image-link">
+
+				<a href="img/slide/6.png" class="image-link">
 					<div class="item">
 						<img  class="img-responsive img-rounded" src="img/slide/6.png" alt="Owl Image">
 					</div>
 				</a>
 
-				<a href="img/slide/3.png" class="image-link">
-					<div class="item">
-						<img  class="img-responsive img-rounded" src="img/slide/7.png" alt="Owl Image">
-					</div>
-				</a>
-              </div>       
+			
+              </div>
           </div>
         </div>
 
 
 	</div>
-	
+
 	<div  class="content-section-c ">
 		<div class="container">
 			<div class="row">
 			<div class="col-md-6 col-md-offset-3 text-center white">
 				<h2>Trial</h2>
-				<p class="lead" style="margin-top:0"><br/><video src="video/king.mp4" autoplay></video></p>
-			
+				<p class="lead" style="margin-top:0"><br/><video src="video/king.mp4" controls></video></p>
+
 			 </div>
-			
+
 			</div>
 		</div>
-	</div>	
-	
+	</div>
+
 	<!-- Credits -->
 	<div id="credits" class="content-section-a">
 		<div class="container">
 			<div class="row">
-			
+
 			<div class="col-md-6 col-md-offset-3 text-center wrap_title">
 				<h2>Credits</h2>
 				<p class="lead" style="margin-top:0">A special thanks to..</p>
 			 </div>
-			 
+
 				<div class="col-sm-6  block wow bounceIn">
 					<div class="row">
-						<div class="col-md-4 box-icon rotate"> 
-							<i class="fa fa-desktop fa-4x "> </i> 
+						<div class="col-md-4 box-icon">
+							<i class="fa fa-desktop fa-4x "> </i>
 						</div>
 						<div class="col-md-8 box-ct">
 							<h3> Boostcamp X Connect </h3>
@@ -365,22 +329,22 @@
 			  </div>
 			  <div class="col-sm-6 block wow bounceIn">
 					<div class="row">
-					  <div class="col-md-4 box-icon rotate"> 
-						<i class="fa fa-picture-o fa-4x "> </i> 
+					  <div class="col-md-4 box-icon">
+						<i class="fa fa-picture-o fa-4x "> </i>
 					  </div>
 					  <div class="col-md-8 box-ct">
 						<h3> Team Endroid </h3>
-						<p>김현섭, 한승범, 조영수 외 사라져버린 6명..</p> 
+						<p>김현섭, 한승범, 조영수</p>
 					  </div>
 					</div>
 			  </div>
 		  </div>
-		  
+
 		  <div class="row tworow">
 				<div class="col-sm-6  block wow bounceIn">
 					<div class="row">
-						<div class="col-md-4 box-icon rotate"> 
-							<i class="fa fa-magic fa-4x "> </i> 
+						<div class="col-md-4 box-icon">
+							<i class="fa fa-magic fa-4x "> </i>
 						</div>
 						<div class="col-md-8 box-ct">
 							<h3> Team Mojito </h3>
@@ -390,19 +354,19 @@
 			  </div>
 			  <div class="col-sm-6 block wow bounceIn">
 					<div class="row">
-					  <div class="col-md-4 box-icon rotate"> 
-						<i class="fa fa-heart fa-4x "> </i> 
+					  <div class="col-md-4 box-icon">
+						<i class="fa fa-heart fa-4x "> </i>
 					  </div>
 					  <div class="col-md-8 box-ct">
-						<h3> 튜터</h3>
-						<p> 최선일 - 오늘도 고통받는 튜터님 </p> 
+						<h3> Tutor</h3>
+						<p> 최선일</p>
 					  </div>
 					</div>
 			  </div>
 		  </div>
 		</div>
 	</div>
-	
+
 	<!-- Banner Download -->
 	<div id="downloadlink" class="banner">
 		<div class="container">
@@ -410,22 +374,22 @@
 				<div class="col-md-6 col-md-offset-3 text-center wrap_title">
 				<h3>지금 바로 이용해보세요!</h3>
 				<p class="lead" style="margin-top:0"></p>
-				<p><a class="btn btn-embossed btn-primary view" role="button">Download</a></p> 
+				<p><a class="btn btn-embossed btn-primary view" role="button">Download</a></p>
 			 </div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Contact -->
 	<div id="contact" class="content-section-a">
 		<div class="container">
 			<div class="row">
-			
+
 			<div class="col-md-6 col-md-offset-3 text-center wrap_title">
 				<h2>Contact Us</h2>
 				<p class="lead" style="margin-top:0"></p>
 			</div>
-			
+
 			<form role="form" action="" method="post" >
 				<div class="col-md-6">
 					<div class="form-group">
@@ -435,7 +399,7 @@
 							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span>
 						</div>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="InputEmail">Your Email</label>
 						<div class="input-group">
@@ -443,7 +407,7 @@
 							<span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span>
 						</div>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="InputMessage">Message</label>
 						<div class="input-group">
@@ -455,7 +419,7 @@
 					<input type="submit" name="submit" id="submit" value="Submit" class="btn wow tada btn-embossed btn-primary pull-right">
 				</div>
 			</form>
-			
+
 			<hr class="featurette-divider hidden-lg">
 				<div class="col-md-5 col-md-push-1 address">
 					<address>
@@ -467,9 +431,9 @@
 					</address>
 
 					<h3>Social</h3>
-					<li class="social"> 
+					<li class="social">
 					<a href="#"><i class="fa fa-facebook-square fa-size"> </i></a>
-					<a href="#"><i class="fa  fa-twitter-square fa-size"> </i> </a> 
+					<a href="#"><i class="fa  fa-twitter-square fa-size"> </i> </a>
 					<a href="#"><i class="fa fa-google-plus-square fa-size"> </i></a>
 					<a href="#"><i class="fa fa-flickr fa-size"> </i> </a>
 					</li>
@@ -477,9 +441,9 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
+
+
+
     <footer>
       <div class="container">
         <div class="row">
@@ -489,18 +453,18 @@
               Github를 방문해주세요!<br/>
               Go to: <a  href="http://andreagalanti.it" target="_blank">github.com/inkp80</a>
             </p>
-			
+
 			<!-- LICENSE -->
 			<a rel="cc:attributionURL" href="http://www.andreagalanti.it/flatfy"
 		   property="dc:title">Flatfy Theme </a> by
 		   <a rel="dc:creator" href="http://www.andreagalanti.it"
 		   property="cc:attributionName">Andrea Galanti</a>
-		   is licensed to the public under 
+		   is licensed to the public under
 		   <BR>the <a rel="license"
 		   href="http://creativecommons.org/licenses/by-nc/3.0/it/deed.it">Creative
 		   Commons Attribution 3.0 License - NOT COMMERCIAL</a>.
-		   
-	   
+
+
           </div> <!-- /col-xs-7 -->
 
           <div class="col-md-5">
@@ -532,13 +496,13 @@
 	  jQuery(function($) {
 		$(document).ready( function() {
 		  $('.navbar-default').stickUp();
-		  
+
 		});
 	  });
-	
+
 	</script>
 	<!-- Smoothscroll -->
-	<script type="text/javascript" src="js/jquery.corner.js"></script> 
+	<script type="text/javascript" src="js/jquery.corner.js"></script>
 	<script src="js/wow.min.js"></script>
 	<script>
 	 new WOW().init();
@@ -546,7 +510,7 @@
 	<script src="js/classie.js"></script>
 	<script src="js/uiMorphingButton_inflow.js"></script>
 	<!-- Magnific Popup core JS file -->
-	<script src="js/jquery.magnific-popup.js"></script> 
+	<script src="js/jquery.magnific-popup.js"></script>
 </body>
 
 </html>
