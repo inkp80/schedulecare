@@ -8,7 +8,7 @@
         android:id="@+id/dialog_small_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter title"
+        android:hint="제목을 입력하세요"
         />
     <TimePicker
         android:id="@+id/dialog_small_timer"

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
@@ -41,6 +42,8 @@ import github.nisrulz.recyclerviewhelper.RVHItemDividerDecoration;
 import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.inkp.boostcamp.Boostme.Utills.ONE_MINUTE_IN_MILLIS;
 
 /**
  * Created by inkp on 2017-02-20.
@@ -181,10 +184,21 @@ public class AddTagListActivity extends AppCompatActivity {
     public void CustomDialogForAddTagListItem() {
 
         final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.custom_dialog_addtag, null);
         final EditText edit_title = (EditText) dialogView.findViewById(R.id.dialog_tag_name);
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_tag_timer);
+
+        final Button add_5min = (Button) dialogView.findViewById(R.id.tag_dialog_small_5min);
+        final Button add_15min = (Button) dialogView.findViewById(R.id.tag_dialog_small_15min);
+        final Button add_30min = (Button) dialogView.findViewById(R.id.tag_dialog_small_30min);
+
+
         timePicker.setIs24HourView(true);
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -200,6 +214,71 @@ public class AddTagListActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
+            }
+        });
+
+
+        add_5min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (5 * Utills.ONE_MINUTE_IN_MILLIS);
+                calendar.setTimeInMillis(cal_time);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (5 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((5+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_15min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (15*60*1000);
+                calendar.setTimeInMillis(cal_time);
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (15 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((15+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_30min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (30*60*1000);
+                calendar.setTimeInMillis(cal_time);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (30 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((30+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
             }
         });
 

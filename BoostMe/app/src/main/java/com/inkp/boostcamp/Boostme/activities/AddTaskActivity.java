@@ -54,6 +54,7 @@ import github.nisrulz.recyclerviewhelper.RVHItemTouchHelperCallback;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.inkp.boostcamp.Boostme.Utills.ONE_MINUTE_IN_MILLIS;
 import static com.inkp.boostcamp.Boostme.Utills.format_yymmdd_hhmm_a;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeyMainSchedule;
 import static com.inkp.boostcamp.Boostme.Utills.getNextKeySmallSchedule;
@@ -183,6 +184,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             setWeekDayToView(mWeekOfDays);
             smallSchedules.clear();
             RealmResults<SmallScheduleRealm> small_objects = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", main_schedule_id).findAllSorted("order_value");
+            Utills.cancleAlarm(getBaseContext(), main_schedule_id, small_objects);
+
             for (int i = 0; i < small_objects.size(); i++) {
                 SmallSchedule tmp = new SmallSchedule();
                 tmp.setSmall_tilte(small_objects.get(i).getSmall_tilte());
@@ -391,7 +394,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     public void CustomDialogForSmallTasks() {
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         LayoutInflater inflater = getLayoutInflater();
@@ -428,7 +431,13 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 calendar.setTimeInMillis(cal_time);
                 if (Build.VERSION.SDK_INT >= 23) {
                     timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    if (( (5 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((5+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
                 } else {
                     timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
                     timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
@@ -439,12 +448,18 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         add_15min.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long cal_time = calendar.getTimeInMillis() + (15*60*1000);
+                long cal_time = calendar.getTimeInMillis() + (15 * 60 * 1000);
                 calendar.setTimeInMillis(cal_time);
 
                 if (Build.VERSION.SDK_INT >= 23) {
                     timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    if (( (15 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((15+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
                 } else {
                     timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
                     timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
@@ -455,11 +470,17 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         add_30min.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long cal_time = calendar.getTimeInMillis() + (30*60*1000);
+                long cal_time = calendar.getTimeInMillis() + (30 * 60 * 1000);
                 calendar.setTimeInMillis(cal_time);
                 if (Build.VERSION.SDK_INT >= 23) {
                     timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-                    timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    if (( (30 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((30+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
                 } else {
                     timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
                     timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
@@ -468,10 +489,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-        //멤버의 세부내역 입력 Dialog 생성 및 보이기
-        AlertDialog.Builder buider = new AlertDialog.Builder(this); //AlertDialog.Builder 객체 생성
-        //buider.setTitle("Member Information"); //Dialog 제목
-        buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
+        AlertDialog.Builder buider = new AlertDialog.Builder(this);
+        buider.setView(dialogView);
         buider.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -599,8 +618,16 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         //final TextView locationName = (TextView) dialogView.findViewById(R.id.dialog_location);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+        //calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
         final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.dialog_location_time);
+        final Button add_5min = (Button) dialogView.findViewById(R.id.location_dialog_small_5min);
+        final Button add_15min = (Button) dialogView.findViewById(R.id.location_dialog_small_15min);
+        final Button add_30min = (Button) dialogView.findViewById(R.id.location_dialog_small_30min);
+
 
         timePicker.setIs24HourView(true);
         if (Build.VERSION.SDK_INT >= 23) {
@@ -620,6 +647,70 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        add_5min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (5 * Utills.ONE_MINUTE_IN_MILLIS);
+                calendar.setTimeInMillis(cal_time);
+                Log.d("this time is", String.valueOf(calendar));
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (5 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((5+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_15min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (15 * 60 * 1000);
+                calendar.setTimeInMillis(cal_time);
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (15 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((15+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
+
+        add_30min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long cal_time = calendar.getTimeInMillis() + (30 * 60 * 1000);
+                calendar.setTimeInMillis(cal_time);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    if (( (30 + timePicker.getMinute()) * ONE_MINUTE_IN_MILLIS) >= (60 * Utills.ONE_MINUTE_IN_MILLIS)) {
+                        cal_time = (cal_time + (timePicker.getMinute() * ONE_MINUTE_IN_MILLIS)) - 60 * ONE_MINUTE_IN_MILLIS;
+                        calendar.setTimeInMillis(cal_time);
+                        timePicker.setMinute((30+timePicker.getMinute())-60);
+                    } else {
+                        timePicker.setMinute(calendar.get(Calendar.MINUTE));
+                    }
+                } else {
+                    timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+                    timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                }
+            }
+        });
 
         AlertDialog.Builder buider = new AlertDialog.Builder(this);
         buider.setView(dialogView);
@@ -981,6 +1072,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
 
+        if (action_flag == 1) {
+            ScheduleRealm mMainSchedule = realm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
+            Utills.setAlarmByMainButton(this, main_schedule_id, mMainSchedule);
+            return;
+        }
 
         for (int i = 0; i < smallSchedules.size(); i++) {
             Log.d("from detail", "for알람 등록 체크");
@@ -1171,24 +1267,24 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         int unCheck = (1 << 8) - 1; // 1111 1111
         for (boolean isChecked : mWeekDaysSetState) {
 
-            if(isChecked) {
+            if (isChecked) {
                 Log.d("체크여부", "참");
-            } else{
+            } else {
                 Log.d("체크여부", "거짓");
             }
 
             if (isChecked) {
                 mWeekOfDays |= (1 << idx);
-            } else{
+            } else {
                 mWeekOfDays &= (unCheck ^ getExponential(2, idx));
             }
             idx++;
         }
     }
 
-    public int getExponential(int bot, int top){
-        int tmp=1;
-        for(int i=1; i<=top; i++){
+    public int getExponential(int bot, int top) {
+        int tmp = 1;
+        for (int i = 1; i <= top; i++) {
             tmp *= bot;
         }
         return tmp;

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -50,7 +51,7 @@ import io.realm.Sort;
         robotoCalendarView.markCircleImage1(calendar);
         */
 
-public class MainCalendarFragment extends Fragment implements RobotoCalendarView.RobotoCalendarListener {
+public class MainCalendarFragment extends android.support.v4.app.Fragment implements RobotoCalendarView.RobotoCalendarListener {
     Realm realm;
 
     public RecyclerView mScheduleRecyclerView;
@@ -70,7 +71,7 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
         mToday = new GregorianCalendar();
         mToday.setTime(mTodayInDate);
-        Log.d("check week of day", String.valueOf(mToday.get(Calendar.DAY_OF_WEEK)));
+        //Log.d("check week of day", String.valueOf(mToday.get(Calendar.DAY_OF_WEEK)));
         mToday.set(Calendar.HOUR_OF_DAY, 0);
         mToday.set(Calendar.MINUTE, 0);
         mToday.set(Calendar.SECOND, 0);
@@ -174,19 +175,19 @@ public class MainCalendarFragment extends Fragment implements RobotoCalendarView
 
     @Override
     public void onDayLongClick(Calendar daySelectedCalendar) {
-        Toast.makeText(getActivity(), "onDayLongClick: " + daySelectedCalendar.getTime(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "onDayLongClick: " + daySelectedCalendar.getTime(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRightButtonClick() {
-        Toast.makeText(getActivity(), "onRightButtonClick!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "onRightButtonClick!", Toast.LENGTH_SHORT).show();
         mToday.add(Calendar.MONTH, 1);
         makeCheckMarkOnDay();
     }
 
     @Override
     public void onLeftButtonClick() {
-        Toast.makeText(getActivity(), "onLeftButtonClick!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "onLeftButtonClick!", Toast.LENGTH_SHORT).show();
 
         mToday.add(Calendar.MONTH, -1);
         makeCheckMarkOnDay();

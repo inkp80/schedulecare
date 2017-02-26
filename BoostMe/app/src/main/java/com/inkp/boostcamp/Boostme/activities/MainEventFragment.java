@@ -28,7 +28,7 @@ import io.realm.Sort;
  * Created by macbook on 2017. 2. 8..
  */
 
-public class MainEventFragment extends Fragment {
+public class MainEventFragment extends android.support.v4.app.Fragment {
 
     Realm realm;
     private ScheduleAdapter Event_scheduleAdapter;

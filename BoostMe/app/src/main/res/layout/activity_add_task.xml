@@ -218,7 +218,7 @@
                 android:layout_width="32dp"
                 android:layout_height="@dimen/input_icon"
                 android:gravity="center_vertical|center_horizontal"
-                android:textSize="8sp"
+                android:textSize="7sp"
                 android:text="소요시간"
                 android:textColor="@color/selected_object"/>
 

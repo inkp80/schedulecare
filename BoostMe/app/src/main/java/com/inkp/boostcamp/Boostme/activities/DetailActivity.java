@@ -157,7 +157,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), AddTaskActivity.class);
-                Utills.cancleAlarm(getBaseContext(), targetId, mSmallScheduleObjectList);
+                //Utills.cancleAlarm(getBaseContext(), targetId, mSmallScheduleObjectList);
                 intent.putExtra("intentAction", Utills.INTENT_ACTION_EDIT_SCHEDULE);
                 intent.putExtra(Utills.ALARM_intent_scheduleId, mScheduleObject.getId());
                 intent.putExtra(Utills.ALARM_intent_title, mScheduleObject.getTitle());

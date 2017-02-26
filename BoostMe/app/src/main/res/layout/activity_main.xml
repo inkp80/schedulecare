@@ -82,50 +82,17 @@
             </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
-    <LinearLayout
-        android:orientation="horizontal"
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/main_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <ImageButton
-            android:padding="5dp"
-            android:layout_marginBottom="@dimen/top_bot_margin"
-            android:id="@+id/toolbar_main_event"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/eventlist_white"
-            android:gravity="center"
-            android:layout_width="@dimen/main_c_e_t_icon"
-            android:layout_height="wrap_content"
-            android:background="#4f4f4f"/>
-        <ImageButton
-            android:padding="5dp"
-            android:layout_marginBottom="@dimen/top_bot_margin"
-            android:id="@+id/toolbar_main_calendar"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/calendar_white"
-            android:gravity="center"
-            android:layout_width="@dimen/main_c_e_t_icon"
-            android:layout_height="wrap_content"
-            android:background="#5f5f5f" />
-    </LinearLayout>
-
-
-    <FrameLayout
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/selected_object"
+        app:tabSelectedTextColor="#000000"
+        android:background="@color/etc_menu_color"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <fragment
-            android:id="@+id/main_calendar_fragment"
-            android:name="com.inkp.boostcamp.Boostme.activities.MainCalendarFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/activity_main"/>
-
-        <fragment
-            android:id="@+id/main_event_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.inkp.boostcamp.Boostme.activities.MainEventFragment"
-            tools:layout="@layout/activity_main" />
-    </FrameLayout>
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

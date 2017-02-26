@@ -26,14 +26,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAlcjftFeJEIyU5k6V5lO9dcLVINFGfzgQ" />
 
-
         <activity android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".activities.AddTaskActivity"
@@ -51,6 +46,16 @@
         <activity android:name=".activities.AddTagListActivity"></activity>
         <activity android:name=".activities.AppInformationActivity"></activity>
 
+        <activity android:name=".activities.StartActivity"
+            >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <receiver android:name=".receiver.AlarmReceiver"/>
 
         <receiver android:name=".receiver.RebootReceiver"
@@ -62,6 +67,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".Service.Rebooted"/>
+
 
     </application>
 
