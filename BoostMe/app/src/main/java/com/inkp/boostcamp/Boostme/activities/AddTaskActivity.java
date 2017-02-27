@@ -3,6 +3,7 @@ package com.inkp.boostcamp.Boostme.activities;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.input.InputManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -91,10 +93,10 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @BindView(R.id.add_task_title)
-    TextView titleView;
+    EditText titleView;
     @BindView(R.id.add_task_date)
     TextView dateView;
-    @BindView(R.id.add_location)
+    @BindView(R.id.add_location_edit_view)
     EditText locationView;
     @BindView(R.id.add_datetime_linear)
     LinearLayout datetime_linearViewer;
@@ -137,6 +139,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
         ButterKnife.bind(this);
+
 
         setSupportActionBar((Toolbar) findViewById(R.id.add_toolbar));
 

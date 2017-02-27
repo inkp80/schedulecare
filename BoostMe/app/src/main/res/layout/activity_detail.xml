@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="DETAIL"
+                    android:text="상세 일정"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/base_font_size" />
 

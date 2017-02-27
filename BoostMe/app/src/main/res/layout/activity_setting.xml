@@ -33,7 +33,7 @@
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SETUP"
+                    android:text="설정"
                     android:textSize="@dimen/base_font_size"
                     android:textColor="#ffffff"/>
             </RelativeLayout>
