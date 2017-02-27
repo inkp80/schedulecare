@@ -61,6 +61,19 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
         ScheduleRealm obj = getData().get(position);
         holder.data = obj;
 
+        mSmallSchedules = realm.where(SmallScheduleRealm.class).equalTo("schedule_id", mScheduleData.get(position).getId()).findAll();
+
+        boolean mIsSmallExisit = false;
+        for(int i=0; i<mSmallSchedules.size(); i++){
+            if(mSmallSchedules.get(i).isAlarm_flag()){
+                holder.mViewHolder_alarmButton.setChecked(true);
+                mIsSmallExisit = true;
+                break;
+            }
+        } if(mIsSmallExisit== false){
+            holder.mViewHolder_alarmButton.setChecked(false);
+        }
+
         if (holder.data.getWeek_of_day_repit() != 0) {
             holder.ViewHolder_date.setText(Utills.format_a_hhmm.format(holder.data.getDate()));
             holder.ViewHolder_date.append(", ");
@@ -69,7 +82,6 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
             holder.ViewHolder_date.setText(Utills.format_yymmdd_hhmm_a.format(holder.data.getDate()));
 
         holder.ViewHolder_title.setText(holder.data.getTitle());
-        holder.mViewHolder_alarmButton.setChecked(holder.data.isAlarm_flag());
         holder.holder_schedule_id = obj.getId();
     }
 
@@ -155,7 +167,6 @@ public class ScheduleAdapter extends RealmRecyclerViewAdapter<ScheduleRealm, Sch
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Utills.access_Schedule_id, holder_schedule_id);
                     mContext.startActivity(intent);
-                    Toast.makeText(context, "To Detail View", Toast.LENGTH_SHORT).show();
                     break;
             }
 

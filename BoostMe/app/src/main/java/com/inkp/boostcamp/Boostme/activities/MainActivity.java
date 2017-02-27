@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "To Setting", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
             }

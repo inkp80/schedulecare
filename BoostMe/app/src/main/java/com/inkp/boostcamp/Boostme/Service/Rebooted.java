@@ -45,8 +45,8 @@ public class Rebooted extends IntentService {
             RegistAlarm(getBaseContext(), mScheduleList, mSchedule.get(i));
         }
         realm.close();
-        Intent intentBootNoti = new Intent(getBaseContext(), MainActivity.class);
-        NotificationUtills.NotificationSomethings(getBaseContext(), intentBootNoti);
+       //Intent intentBootNoti = new Intent(getBaseContext(), MainActivity.class);
+       //NotificationUtills.NotificationSomethings(getBaseContext(), intentBootNoti);
         return;
     }
 

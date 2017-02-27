@@ -30,7 +30,7 @@ import io.realm.internal.Util;
 public class AlarmReceiver extends BroadcastReceiver {
     Context mContext;
 
-    int next_idx=-1;
+    //int next_idx=-1;
     int schedule_id;
     int idx;
     String title;
@@ -40,8 +40,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("alarm Received", "alarm");
-        Toast.makeText(context, "Alaamr", Toast.LENGTH_SHORT).show();
 
         mContext = context;
 
@@ -54,9 +52,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
         schedule_id = intent.getIntExtra(Utills.ALARM_intent_scheduleId, 0);
-        Log.d("schedule id", String.valueOf(schedule_id));
+
         idx = intent.getIntExtra(Utills.ALARM_intent_scheduleIdx, 0);
-        Log.d("초기 idx값", String.valueOf(idx));
         title = intent.getStringExtra(Utills.ALARM_intent_title);
         date_in_long = intent.getLongExtra(Utills.ALARM_intent_date, 0);
         week_of_days = intent.getIntExtra(Utills.ALARM_intent_weekofday, 0);
@@ -111,7 +108,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                         setPendingIntent(new_alarm_id, intent);
                         Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
-                        next_idx = idx;
+                        //next_idx = idx;
                         break;
                     }
                 }
@@ -157,7 +154,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 setPendingIntent(new_alarm_id, intent);
                 Utills.enrollAlarm(context, setPendingIntent(new_alarm_id, intent), triggertime);
-                next_idx = idx;
+                //next_idx = idx;
                 break;
             }
             context.startActivity(makeAlarmActivityIntent());
@@ -183,7 +180,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.putExtra(Utills.ALARM_intent_date, date_in_long);
         intent.putExtra(Utills.ALARM_intent_small_title, small_title);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Utills.ALARM_intent_small_next_idx, next_idx);
+        //intent.putExtra(Utills.ALARM_intent_small_next_idx, next_idx);
         intent.putExtra(Utills.ALARM_intent_scheduleId, schedule_id);
         return intent;
     }

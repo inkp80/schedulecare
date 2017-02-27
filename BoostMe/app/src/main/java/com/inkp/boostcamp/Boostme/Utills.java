@@ -242,6 +242,8 @@ public class Utills {
                 @Override
                 public void execute(Realm bgRealm) {
                     SmallScheduleRealm small_schedule = bgRealm.where(SmallScheduleRealm.class).equalTo("id", small_id).findFirst();
+                    if(small_schedule == null){
+                    Log.d("Utills. setalarm"," is null");}
                     small_schedule.setAlarm_flag(true);
                     bgRealm.insertOrUpdate(small_schedule);
                 }

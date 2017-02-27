@@ -247,7 +247,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         datetime_linearViewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddTaskActivity.this, "hi", Toast.LENGTH_SHORT).show();
                 CustomDialogForDateTime();
             }
         });
@@ -328,7 +327,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     setWeekDayToView(mWeekOfDays);
                 } else
                     weekofdaysView.setText("요일 반복");
-                Toast.makeText(this, String.valueOf(mWeekOfDays), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1072,11 +1070,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
 
-        if (action_flag == 1) {
+        /*if (action_flag == 1) {
             ScheduleRealm mMainSchedule = realm.where(ScheduleRealm.class).equalTo("id", main_schedule_id).findFirst();
             Utills.setAlarmByMainButton(this, main_schedule_id, mMainSchedule);
             return;
-        }
+        }*/
 
         for (int i = 0; i < smallSchedules.size(); i++) {
             Log.d("from detail", "for알람 등록 체크");
