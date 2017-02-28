@@ -63,6 +63,7 @@ public class TagAdapter extends RealmRecyclerViewAdapter<TagRealm, TagAdapter.Ta
                     intent.putExtra(Utills.TAG_intent_tagid, data.getId());
                     intent.putExtra(Utills.Tag_intent_title, mTagTitle.getText().toString());
                     intent.putExtra(Utills.Tag_intent_action, 1);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
                 }
             });
